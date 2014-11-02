@@ -44,6 +44,10 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
+      jsTestE2E: {
+        files: ['test/e2e/{,*/}*.js'],
+        tasks: ['newer:jshint:testE2E', 'protractor']
+      },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
@@ -127,7 +131,14 @@ module.exports = function (grunt) {
           jshintrc: 'test/.jshintrc'
         },
         src: ['test/spec/{,*/}*.js']
+      },
+      testE2E: {
+        options: {
+          jshintrc: 'test/.jshintrc'
+        },
+        src: ['test/e2e/{,*/}*.js']
       }
+
     },
 
     // Empties folders to start fresh
@@ -384,6 +395,14 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // E2E test settings
+    protractor: {
+      e2e: {
+        configFile: 'test/protractor-e2e.js',
+        keepAlive: false
+      }
     }
   });
 
@@ -413,7 +432,8 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    'karma',
+    'protractor'
   ]);
 
   grunt.registerTask('build', [
