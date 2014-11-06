@@ -24,6 +24,11 @@ angular
         url: '/',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
+      })
+      .state('campuses', {
+        url: '/campuses',
+        templateUrl: 'views/campus_list.html',
+        controller: 'CampusListCtrl'
       });
 
     RestangularProvider.setBaseUrl('/api');
