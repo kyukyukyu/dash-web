@@ -34,5 +34,17 @@ exports.config = {
     defaultTimeoutInterval: 30000,
     isVerbose : true,
     includeStackTrace : true
+  },
+
+  // Options to be passed to protractor-http-mock.
+  mocks: {
+    dir: 'e2e/mock'
+  },
+
+  onPrepare: function () {
+    require('protractor-http-mock').config = {
+      rootDirectory: __dirname,
+      protractorConfig: 'protractor-e2e'
+    };
   }
 };
