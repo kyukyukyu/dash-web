@@ -12,16 +12,19 @@ angular
   .module('dashApp', [
     'ngAnimate',
     'ngCookies',
-    'ngResource',
     'ngSanitize',
+    'restangular',
     'ui.router',
   ])
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, RestangularProvider) {
     $urlRouterProvider.otherwise('/');
+
     $stateProvider
       .state('main', {
         url: '/',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       });
+
+    RestangularProvider.setBaseUrl('/api');
   });
