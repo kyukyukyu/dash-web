@@ -36,23 +36,25 @@ unit testing framework, and
 [Protractor](http://angular.github.io/protractor/) as
 E2E testing framework. Also, to mock HTTP backends,
 which should be implemented in
-[dash](https://github.com/kyukyukyu/dash),
+[Dash](https://github.com/kyukyukyu/dash),
 [protractor-http-mock](https://github.com/atecarlos/protractor-http-mock)
 is used.
 
 Below is the directory structure for tests.
 
-> test/
->   e2e/
->     mock/     # HTTP backend mocks are here.
->     spec/     # E2E testing specs are here.
->   mock/       # Fixture data for HTTP backend mocks are here.
->   spec/       # Unit testing specs are here.
->     controllers/
->     services/
->   .jshintrc   # for test codes
->   karma.conf.js       # Karma configuration
->   protractor-e2e.js   # Protractor configuration
+```
+test/
+  e2e/
+    mock/     # HTTP backend mocks are here.
+    spec/     # E2E testing specs are here.
+  mock/       # Fixture data for HTTP backend mocks are here.
+  spec/       # Unit testing specs are here.
+    controllers/
+    services/
+  .jshintrc   # for test codes
+  karma.conf.js       # Karma configuration
+  protractor-e2e.js   # Protractor configuration
+```
 
 To run the tests, just run the following command on the root directory.
 
