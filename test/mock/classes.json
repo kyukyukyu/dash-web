@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "instructor": "Minsoo Yoo",
+    "code": "10029",
+    "subject_id": 1,
+    "subject": {
+      "id": 1,
+      "name": "Software Engineering",
+      "code": "CSE4006",
+      "score": 3.00,
+      "created_at": "2014-11-17T19:16:00+09:00"
+    },
+    "department_id": 1,
+    "department": {
+      "id": 1,
+      "name": "Division of Computer Science and Engineering",
+      "code": "H002866",
+      "created_at": "2014-09-12T22:35:00+09:00",
+      "campus_id": 1
+    },
+    "created_at": "2014-11-17T20:22:00+09:00"
+  }, {
+    "id": 2,
+    "instructor": "In Ryu",
+    "code": "10030",
+    "subject_id": 1,
+    "subject": {
+      "id": 1,
+      "name": "Software Engineering",
+      "code": "CSE4006",
+      "score": 3.00,
+      "created_at": "2014-11-17T19:16:00+09:00"
+    },
+    "department_id": 1,
+    "department": {
+      "id": 1,
+      "name": "Division of Computer Science and Engineering",
+      "code": "H002866",
+      "created_at": "2014-09-12T22:35:00+09:00",
+      "campus_id": 1
+    },
+    "created_at": "2014-11-17T20:24:00+09:00"
+  }, {
+    "id": 3,
+    "instructor": "Inhwan Lee",
+    "code": "10031",
+    "subject_id": 2,
+    "subject": {
+      "id": 2,
+      "name": "Computer Architecture 2",
+      "code": "ELE3020",
+      "score": 3.00,
+      "created_at": "2014-11-17T20:30:00+09:00"
+    },
+    "department_id": 1,
+    "department": {
+      "id": 1,
+      "name": "Division of Computer Science and Engineering",
+      "code": "H002866",
+      "created_at": "2014-09-12T22:35:00+09:00",
+      "campus_id": 1
+    },
+    "created_at": "2014-11-17T20:31:00+09:00"
+  }
+]
