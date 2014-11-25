@@ -16,12 +16,16 @@ body {
   padding-bottom: 20px;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
+/* Backdrop for Dash */
+.ds-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: $zindex-modal-background;
+  background: $modal-backdrop-bg;
+  @include opacity($modal-backdrop-opacity);
 }
 
 /* Custom page header */
