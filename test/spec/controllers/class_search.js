@@ -83,7 +83,6 @@ describe('Controller: ClassSearchCtrl', function () {
 
     var commonSpecs = function () {
       it('of every type', function () {
-        expectedQueryObj.type = 'all';
       });
 
       it('of general education', function () {

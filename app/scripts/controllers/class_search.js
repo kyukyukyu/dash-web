@@ -54,8 +54,8 @@ var parseKeyword = function (keyword) {
  */
 angular.module('dashApp')
   .controller('ClassSearchCtrl', function ($scope, Classes) {
-    $scope.type = 'all';
     $scope.keyword = '';
+    $scope.type = null;
     $scope.searchResult = null;
 
     $scope.searchClasses = function () {
