@@ -53,10 +53,11 @@ var parseKeyword = function (keyword) {
  * Controller of the dashApp
  */
 angular.module('dashApp')
-  .controller('ClassSearchCtrl', function ($scope, Classes) {
+  .controller('ClassSearchCtrl', function ($scope, Classes, UIBackdrop) {
     $scope.keyword = '';
     $scope.type = null;
     $scope.searchResult = null;
+    $scope.isSearchBoxFocused = false;
 
     $scope.searchClasses = function () {
       /* jshint camelcase: false */
@@ -91,5 +92,12 @@ angular.module('dashApp')
 
         $scope.searchResult = searchResult;
       });
+    };
+
+    $scope.focusOnSearchBox = function () {
+      UIBackdrop.show().then(function () {
+        $scope.isSearchBoxFocused = false;
+      });
+      $scope.isSearchBoxFocused = true;
     };
   });

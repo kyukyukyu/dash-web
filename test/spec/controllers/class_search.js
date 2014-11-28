@@ -9,11 +9,11 @@ describe('Controller: ClassSearchCtrl', function () {
   // load the controller's module
   beforeEach(module('dashApp'));
 
-  var $httpBackend, $timeout, ClassSearchCtrl, scope;
+  var $httpBackend, $timeout, UIBackdrop, ClassSearchCtrl, scope;
   var backendUrlRegex = /^\/api\/classes(\?(.*))?$/;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope) {
+  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope, _UIBackdrop_) {
     /* jshint unused: false */
 
     $httpBackend = _$httpBackend_;
@@ -23,6 +23,7 @@ describe('Controller: ClassSearchCtrl', function () {
     ClassSearchCtrl = $controller('ClassSearchCtrl', {
       $scope: scope
     });
+    UIBackdrop = _UIBackdrop_;
   }));
 
   afterEach(function () {
@@ -181,6 +182,28 @@ describe('Controller: ClassSearchCtrl', function () {
       angular.forEach(classes, function (c, j) {
         expect(c.id).toBe(expectedClassGroup.classIds[j]);
       });
+    });
+  });
+
+  describe('search box event', function () {
+    it('should set isSearchBoxFocused true when event handler is called', function () {
+      expect(scope.isSearchBoxFocused).toBe(false);
+      scope.focusOnSearchBox();
+      expect(scope.isSearchBoxFocused).toBe(true);
+    });
+
+    it('should show backdrop when event handler is called', function () {
+      spyOn(UIBackdrop, 'show').and.callThrough();
+      scope.focusOnSearchBox();
+      expect(UIBackdrop.show).toHaveBeenCalled();
+    });
+
+    it('should set isSearchBoxFocused false when backdrop shown by this was hidden', function () {
+      scope.focusOnSearchBox();
+      expect(scope.isSearchBoxFocused).toBe(true);
+      UIBackdrop.hide();
+      $timeout.flush();
+      expect(scope.isSearchBoxFocused).toBe(false);
     });
   });
 });

@@ -3,6 +3,21 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
 
+$white-box-margin-bottom: 12px;
+
+@mixin white-box() {
+  background: #fff;
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  padding: 12px 10px;
+  margin-bottom: $white-box-margin-bottom;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 $footer-height: 40px;
 
 html, body {
@@ -42,57 +57,69 @@ body {
   }
 }
 
-/* Custom page footer */
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
+$search-box-height: 40px;
 
-.container-narrow > hr {
-  margin: 30px 0;
-}
+/* Right column */
+.col-right {
+  height: 100%;
+  position: relative;
+  @include make-md-column(4);
+  @include make-lg-column(4);
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-
-  .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-  }
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
-
-  p + h4 {
-    margin-top: 28px;
-  }
-}
-
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  .container {
-    max-width: 730px;
+  .box {
+    @include white-box();
   }
 
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
+  .box-group {
+    position: relative;
   }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
+
+  & > .box-group {
+    position: absolute !important;
+    left: $grid-gutter-width / 2;
+    right: $grid-gutter-width / 2;
   }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
+
+  .box-group-top {
+    height: $search-box-height;
+    top: 0;
+
+    .search-box {
+      height: $search-box-height;
+      position: relative;
+      z-index: $zindex-modal-background + 10;
+    }
+  }
+
+  .box-group-bottom {
+    top: $search-box-height + $white-box-margin-bottom;
+    bottom: 0;
+
+    .box-group {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: $zindex-modal-background + 5;
+      opacity: 1;
+
+      &.hidden {
+        top: -($search-box-height + $white-box-margin-bottom);
+        display: block !important;
+        visibility: visible !important;
+        opacity: 0;
+      }
+
+      &.hidden-add, &.hidden-remove {
+        -webkit-transition: 0.2s ease-in-out all;
+        transition: 0.2s ease-in-out all;
+      }
+    }
+
+    .class-cart {
+      width: 100%;
+      height: 100%;
+      z-index: $zindex-modal-background - 10;
+    }
   }
 }
 
