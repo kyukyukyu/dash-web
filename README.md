@@ -19,6 +19,13 @@ following command to install them.
 npm install -g bower grunt-cli
 ```
 
+Also, make sure [Compass](http://compass-style.org) installed.
+This one is needed to compile [SASS](http://sass-lang.com) files.
+
+```shell
+gem install compass
+```
+
 Next, install dependencies.
 
 ```shell
