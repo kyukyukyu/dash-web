@@ -1,4 +1,5 @@
-# dash-web
+dash-web [![Build Status](https://travis-ci.org/kyukyukyu/dash-web.svg?branch=master)](https://travis-ci.org/kyukyukyu/dash-web) [![Sauce Test Status](https://saucelabs.com/buildstatus/dash)](https://saucelabs.com/u/dash)
+========
 
 > The AngularJS app part of [Dash](https://github.com/kyukyukyu/dash)
 
