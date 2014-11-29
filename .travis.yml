@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - '0.10'
+env:
+  global:
+    - secure: gDvMjvsm4AaDHLfM158b0IiYYaVxE8OCh4vUngIht06f/QMO7w5fZOEi1IsFhUggvJMEdzCepFzdMecxEf8NmyzIuwkGYSr8ZbFpFSIsJQfHCgUZ6KpG4PaGJsQlnD9Ko5NVH9iZgBP1rffz4dsui+fGjEb3kUemE/PMMTkt+dU=
+    - secure: D8xMl/XH6+WxFkK/55yvauOSkv1qJAHUKZv9OgcVplaSn2oznuEBlvrpzPu5kLY2xkxAACbAoCMVATDgG/ARJL5lV5pI11xJ/3nw+oXWHk0GipjJAAHhIEv+OteZ64+Aa7ZuT/7ugWlMsAtAeJXFcDVfwJw+degudh8ftJh0p8A=
 before_script:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
+addons:
+  sauce_connect: true
