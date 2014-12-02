@@ -15,6 +15,7 @@ angular
     'ngSanitize',
     'restangular',
     'ui.router',
+    'ui.bootstrap',
   ])
   .config(function ($stateProvider, $urlRouterProvider, RestangularProvider) {
     $urlRouterProvider.otherwise('/');
