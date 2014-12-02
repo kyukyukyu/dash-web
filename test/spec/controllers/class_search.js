@@ -31,7 +31,7 @@ describe('Controller: ClassSearchCtrl', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('should search classes', function () {
+  describe('generating search queries', function () {
     /* jshint camelcase: false */
 
     // Set request expectations
@@ -127,9 +127,18 @@ describe('Controller: ClassSearchCtrl', function () {
       });
     };
 
-    var specsWithName = createSpecGroup('by its name', 'name', 'name', 'understanding');
-    var specsWithInstructor = createSpecGroup('by its instructor', 'instructor', 'instructor', 'Yun, sunhee');
-    var specsWithCode = createSpecGroup('by its subject code', 'subject', 'subject', 'GEN4091');
+    var specsWithName = createSpecGroup(
+      'should generate queries which search classes by its name',
+      'name', 'name', 'understanding'
+    );
+    var specsWithInstructor = createSpecGroup(
+      'should generate queries which search classes by its instructor',
+      'instructor', 'instructor', 'Yun, sunhee'
+    );
+    var specsWithCode = createSpecGroup(
+      'should generate queries which search classes by its subject code',
+      'subject', 'subject', 'GEN4091'
+    );
 
     specsWithName(function () {
       specsWithInstructor(function () {
