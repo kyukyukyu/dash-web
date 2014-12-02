@@ -16,6 +16,7 @@ angular
     'restangular',
     'ui.router',
     'ui.bootstrap',
+    'ui.select',
   ])
   .config(function ($stateProvider, $urlRouterProvider, RestangularProvider) {
     $urlRouterProvider.otherwise('/');

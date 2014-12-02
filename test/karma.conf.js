@@ -29,6 +29,7 @@ module.exports = function(config) {
       'bower_components/restangular/dist/restangular.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'bower_components/angular-ui-select/dist/select.js',
       'bower_components/uri.js/src/URI.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
