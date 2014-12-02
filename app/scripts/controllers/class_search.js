@@ -54,23 +54,27 @@ var parseKeyword = function (keyword) {
  */
 angular.module('dashApp')
   .controller('ClassSearchCtrl', function ($scope, Classes, UIBackdrop) {
-    $scope.keyword = '';
-    $scope.type = null;
+    $scope.userInput = {
+      keyword: '',
+      type: null
+    };
     $scope.searchResult = null;
-    $scope.isSearchBoxFocused = false;
+    $scope.uiStatus = {
+      isSearchBoxFocused: false
+    };
 
     $scope.searchClasses = function () {
       /* jshint camelcase: false */
       var queryObj = {};
 
-      angular.extend(queryObj, parseKeyword($scope.keyword));
+      angular.extend(queryObj, parseKeyword($scope.userInput.keyword));
 
-      queryObj.type = $scope.type;
-      if ($scope.type === 'general') {
-        queryObj.area_id = $scope.area_id;
-      } else if ($scope.type === 'major') {
-        queryObj.grade = $scope.grade;
-        queryObj.department_id = $scope.department_id;
+      queryObj.type = $scope.userInput.type;
+      if (queryObj.type === 'general') {
+        queryObj.area_id = $scope.userInput.area_id;
+      } else if (queryObj.type === 'major') {
+        queryObj.grade = $scope.userInput.grade;
+        queryObj.department_id = $scope.userInput.department_id;
       }
 
       return Classes.getList(queryObj).then(function (list) {
@@ -96,8 +100,8 @@ angular.module('dashApp')
 
     $scope.focusOnSearchBox = function () {
       UIBackdrop.show().then(function () {
-        $scope.isSearchBoxFocused = false;
+        $scope.uiStatus.isSearchBoxFocused = false;
       });
-      $scope.isSearchBoxFocused = true;
+      $scope.uiStatus.isSearchBoxFocused = true;
     };
   });

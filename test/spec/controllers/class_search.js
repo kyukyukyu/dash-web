@@ -71,7 +71,7 @@ describe('Controller: ClassSearchCtrl', function () {
       return function (specs) {
         describe(description, function () {
           beforeEach(function () {
-            scope.keyword = (scope.keyword || '') + ' ' + property + ':' + value;
+            scope.userInput.keyword = (scope.userInput.keyword || '') + ' ' + property + ':' + value;
             expectedQueryObj[queryObjKey] = value;
           });
 
@@ -87,40 +87,40 @@ describe('Controller: ClassSearchCtrl', function () {
       });
 
       it('of general education', function () {
-        scope.type = 'general';
+        scope.userInput.type = 'general';
         expectedQueryObj.type = 'general';
       });
 
       it('of general education by its area', function () {
-        scope.type = 'general';
-        scope.area_id = 2;
+        scope.userInput.type = 'general';
+        scope.userInput.area_id = 2;
         expectedQueryObj.type = 'general';
         expectedQueryObj.area_id = '2';
       });
 
       it('of major education', function () {
-        scope.type = 'major';
+        scope.userInput.type = 'major';
         expectedQueryObj.type = 'major';
       });
 
       it('of major education by its target grade', function () {
-        scope.type = 'major';
-        scope.grade = 3;
+        scope.userInput.type = 'major';
+        scope.userInput.grade = 3;
         expectedQueryObj.type = 'major';
         expectedQueryObj.grade = '3';
       });
 
       it('of major education by its department', function () {
-        scope.type = 'major';
-        scope.department_id = 1;
+        scope.userInput.type = 'major';
+        scope.userInput.department_id = 1;
         expectedQueryObj.type = 'major';
         expectedQueryObj.department_id = '1';
       });
 
       it('of major education by its target grade and department', function () {
-        scope.type = 'major';
-        scope.grade = 3;
-        scope.department_id = 1;
+        scope.userInput.type = 'major';
+        scope.userInput.grade = 3;
+        scope.userInput.department_id = 1;
         expectedQueryObj.type = 'major';
         expectedQueryObj.grade = '3';
         expectedQueryObj.department_id = '1';
@@ -186,10 +186,10 @@ describe('Controller: ClassSearchCtrl', function () {
   });
 
   describe('search box event', function () {
-    it('should set isSearchBoxFocused true when event handler is called', function () {
-      expect(scope.isSearchBoxFocused).toBe(false);
+    it('should set uiStatus.isSearchBoxFocused true when event handler is called', function () {
+      expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
       scope.focusOnSearchBox();
-      expect(scope.isSearchBoxFocused).toBe(true);
+      expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
     });
 
     it('should show backdrop when event handler is called', function () {
@@ -198,12 +198,12 @@ describe('Controller: ClassSearchCtrl', function () {
       expect(UIBackdrop.show).toHaveBeenCalled();
     });
 
-    it('should set isSearchBoxFocused false when backdrop shown by this was hidden', function () {
+    it('should set uiStatus.isSearchBoxFocused false when backdrop shown by this was hidden', function () {
       scope.focusOnSearchBox();
-      expect(scope.isSearchBoxFocused).toBe(true);
+      expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
       UIBackdrop.hide();
       $timeout.flush();
-      expect(scope.isSearchBoxFocused).toBe(false);
+      expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
     });
   });
 });
