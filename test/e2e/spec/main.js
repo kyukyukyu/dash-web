@@ -2,21 +2,29 @@
 
 describe('Dash App', function () {
 
+  var keywordBox, gearIcon,
+      boxGroupBottom,
+      backdrop;
+
   beforeEach(function () {
     browser.get('index.html');
+  });
+
+  beforeEach(function () {
+    keywordBox = element(by.model('keyword'));
+    gearIcon = $('.box-group-top button');
+
+    boxGroupBottom = $('.box-group-bottom > .box-group');
+
+    backdrop = $('#dsBackdrop');
   });
 
   it('should automatically redirect to / when location hash is empty', function() {
     expect(browser.getLocationAbsUrl()).toMatch('/');
   });
 
-  describe('search box', function () {
-    var boxGroupBottom, keywordBox, backdrop;
-
+  describe('searching', function () {
     beforeEach(function () {
-      boxGroupBottom = $('.box-group-bottom > .box-group');
-      keywordBox = element(by.model('keyword'));
-      backdrop = $('#dsBackdrop');
       expect(boxGroupBottom.isDisplayed()).toBeFalsy();
       expect(backdrop.isPresent()).toBeFalsy();
     });
@@ -27,7 +35,7 @@ describe('Dash App', function () {
       });
 
       it('when the gear icon is clicked', function () {
-        $('.box-group-top button').click();
+        gearIcon.click();
       });
 
       afterEach(function () {
