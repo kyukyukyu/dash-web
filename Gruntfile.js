@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       jsTestE2E: {
         files: ['test/e2e/{,*/}*.js'],
-        tasks: ['newer:jshint:testE2E', 'protractor']
+        tasks: ['newer:jshint:testE2E', 'connect:test', 'protractor']
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
