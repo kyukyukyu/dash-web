@@ -1,26 +1,26 @@
 /* global getJSONFixture, URI */
 'use strict';
 
-describe('Controller: ClassSearchCtrl', function () {
+describe('Controller: CourseSearchCtrl', function () {
   jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
 
-  var fxClasses = getJSONFixture('classes.json');
+  var fxCourses = getJSONFixture('courses.json');
 
   // load the controller's module
   beforeEach(module('dashApp'));
 
-  var $httpBackend, $timeout, UIBackdrop, ClassSearchCtrl, scope;
-  var backendUrlRegex = /^\/api\/classes(\?(.*))?$/;
+  var $httpBackend, $timeout, UIBackdrop, CourseSearchCtrl, scope;
+  var backendUrlRegex = /^\/api\/courses(\?(.*))?$/;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope, _UIBackdrop_) {
     /* jshint unused: false */
 
     $httpBackend = _$httpBackend_;
-    $httpBackend.when('GET', backendUrlRegex).respond(fxClasses);
+    $httpBackend.when('GET', backendUrlRegex).respond(fxCourses);
     $timeout = _$timeout_;
     scope = $rootScope.$new();
-    ClassSearchCtrl = $controller('ClassSearchCtrl', {
+    CourseSearchCtrl = $controller('CourseSearchCtrl', {
       $scope: scope
     });
     UIBackdrop = _UIBackdrop_;
@@ -45,7 +45,7 @@ describe('Controller: ClassSearchCtrl', function () {
           var uri = new URI(arguments[1]);
           self.queryObj = uri.query(true);
 
-          return [200, fxClasses, {}, 'OK'];
+          return [200, fxCourses, {}, 'OK'];
         });
     });
 
@@ -91,11 +91,11 @@ describe('Controller: ClassSearchCtrl', function () {
         expectedQueryObj.type = 'general';
       });
 
-      it('of general education by its area', function () {
+      it('of general education by its category', function () {
         scope.userInput.type = 'general';
-        scope.userInput.area_id = 2;
+        scope.userInput.category_id = 2;
         expectedQueryObj.type = 'general';
-        expectedQueryObj.area_id = '2';
+        expectedQueryObj.category_id = '2';
       });
 
       it('of major education', function () {
@@ -105,9 +105,9 @@ describe('Controller: ClassSearchCtrl', function () {
 
       it('of major education by its target grade', function () {
         scope.userInput.type = 'major';
-        scope.userInput.grade = 3;
+        scope.userInput.target_grade = 3;
         expectedQueryObj.type = 'major';
-        expectedQueryObj.grade = '3';
+        expectedQueryObj.target_grade = '3';
       });
 
       it('of major education by its department', function () {
@@ -119,24 +119,24 @@ describe('Controller: ClassSearchCtrl', function () {
 
       it('of major education by its target grade and department', function () {
         scope.userInput.type = 'major';
-        scope.userInput.grade = 3;
+        scope.userInput.target_grade = 3;
         scope.userInput.department_id = 1;
         expectedQueryObj.type = 'major';
-        expectedQueryObj.grade = '3';
+        expectedQueryObj.target_grade = '3';
         expectedQueryObj.department_id = '1';
       });
     };
 
     var specsWithName = createSpecGroup(
-      'should generate queries which search classes by its name',
+      'should generate queries which search courses by its name',
       'name', 'name', 'understanding'
     );
     var specsWithInstructor = createSpecGroup(
-      'should generate queries which search classes by its instructor',
+      'should generate queries which search courses by its instructor',
       'instructor', 'instructor', 'Yun, sunhee'
     );
     var specsWithCode = createSpecGroup(
-      'should generate queries which search classes by its subject code',
+      'should generate queries which search courses by its subject code',
       'subject', 'subject', 'GEN4091'
     );
 
@@ -147,7 +147,7 @@ describe('Controller: ClassSearchCtrl', function () {
     });
 
     afterEach(function () {
-      scope.searchClasses();
+      scope.searchCourses();
       $httpBackend.flush();
       expect(this.queryObj).toEqual(expectedQueryObj);
     });
@@ -155,7 +155,7 @@ describe('Controller: ClassSearchCtrl', function () {
 
   it('should group the search result by its subject', function () {
     /* jshint camelcase: false */
-    scope.searchClasses();
+    scope.searchCourses();
 
     $httpBackend.flush();
 
@@ -163,23 +163,23 @@ describe('Controller: ClassSearchCtrl', function () {
     expect(searchResult.length).toBe(4);
 
     var expectedResult = [
-      {subjectId: 2, classIds: [3]},
-      {subjectId: 4, classIds: [5]},
-      {subjectId: 3, classIds: [4]},
-      {subjectId: 1, classIds: [1, 2]}
+      {subjectId: 2, courseIds: [3]},
+      {subjectId: 4, courseIds: [5]},
+      {subjectId: 3, courseIds: [4]},
+      {subjectId: 1, courseIds: [1, 2]}
     ];
 
     searchResult.sort(function (a, b) {
       return a.subject.name.localeCompare(b.subject.name);
     });
 
-    angular.forEach(searchResult, function (classGroup, i) {
-      var expectedClassGroup = expectedResult[i];
-      expect(classGroup.subject.id).toBe(expectedClassGroup.subjectId);
-      expect(classGroup.classes.length).toBe(expectedClassGroup.classIds.length);
+    angular.forEach(searchResult, function (courseGroup, i) {
+      var expectedCourseGroup = expectedResult[i];
+      expect(courseGroup.subject.id).toBe(expectedCourseGroup.subjectId);
+      expect(courseGroup.courses.length).toBe(expectedCourseGroup.courseIds.length);
 
-      var classes = angular.copy(classGroup.classes);
-      classes.sort(function (a, b) {
+      var courses = angular.copy(courseGroup.courses);
+      courses.sort(function (a, b) {
         if (a.id > b.id) {
           return 1;
         }
@@ -188,8 +188,8 @@ describe('Controller: ClassSearchCtrl', function () {
         }
         return 0;
       });
-      angular.forEach(classes, function (c, j) {
-        expect(c.id).toBe(expectedClassGroup.classIds[j]);
+      angular.forEach(courses, function (c, j) {
+        expect(c.id).toBe(expectedCourseGroup.courseIds[j]);
       });
     });
   });

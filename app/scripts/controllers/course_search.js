@@ -47,13 +47,13 @@ var parseKeyword = function (keyword) {
 
 /**
  * @ngdoc function
- * @name dashApp.controller:ClassSearchCtrl
+ * @name dashApp.controller:CourseSearchCtrl
  * @description
- * # ClassSearchCtrl
+ * # CourseSearchCtrl
  * Controller of the dashApp
  */
 angular.module('dashApp')
-  .controller('ClassSearchCtrl', function ($scope, Classes, UIBackdrop) {
+  .controller('CourseSearchCtrl', function ($scope, Courses, UIBackdrop) {
     $scope.userInput = {
       keyword: '',
       type: null
@@ -63,7 +63,7 @@ angular.module('dashApp')
       isSearchBoxFocused: false
     };
 
-    $scope.searchClasses = function () {
+    $scope.searchCourses = function () {
       /* jshint camelcase: false */
       var queryObj = {};
 
@@ -71,27 +71,27 @@ angular.module('dashApp')
 
       queryObj.type = $scope.userInput.type;
       if (queryObj.type === 'general') {
-        queryObj.area_id = $scope.userInput.area_id;
+        queryObj.category_id = $scope.userInput.category_id;
       } else if (queryObj.type === 'major') {
-        queryObj.grade = $scope.userInput.grade;
+        queryObj.target_grade = $scope.userInput.target_grade;
         queryObj.department_id = $scope.userInput.department_id;
       }
 
-      return Classes.getList(queryObj).then(function (list) {
-        var classGroups = {},
+      return Courses.getList(queryObj).then(function (list) {
+        var courseGroups = {},
             searchResult = [];
 
-        var classGroup;
+        var courseGroup;
         angular.forEach(list, function (c) {
-          if (!(c.subject_id in classGroups)) {
-            classGroups[c.subject_id] = {
+          if (!(c.subject_id in courseGroups)) {
+            courseGroups[c.subject_id] = {
               subject: angular.copy(c.subject),
-              classes: []
+              courses: []
             };
-            searchResult.push(classGroups[c.subject_id]);
+            searchResult.push(courseGroups[c.subject_id]);
           }
-          classGroup = classGroups[c.subject_id];
-          classGroup.classes.push(c);
+          courseGroup = courseGroups[c.subject_id];
+          courseGroup.courses.push(c);
         });
 
         $scope.searchResult = searchResult;
