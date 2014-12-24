@@ -6,7 +6,7 @@
       <div class="box search-box">
         <div class="input-group" ng-click="focusOnSearchBox()">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="keyword" ng-focus="focusOnSearchBox()">
+          <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="userInput.keyword" ng-focus="focusOnSearchBox()">
           <span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-gear"></i></button></span>
         </div>
       </div>
@@ -15,7 +15,71 @@
     <div class="box-group box-group-bottom">
       <div class="box-group" ng-class="{hidden: !uiStatus.isSearchBoxFocused}">
         <div class="box box-search-option">
-          Search option box
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label id="dsCatalogSearchBoxLabelType" class="col-sm-2">Type</label>
+              <div class="col-sm-10">
+                <div class="btn-group btn-group-justified" role="group" aria-labelledby="dsCatalogSearchBoxLabelType">
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-default" type="button" ng-model="userInput.type" btn-radio="null">All</button>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-default" type="button" ng-model="userInput.type" btn-radio="'major'">Major</button>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-default" type="button" ng-model="userInput.type" btn-radio="'general'">General</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="userInput.type === 'major'">
+              <div class="form-group">
+                <label id="dsCatalogSearchBoxLabelGrade" class="col-sm-2">Grade</label>
+                <div class="col-sm-10">
+                  <div class="btn-group btn-group-justified" role="group" aria-labelledby="dsCatalogSearchBoxLabelGrade">
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="null">All</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="1">1</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="2">2</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="3">3</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="4">4</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-default" type="button" ng-model="userInput.target_grade" btn-radio="5">5</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label id="dsCatalogSearchBoxLabelDept" class="col-sm-2">Dept.</label>
+                <div class="col-sm-10">
+                  <select class="form-control" ng-model="userInput.department_id" aria-labelledby="dsCatalogSearchBoxLabelDept">
+                    <option ng-repeat="department in departments" ng-value="department.id">{{department.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="userInput.type === 'general'">
+              <div class="form-group">
+                <label id="dsCatalogSearchBoxLabelCat" class="col-sm-2">Area</label>
+                <div class="col-sm-10">
+                  <select class="form-control" ng-model="userInput.category_id" aria-labelledby="dsCatalogSearchBoxLabelCat">
+                    <option ng-repeat="category in categories" ng-value="category.id">{{category.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
         <div class="box box-search-result">
           Search result box

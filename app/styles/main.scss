@@ -3,6 +3,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
 
+/* fix for 2px-border in justified button groups provided by bootstrap */
+.btn-group.btn-group-justified > .btn-group:not(:last-child) > .btn {
+  border-right: 0;
+}
+
 $white-box-margin-bottom: 12px;
 
 @mixin white-box() {
@@ -112,6 +117,18 @@ $search-box-height: 40px;
       &.hidden-add, &.hidden-remove {
         -webkit-transition: 0.2s ease-in-out all;
         transition: 0.2s ease-in-out all;
+      }
+
+      .box-search-option {
+        #dsCatalogSearchBoxLabelType,
+        #dsCatalogSearchBoxLabelGrade,
+        #dsCatalogSearchBoxLabelDept,
+        #dsCatalogSearchBoxLabelArea {
+          padding-top: $padding-base-vertical;
+          padding-bottom: $padding-base-vertical;
+          margin-top: 1px;
+          margin-bottom: 1px;
+        }
       }
     }
 

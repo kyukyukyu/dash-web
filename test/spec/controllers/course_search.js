@@ -31,6 +31,30 @@ describe('Controller: CourseSearchCtrl', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
+  describe('search options', function () {
+    /* jshint camelcase: false */
+    it('should initialize search options', function () {
+      expect(scope.userInput.keyword).toBe('');
+      expect(scope.userInput.type).toBeNull();
+      expect(scope.userInput.target_grade).toBeUndefined();
+      expect(scope.userInput.department_id).toBeUndefined();
+      expect(scope.userInput.category_id).toBeUndefined();
+    });
+
+    it('should initialize search options for major classes when selected', function () {
+      scope.userInput.type = 'major';
+      scope.$digest();
+      expect(scope.userInput.target_grade).toBeNull();
+      expect(scope.userInput.department_id).toBeNull();
+    });
+
+    it('should initialize search options for general classes when selected', function () {
+      scope.userInput.type = 'general';
+      scope.$digest();
+      expect(scope.userInput.category_id).toBeNull();
+    });
+  });
+
   describe('generating search queries', function () {
     /* jshint camelcase: false */
 

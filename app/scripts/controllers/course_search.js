@@ -63,6 +63,16 @@ angular.module('dashApp')
       isSearchBoxFocused: false
     };
 
+    $scope.$watch('userInput.type', function (type) {
+      /* jshint camelcase: false */
+      if (type === 'general') {
+        $scope.userInput.category_id = $scope.userInput.category_id || null;
+      } else if (type === 'major') {
+        $scope.userInput.target_grade = $scope.userInput.target_grade || null;
+        $scope.userInput.department_id = $scope.userInput.department_id || null;
+      }
+    });
+
     $scope.searchCourses = function () {
       /* jshint camelcase: false */
       var queryObj = {};

@@ -3,7 +3,7 @@
 describe('Dash App', function () {
 
   var keywordBox, gearIcon,
-      boxGroupBottom,
+      boxGroupBottom, btnGroupType, btnGroupGrade, selectBoxDepartment, selectBoxCategory,
       backdrop;
 
   beforeEach(function () {
@@ -11,10 +11,14 @@ describe('Dash App', function () {
   });
 
   beforeEach(function () {
-    keywordBox = element(by.model('keyword'));
+    keywordBox = element(by.model('userInput.keyword'));
     gearIcon = $('.box-group-top button');
 
     boxGroupBottom = $('.box-group-bottom > .box-group');
+    btnGroupType = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelType]');
+    btnGroupGrade = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelGrade]');
+    selectBoxDepartment = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelDept]');
+    selectBoxCategory = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelCat]');
 
     backdrop = $('#dsBackdrop');
   });
@@ -50,5 +54,30 @@ describe('Dash App', function () {
       expect(backdrop.isPresent()).toBeFalsy();
       expect(boxGroupBottom.isDisplayed()).toBeFalsy();
     });
+
+    describe('search options', function () {
+      beforeEach(function () {
+        gearIcon.click();
+      });
+
+      it('should show no other options than course type at first', function () {
+        expect(btnGroupGrade.isDisplayed()).toBeFalsy();
+      });
+
+      it('should show options related to major courses when type option is set to general', function () {
+        btnGroupType.$('[btn-radio="\'major\'"]').click();
+        expect(btnGroupGrade.isDisplayed()).toBeTruthy();
+        expect(selectBoxDepartment.isDisplayed()).toBeTruthy();
+        expect(selectBoxCategory.isDisplayed()).toBeFalsy();
+      });
+
+      it('should show options related to general courses when type option is set to general', function () {
+        btnGroupType.$('[btn-radio="\'general\'"]').click();
+        expect(selectBoxCategory.isDisplayed()).toBeTruthy();
+        expect(btnGroupGrade.isDisplayed()).toBeFalsy();
+        expect(selectBoxDepartment.isDisplayed()).toBeFalsy();
+      });
+    });
   });
+
 });
