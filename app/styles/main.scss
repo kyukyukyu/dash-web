@@ -12,8 +12,6 @@ $white-box-margin-bottom: 12px;
 
 @mixin white-box() {
   background: #fff;
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
   padding: 12px 10px;
   margin-bottom: $white-box-margin-bottom;
@@ -115,7 +113,6 @@ $search-box-height: 40px;
       }
 
       &.hidden-add, &.hidden-remove {
-        -webkit-transition: 0.2s ease-in-out all;
         transition: 0.2s ease-in-out all;
       }
 
