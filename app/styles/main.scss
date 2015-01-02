@@ -61,6 +61,26 @@ body {
 }
 
 $search-box-height: 40px;
+$search-ui-top-when-shown: 0;
+$search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
+
+@mixin keyframe-search-ui-hidden {
+  display: block;
+  opacity: 0;
+  top: $search-ui-top-when-hidden;
+}
+
+@keyframes search-ui-hide {
+  to {
+    @include keyframe-search-ui-hidden;
+  }
+}
+
+@keyframes search-ui-show {
+  from {
+    @include keyframe-search-ui-hidden;
+  }
+}
 
 /* Right column */
 .col-right {
@@ -100,20 +120,22 @@ $search-box-height: 40px;
 
     .box-group {
       position: absolute;
-      top: 0;
+      top: $search-ui-top-when-shown;
       width: 100%;
       z-index: $zindex-modal-background + 5;
       opacity: 1;
 
-      &.hidden {
-        top: -($search-box-height + $white-box-margin-bottom);
-        display: block !important;
-        visibility: visible !important;
-        opacity: 0;
+      &.ng-hide-add, &.ng-hide-remove {
+        animation-duration: 0.2s;
+        animation-timing-function: ease-in-out;
       }
 
-      &.hidden-add, &.hidden-remove {
-        transition: 0.2s ease-in-out all;
+      &.ng-hide-add {
+        animation-name: search-ui-hide;
+      }
+
+      &.ng-hide-remove {
+        animation-name: search-ui-show;
       }
 
       .box-search-option {
