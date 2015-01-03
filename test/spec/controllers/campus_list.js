@@ -1,21 +1,17 @@
-/* global getJSONFixture */
-
 'use strict';
 
 describe('Controller: CampusListCtrl', function () {
-  jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
-
-  var mockCampuses = getJSONFixture('campuses.json');
-
   // load the controller's module
   beforeEach(module('dashApp'));
+
+  // load module for mocking backend
+  beforeEach(module('dashApp.mock.campuses'));
 
   var $httpBackend, createController, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.when('GET', '/api/campuses').respond(mockCampuses);
 
     scope = $rootScope.$new();
     createController = function () {

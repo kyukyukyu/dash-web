@@ -1,4 +1,3 @@
-/* global protractor, element, by */
 'use strict';
 
 var mock = require('protractor-http-mock');

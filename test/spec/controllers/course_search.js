@@ -1,29 +1,30 @@
-/* global getJSONFixture, URI */
+/* global URI */
 'use strict';
 
 describe('Controller: CourseSearchCtrl', function () {
-  jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
-
-  var fxCourses = getJSONFixture('courses.json');
-
   // load the controller's module
   beforeEach(module('dashApp'));
 
+  // load module for mocking backend
+  beforeEach(module('dashApp.mock.courses'));
+
   var $httpBackend, $timeout, UIBackdrop, CourseSearchCtrl, scope;
-  var backendUrlRegex = /^\/api\/courses(\?(.*))?$/;
+  var backendUrlRegex, fxCourses;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope, _UIBackdrop_) {
+  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope, _UIBackdrop_,
+                              _coursesApiUrlRegex_, _fxCourses_) {
     /* jshint unused: false */
 
     $httpBackend = _$httpBackend_;
-    $httpBackend.when('GET', backendUrlRegex).respond(fxCourses);
     $timeout = _$timeout_;
     scope = $rootScope.$new();
     CourseSearchCtrl = $controller('CourseSearchCtrl', {
       $scope: scope
     });
     UIBackdrop = _UIBackdrop_;
+    backendUrlRegex = _coursesApiUrlRegex_;
+    fxCourses = _fxCourses_;
   }));
 
   afterEach(function () {

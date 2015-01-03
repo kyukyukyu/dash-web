@@ -1,23 +1,19 @@
-/* global getJSONFixture */
-
 'use strict';
 
 describe('Service: Campuses', function () {
   /* jshint unused: false */
-  jasmine.getJSONFixtures().fixturesPath = 'base/test/mock';
-
-  var mockCampuses = getJSONFixture('campuses.json');
 
   // load the service's module
   beforeEach(module('dashApp'));
+
+  // load module for mocking backend
+  beforeEach(module('dashApp.mock.campuses'));
 
   // instantiate service
   var $httpBackend, $timeout, Campuses;
   beforeEach(inject(function (_$httpBackend_, _$timeout_, _Campuses_) {
     $httpBackend = _$httpBackend_;
     $timeout = _$timeout_;
-    $httpBackend.when('GET', '/api/campuses').respond(mockCampuses);
-    $httpBackend.when('GET', '/api/campuses/1').respond(mockCampuses.objects[0]);
     Campuses = _Campuses_;
   }));
 
