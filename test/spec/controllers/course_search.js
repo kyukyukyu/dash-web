@@ -6,14 +6,21 @@ describe('Controller: CourseSearchCtrl', function () {
   beforeEach(module('dashApp'));
 
   // load module for mocking backend
+  beforeEach(module('dashApp.mock.campuses'));
   beforeEach(module('dashApp.mock.courses'));
 
-  var $httpBackend, $timeout, UIBackdrop, CourseSearchCtrl, scope;
-  var backendUrlRegex, fxCourses;
+  var $httpBackend,
+    $timeout,
+    UIBackdrop,
+    Campuses,
+    CourseSearchCtrl,
+    scope,
+    fxCourses;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller, $rootScope, _UIBackdrop_,
-                              _coursesApiUrlRegex_, _fxCourses_) {
+  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller,
+                              $rootScope, _Campuses_, _UIBackdrop_,
+                              _fxCourses_) {
     /* jshint unused: false */
 
     $httpBackend = _$httpBackend_;
@@ -22,8 +29,8 @@ describe('Controller: CourseSearchCtrl', function () {
     CourseSearchCtrl = $controller('CourseSearchCtrl', {
       $scope: scope
     });
+    Campuses = _Campuses_;
     UIBackdrop = _UIBackdrop_;
-    backendUrlRegex = _coursesApiUrlRegex_;
     fxCourses = _fxCourses_;
   }));
 
@@ -56,16 +63,34 @@ describe('Controller: CourseSearchCtrl', function () {
     });
   });
 
+  it('should search courses with a campus selected', function () {
+    var reason;
+    scope.searchCourses().catch(function (_reason) {
+      reason = _reason;
+    });
+    $timeout.flush();
+    expect(reason).toBe('campus not selected');
+  });
+
   describe('generating search queries', function () {
     /* jshint camelcase: false */
 
+    // set selected campus
+    beforeEach(function () {
+      $httpBackend.expect('GET', '/api/campuses/1');
+      Campuses.setSelectedCampus(1);
+      $httpBackend.flush();
+      $timeout.flush();
+    });
+
     // Set request expectations
     var expectedQueryObj;
+    var expectedApiUrlRegex = new RegExp('^/api/campuses/1/courses(\\?.*)?$');
     beforeEach(function () {
       var self = this;
 
       expectedQueryObj = {};
-      $httpBackend.expect('GET', backendUrlRegex)
+      $httpBackend.expect('GET', expectedApiUrlRegex)
         .respond(function () {
           var uri = new URI(arguments[1]);
           self.queryObj = uri.query(true);
@@ -180,8 +205,9 @@ describe('Controller: CourseSearchCtrl', function () {
 
   it('should group the search result by its subject', function () {
     /* jshint camelcase: false */
+    Campuses.setSelectedCampus(1);
+    $httpBackend.flush();
     scope.searchCourses();
-
     $httpBackend.flush();
 
     var searchResult = angular.copy(scope.searchResult);

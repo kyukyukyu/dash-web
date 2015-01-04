@@ -53,7 +53,7 @@ var parseKeyword = function (keyword) {
  * Controller of the dashApp
  */
 angular.module('dashApp')
-  .controller('CourseSearchCtrl', function ($scope, Courses, UIBackdrop) {
+  .controller('CourseSearchCtrl', function ($q, $scope, Courses, UIBackdrop) {
     $scope.userInput = {
       keyword: '',
       type: null
@@ -105,6 +105,13 @@ angular.module('dashApp')
         });
 
         $scope.searchResult = searchResult;
+      }, function (reason) {
+        if (reason === Courses.REASON_CAMPUS_NOT_SELECTED) {
+          // TODO: Warn the user that there is no selected campus.
+          //       A service for alert should be implemented.
+          return $q.reject('campus not selected');
+        }
+        return $q.reject(reason);
       });
     };
 
