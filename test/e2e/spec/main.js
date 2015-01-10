@@ -7,7 +7,7 @@ describe('Dash App', function () {
       backdrop;
 
   beforeEach(function () {
-    browser.get('index.html');
+    browser.get('index_e2e.html');
   });
 
   beforeEach(function () {

@@ -15,6 +15,9 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  // enable processhtml which is used for e2e testing
+  grunt.loadNpmTasks('grunt-processhtml');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -46,7 +49,7 @@ module.exports = function (grunt) {
       },
       jsTestE2E: {
         files: ['test/e2e/{,*/}*.js'],
-        tasks: ['newer:jshint:testE2E', 'connect:test', 'protractor']
+        tasks: ['newer:jshint:testE2E', 'processhtml:e2e', 'connect:test', 'protractor']
       },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -350,6 +353,8 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
+            '!e2e.html',
+            '!index_e2e.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
             'fonts/*'
@@ -380,7 +385,8 @@ module.exports = function (grunt) {
         'compass:server'
       ],
       test: [
-        'compass'
+        'compass',
+        'processhtml:e2e'
       ],
       dist: [
         'compass:dist',
@@ -402,6 +408,14 @@ module.exports = function (grunt) {
       e2e: {
         configFile: 'test/protractor-e2e.js',
         keepAlive: false
+      }
+    },
+
+    processhtml: {
+      e2e: {
+        files: {
+          '<%= yeoman.app %>/index_e2e.html': ['<%= yeoman.app %>/index.html']
+        }
       }
     }
   });

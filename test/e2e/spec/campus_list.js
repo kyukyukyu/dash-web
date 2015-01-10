@@ -1,17 +1,17 @@
 'use strict';
 
-var mock = require('protractor-http-mock');
+var HttpBackend = require('http-backend-proxy');
+var mockCampuses = require('../../mock/campuses');
 
 describe('Dash App – Campus List', function () {
 
-  beforeEach(function () {
-    mock(['campuses']);
-    browser.get('index.html');
-    browser.setLocation('/campuses');
-  });
+  var proxy;
 
-  afterEach(function () {
-    mock.teardown();
+  beforeEach(function () {
+    proxy = new HttpBackend(browser);
+    mockCampuses(proxy.onLoad);
+    browser.get('index_e2e.html');
+    browser.setLocation('/campuses');
   });
 
   var campusList = element.all(by.repeater('campus in campuses'));
@@ -38,5 +38,9 @@ describe('Dash App – Campus List', function () {
     .then(function (val) {
       expect(val).toBeTruthy();
     });
+  });
+
+  afterEach(function () {
+    proxy.onLoad.reset();
   });
 });

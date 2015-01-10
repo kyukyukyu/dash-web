@@ -1,10 +1,23 @@
+(function (undefined) {
 'use strict';
 
-angular.module('dashApp.mock.campuses', ['dashApp.mock.common'])
-  .factory('fxCampuses', function () {
-    return getJSONFixture('campuses.json');
-  })
-  .run(function ($httpBackend, fxCampuses) {
-    $httpBackend.when('GET', '/api/campuses').respond(fxCampuses);
-    $httpBackend.when('GET', '/api/campuses/1').respond(fxCampuses.objects[0]);
-  });
+var mock = function ($httpBackend, fxCampuses) {
+  $httpBackend.when('GET', '/api/campuses').respond(fxCampuses);
+  $httpBackend.when('GET', '/api/campuses/1').respond(fxCampuses.objects[0]);
+};
+
+if (module !== undefined && module.exports) {
+  // for e2e testing
+  var fxCampuses = require('./campuses.json');
+  module.exports = function ($httpBackend) {
+    return mock.call(this, $httpBackend, fxCampuses);
+  };
+} else {
+  // for unit testing
+  angular.module('dashApp.mock.campuses', ['dashApp.mock.common'])
+    .factory('fxCampuses', function () {
+      return getJSONFixture('campuses.json');
+    })
+    .run(mock);
+}
+})();
