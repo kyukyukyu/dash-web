@@ -3,7 +3,7 @@
 
 describe('Controller: CourseSearchCtrl', function () {
   // load the controller's module
-  beforeEach(module('dashApp'));
+  beforeEach(module('dashApp.create'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));

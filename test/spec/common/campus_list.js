@@ -2,7 +2,7 @@
 
 describe('Controller: CampusListCtrl', function () {
   // load the controller's module
-  beforeEach(module('dashApp'));
+  beforeEach(module('dashApp.common'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));

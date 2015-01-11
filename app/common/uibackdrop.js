@@ -7,7 +7,7 @@
  * # UIBackdrop
  * Factory in the dashApp.
  */
-angular.module('dashApp')
+angular.module('dashApp.common')
   .factory('UIBackdrop', function ($rootElement, $q) {
     var _backdrop;
     var _isShown = false;

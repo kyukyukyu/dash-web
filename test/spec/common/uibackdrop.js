@@ -3,7 +3,7 @@
 describe('Service: UIBackdrop', function () {
 
   // load the service's module
-  beforeEach(module('dashApp'));
+  beforeEach(module('dashApp.common'));
 
   // instantiate service
   var $rootElement, $timeout, UIBackdrop;

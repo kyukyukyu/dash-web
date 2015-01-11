@@ -2,7 +2,7 @@
 
 describe('Service: Courses', function () {
   // load the service's module
-  beforeEach(module('dashApp'));
+  beforeEach(module('dashApp.common'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));

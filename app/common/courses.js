@@ -7,7 +7,7 @@
  * # Courses
  * Factory in the dashApp.
  */
-angular.module('dashApp')
+angular.module('dashApp.common')
   .factory('Courses', function ($q, Restangular, Campuses) {
     var service = {};
     service.REASON_CAMPUS_NOT_SELECTED = 'campus not selected';

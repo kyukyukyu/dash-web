@@ -52,7 +52,7 @@ var parseKeyword = function (keyword) {
  * # CourseSearchCtrl
  * Controller of the dashApp
  */
-angular.module('dashApp')
+angular.module('dashApp.create')
   .controller('CourseSearchCtrl', function ($q, $scope, Courses, UIBackdrop) {
     $scope.userInput = {
       keyword: '',

@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:testE2E', 'processhtml:e2e', 'connect:test', 'protractor']
       },
       compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= yeoman.app %>/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       gruntfile: {
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.app %>/scripts/{,*/}*.js'
+          '<%= yeoman.app %>/{,*/}*.js'
         ]
       },
       test: {
@@ -182,7 +182,7 @@ module.exports = function (grunt) {
         ignorePath:  /\.\.\//
       },
       sass: {
-        src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        src: ['<%= yeoman.app %>/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
       }
     },
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
+        sassDir: '<%= yeoman.app %>',
         cssDir: '.tmp/styles',
         generatedImagesDir: '.tmp/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
@@ -316,7 +316,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.dist %>',
-          src: ['*.html', 'views/{,*/}*.html'],
+          src: ['{,*/}*.html'],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -356,7 +356,7 @@ module.exports = function (grunt) {
             '*.html',
             '!e2e.html',
             '!index_e2e.html',
-            'views/{,*/}*.html',
+            '{,*/}*.tpl.html',
             'images/{,*/}*.{webp}',
             'fonts/*'
           ]
@@ -374,9 +374,9 @@ module.exports = function (grunt) {
       },
       styles: {
         expand: true,
-        cwd: '<%= yeoman.app %>/styles',
+        cwd: '<%= yeoman.app %>{,*/}',
         dest: '.tmp/styles/',
-        src: '{,*/}*.css'
+        src: '*.css'
       }
     },
 

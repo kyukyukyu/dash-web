@@ -7,7 +7,7 @@
  * # Campuses
  * Factory in the dashApp.
  */
-angular.module('dashApp')
+angular.module('dashApp.common')
   .factory('Campuses', function ($rootScope, $q, Restangular) {
     var service = Restangular.service('campuses');
     var selectedCampus = null;
