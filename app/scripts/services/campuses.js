@@ -8,7 +8,7 @@
  * Factory in the dashApp.
  */
 angular.module('dashApp')
-  .factory('Campuses', function ($q, Restangular) {
+  .factory('Campuses', function ($rootScope, $q, Restangular) {
     var service = Restangular.service('campuses');
     var selectedCampus = null;
     service.setSelectedCampus = function (campusOrId) {
@@ -24,6 +24,7 @@ angular.module('dashApp')
 
       return promise.then(function (campus) {
         selectedCampus = campus;
+        $rootScope.$broadcast('campusselected', selectedCampus);
         return selectedCampus;
       });
     };
