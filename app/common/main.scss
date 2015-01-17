@@ -47,6 +47,7 @@ body {
   }
 }
 
+nav [dropdown] [role=menu] li:not(.selected) i.fa.fa-check { display: none; }
 
 /* Custom page footer */
 .footer {

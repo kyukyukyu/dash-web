@@ -1,16 +1,26 @@
 'use strict';
 
-describe('Dash App', function () {
+var HttpBackend = require('http-backend-proxy');
+var mockCampuses = require('../../mock/campuses');
 
-  var keywordBox, gearIcon,
-      boxGroupBottom, btnGroupType, btnGroupGrade, selectBoxDepartment, selectBoxCategory,
-      backdrop;
+describe('Main', function () {
+
+  var proxy;
+
+  var navbar,
+    keywordBox, gearIcon,
+    boxGroupBottom, btnGroupType, btnGroupGrade, selectBoxDepartment, selectBoxCategory,
+    backdrop;
 
   beforeEach(function () {
+    proxy = new HttpBackend(browser);
+    mockCampuses(proxy.onLoad);
     browser.get('index_e2e.html');
   });
 
   beforeEach(function () {
+    navbar = $('nav');
+
     keywordBox = element(by.model('userInput.keyword'));
     gearIcon = $('.box-group-top button');
 
