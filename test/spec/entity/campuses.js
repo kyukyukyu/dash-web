@@ -4,7 +4,7 @@ describe('Service: Campuses', function () {
   /* jshint unused: false */
 
   // load the service's module
-  beforeEach(module('dashApp.common'));
+  beforeEach(module('dashApp.entity'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));
@@ -51,6 +51,18 @@ describe('Service: Campuses', function () {
   describe('setting selected campus', function () {
     beforeEach(function () {
       spyOn($rootScope, '$broadcast');
+    });
+
+    it('should set the first campus as selected campus for the app', function () {
+      $httpBackend.expect('GET', '/api/campuses');
+      $httpBackend.flush();
+
+      var firstCampus = Campuses.getSelectedCampus();
+      expect(firstCampus.id).toBe(1);
+      expect($rootScope.$broadcast).toHaveBeenCalledWith(
+        'campusselected',
+        firstCampus
+      );
     });
 
     it('should set an campus object as selected campus for the app', function () {

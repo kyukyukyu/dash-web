@@ -6,7 +6,8 @@ angular
     'ngCookies',
     'ngSanitize',
     'restangular',
-    'ui.router'
+    'ui.router',
+    'dashApp.entity'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -16,22 +17,5 @@ angular
         url: '/campuses',
         templateUrl: 'common/campus_list.tpl.html',
         controller: 'CampusListCtrl'
-      });
-  })
-  .config(function (RestangularProvider) {
-    RestangularProvider
-      .setBaseUrl('/api')
-      .addResponseInterceptor(function (data, operation) {
-        var extractedData;
-        if (operation === 'getList') {
-          /* jshint sub: true */
-          extractedData = data.objects;
-          extractedData.numResults = data['num_results'];
-          extractedData.page = data.page;
-          extractedData.numPages = data['num_pages'];
-        } else {
-          extractedData = data;
-        }
-        return extractedData;
       });
   });

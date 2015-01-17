@@ -17,21 +17,25 @@ describe('Controller: CourseSearchCtrl', function () {
     scope,
     fxCourses;
 
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, $controller,
-                              $rootScope, _Campuses_, _UIBackdrop_,
-                              _fxCourses_) {
-    /* jshint unused: false */
-
+  // instantiate dependencies
+  beforeEach(inject(function (_$httpBackend_, _$timeout_, _Campuses_,
+                              _UIBackdrop_, _fxCourses_) {
     $httpBackend = _$httpBackend_;
     $timeout = _$timeout_;
+    Campuses = _Campuses_;
+    UIBackdrop = _UIBackdrop_;
+    fxCourses = _fxCourses_;
+  }));
+
+  // flush HTTP request made by Campuses service
+  beforeEach(function () { $httpBackend.flush(1); });
+
+  // Initialize the controller and a mock scope
+  beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     CourseSearchCtrl = $controller('CourseSearchCtrl', {
       $scope: scope
     });
-    Campuses = _Campuses_;
-    UIBackdrop = _UIBackdrop_;
-    fxCourses = _fxCourses_;
   }));
 
   afterEach(function () {
@@ -61,15 +65,6 @@ describe('Controller: CourseSearchCtrl', function () {
       scope.$digest();
       expect(scope.userInput.category_id).toBeNull();
     });
-  });
-
-  it('should search courses with a campus selected', function () {
-    var reason;
-    scope.searchCourses().catch(function (_reason) {
-      reason = _reason;
-    });
-    $timeout.flush();
-    expect(reason).toBe('campus not selected');
   });
 
   describe('generating search queries', function () {

@@ -14,7 +14,7 @@ describe('Dash App – Campus List', function () {
     browser.setLocation('/campuses');
   });
 
-  var campusList = element.all(by.repeater('campus in campuses'));
+  var campusList = $('ui-view').all(by.repeater('campus in campuses'));
 
   it('should show the list of campuses', function() {
     var campusData = [

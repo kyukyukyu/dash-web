@@ -30,6 +30,7 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/uri.js/src/URI.js',
+      'app/entity/entity.js',
       'app/common/common.js',
       'app/create/create.js',
       'app/**/*.js',

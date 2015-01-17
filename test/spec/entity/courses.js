@@ -2,45 +2,36 @@
 
 describe('Service: Courses', function () {
   // load the service's module
-  beforeEach(module('dashApp.common'));
+  beforeEach(module('dashApp.entity'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));
   beforeEach(module('dashApp.mock.courses'));
 
-  // instantiate service
   var $httpBackend,
     $timeout,
     Campuses,
     Courses,
     fxCourses;
+
+  // instantiate dependencies
   beforeEach(inject(function (_$httpBackend_, _$timeout_, _Campuses_,
-                              _Courses_, _fxCourses_) {
+                              _fxCourses_) {
     $httpBackend = _$httpBackend_;
     $timeout = _$timeout_;
     Campuses = _Campuses_;
-    Courses = _Courses_;
     fxCourses = _fxCourses_;
   }));
+
+  // flush HTTP request made by Campuses service
+  beforeEach(function () { $httpBackend.flush(1); });
+
+  // instantiate service
+  beforeEach(inject(function (_Courses_) { Courses = _Courses_; }));
 
   afterEach(function () {
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
-  });
-
-  it('should not provide course data if selected campus is not set', function () {
-    var _reason;
-    var errorHandler = function (reason) { _reason = reason; };
-
-    _reason = null;
-    Courses.get(1).catch(errorHandler);
-    $timeout.flush();
-    expect(_reason).toBe(Courses.REASON_CAMPUS_NOT_SELECTED);
-
-    _reason = null;
-    Courses.getList().catch(errorHandler);
-    $timeout.flush();
-    expect(_reason).toBe(Courses.REASON_CAMPUS_NOT_SELECTED);
   });
 
   describe('with selected campus set', function () {

@@ -7,10 +7,16 @@
  * # Campuses
  * Factory in the dashApp.
  */
-angular.module('dashApp.common')
+angular.module('dashApp.entity')
   .factory('Campuses', function ($rootScope, $q, Restangular) {
     var service = Restangular.service('campuses');
     var selectedCampus = null;
+
+    // initialize selectedCampus with the first campus entity
+    service.getList().then(function (campuses) {
+      service.setSelectedCampus(campuses[0]);
+    });
+
     service.setSelectedCampus = function (campusOrId) {
       var promise;
 
