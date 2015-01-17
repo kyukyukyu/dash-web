@@ -1,0 +1,14 @@
+$white-box-margin-bottom: 12px;
+
+@mixin white-box() {
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  padding: 12px 10px;
+  margin-bottom: $white-box-margin-bottom;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+$footer-height: 40px;

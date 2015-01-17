@@ -3,7 +3,7 @@
   <div class="col-md-6 col-lg-5">column 2</div>
   <div class="col-right" ng-controller="CourseSearchCtrl">
     <div class="box-group box-group-top">
-      <div class="box search-box">
+      <div class="box search-box" ng-class="{focused: uiStatus.isSearchBoxFocused}">
         <div class="input-group" ng-click="focusOnSearchBox()">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
           <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="userInput.keyword" ng-focus="focusOnSearchBox()">
