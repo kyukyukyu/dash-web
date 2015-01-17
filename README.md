@@ -42,10 +42,10 @@ as test runner, [Jasmine
 2.0](http://jasmine.github.io/2.0/introduction.html) as
 unit testing framework, and
 [Protractor](http://angular.github.io/protractor/) as
-E2E testing framework. Also, to mock HTTP backends,
+E2E testing framework. Also, to mock HTTP backends on E2E testing,
 which should be implemented in
 [Dash](https://github.com/kyukyukyu/dash),
-[protractor-http-mock](https://github.com/atecarlos/protractor-http-mock)
+[http-backend-proxy](https://github.com/kbaltrinic/http-backend-proxy)
 is used.
 
 Below is the directory structure for tests.
@@ -53,12 +53,15 @@ Below is the directory structure for tests.
 ```
 test/
   e2e/
-    mock/     # HTTP backend mocks are here.
+    page/     # Page Object definitions are here.
     spec/     # E2E testing specs are here.
+    util/     # Utilities for E2E testing are here.
+    .jshintrc # for E2E testing codes
   mock/       # Fixture data for HTTP backend mocks are here.
   spec/       # Unit testing specs are here.
-    controllers/
-    services/
+    common/
+    create/
+    entity/
   .jshintrc   # for test codes
   karma.conf.js       # Karma configuration
   protractor-e2e.js   # Protractor configuration
