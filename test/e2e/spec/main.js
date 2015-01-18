@@ -90,4 +90,8 @@ describe('Main', function () {
     });
   });
 
+  afterEach(function () {
+    proxy.onLoad.reset();
+  });
+
 });

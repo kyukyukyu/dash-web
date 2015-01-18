@@ -5,25 +5,31 @@ var mockCampuses = require('../../mock/campuses');
 var NavBar = require('../page/navbar');
 
 describe('Navigation bar', function () {
+
   var proxy;
+
   var navbar;
 
   beforeEach(function () {
     proxy = new HttpBackend(browser);
     mockCampuses(proxy.onLoad);
-    browser.get('index_e2e.html');
     navbar = new NavBar();
+    browser.get('index_e2e.html');
   });
 
   describe('campus dropdown', function () {
+    var firstRun = true;
     var dropdown;
     var menuItems;
 
     beforeEach(function () {
-      dropdown = navbar.campusDropdown;
-      menuItems = [];
-      for (var i = 0; i < 2; ++i) {
-        menuItems.push(dropdown.menuItemAt(i));
+      if (firstRun) {
+        firstRun = false;
+        dropdown = navbar.campusDropdown;
+        menuItems = [];
+        for (var i = 0; i < 2; ++i) {
+          menuItems.push(dropdown.menuItemAt(i));
+        }
       }
     });
 
@@ -46,9 +52,14 @@ describe('Navigation bar', function () {
       expect(dropdown.menu.isDisplayed()).toBeFalsy();
       expect(dropdown.selectedCampus.getText()).toBe('HYU ERICA');
 
-      dropdown.selectedCampus.click();
+      dropdown.toggle();
       expect(menuItems[0].isSelected()).toBeFalsy();
       expect(menuItems[1].isSelected()).toBeTruthy();
     });
   });
+
+  afterEach(function () {
+    proxy.onLoad.reset();
+  });
+
 });
