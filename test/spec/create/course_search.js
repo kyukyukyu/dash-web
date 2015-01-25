@@ -7,6 +7,8 @@ describe('Controller: CourseSearchCtrl', function () {
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));
+  beforeEach(module('dashApp.mock.departments'));
+  beforeEach(module('dashApp.mock.genEduCategories'));
   beforeEach(module('dashApp.mock.courses'));
 
   var $httpBackend,
@@ -38,10 +40,19 @@ describe('Controller: CourseSearchCtrl', function () {
     });
   }));
 
+  // flush HTTP request made by controller
+  beforeEach(function () { $httpBackend.flush(2); });
+
   afterEach(function () {
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
   });
+
+  it('should load list of departments and gen.edu categories',
+    inject(function (fxDepartments, fxGenEduCategories) {
+      expect(scope.departments.plain()).toEqual(fxDepartments.objects);
+      expect(scope.categories.plain()).toEqual(fxGenEduCategories.objects);
+    }));
 
   describe('search options', function () {
     /* jshint camelcase: false */

@@ -2,6 +2,8 @@
 
 var HttpBackend = require('http-backend-proxy');
 var mockCampuses = require('../../mock/campuses');
+var mockDepartments = require('../../mock/departments');
+var mockGenEduCategories = require('../../mock/gen_edu_categories');
 
 describe('Main', function () {
 
@@ -15,6 +17,8 @@ describe('Main', function () {
   beforeEach(function () {
     proxy = new HttpBackend(browser);
     mockCampuses(proxy.onLoad);
+    mockDepartments(proxy.onLoad);
+    mockGenEduCategories(proxy.onLoad);
     browser.get('index_e2e.html');
   });
 
@@ -74,16 +78,20 @@ describe('Main', function () {
         expect(btnGroupGrade.isDisplayed()).toBeFalsy();
       });
 
-      it('should show options related to major courses when type option is set to general', function () {
+      it('should show options related to major courses when type option is set to major', function () {
         btnGroupType.$('[btn-radio="\'major\'"]').click();
         expect(btnGroupGrade.isDisplayed()).toBeTruthy();
         expect(selectBoxDepartment.isDisplayed()).toBeTruthy();
+        expect(selectBoxDepartment.$('option:checked').getText()).toEqual('(All)');
+        expect(selectBoxDepartment.$$('option').count()).toBe(1 + 11);
         expect(selectBoxCategory.isDisplayed()).toBeFalsy();
       });
 
       it('should show options related to general courses when type option is set to general', function () {
         btnGroupType.$('[btn-radio="\'general\'"]').click();
         expect(selectBoxCategory.isDisplayed()).toBeTruthy();
+        expect(selectBoxCategory.$('option:checked').getText()).toEqual('(All)');
+        expect(selectBoxCategory.$$('option').count()).toBe(1 + 4);
         expect(btnGroupGrade.isDisplayed()).toBeFalsy();
         expect(selectBoxDepartment.isDisplayed()).toBeFalsy();
       });

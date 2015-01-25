@@ -53,11 +53,14 @@ var parseKeyword = function (keyword) {
  * Controller of the dashApp
  */
 angular.module('dashApp.create')
-  .controller('CourseSearchCtrl', function ($q, $scope, Courses, UIBackdrop) {
+  .controller('CourseSearchCtrl', function ($q, $scope, Restangular, Courses,
+                                            UIBackdrop) {
     $scope.userInput = {
       keyword: '',
       type: null
     };
+    $scope.departments = Restangular.all('departments').getList().$object;
+    $scope.categories = Restangular.all('gen_edu_categories').getList().$object;
     $scope.searchResult = null;
     $scope.uiStatus = {
       isSearchBoxFocused: false

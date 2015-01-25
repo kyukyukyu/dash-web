@@ -1,0 +1,84 @@
+{
+  "num_results": 11,
+  "page": 1,
+  "num_pages": 1,
+  "objects": [
+    {
+      "campus_id": 1,
+      "code": "H0002519",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 1,
+      "name": "Major in Computer Engineering"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002518",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 2,
+      "name": "Major in Computer Science"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002867",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 3,
+      "name": "Department of Information System"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002575",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 4,
+      "name": "Department of Electronic Engineering"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002574",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 5,
+      "name": "Department of Electrical and Bioengineering"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0003665",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 6,
+      "name": "Department of Media Communication"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002719",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 7,
+      "name": "Department of Korean Language Education"
+    },
+    {
+      "campus_id": 1,
+      "code": "H0002256",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 8,
+      "name": "College"
+    },
+    {
+      "campus_id": 2,
+      "code": "Y0000452",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 9,
+      "name": "Department of Korean Language & Literature"
+    },
+    {
+      "campus_id": 2,
+      "code": "Y0000467",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 10,
+      "name": "Department of Cultural Anthropology"
+    },
+    {
+      "campus_id": 2,
+      "code": "Y0000316",
+      "created_at": "2015-01-05T13:52:08+00:00",
+      "id": 11,
+      "name": "College"
+    }
+  ]
+}
