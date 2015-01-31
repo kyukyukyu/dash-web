@@ -63,7 +63,8 @@ angular.module('dashApp.create')
     $scope.categories = Restangular.all('gen_edu_categories').getList().$object;
     $scope.searchResult = null;
     $scope.uiStatus = {
-      isSearchBoxFocused: false
+      isSearchBoxFocused: false,
+      isOptionBoxOpen: true
     };
 
     $scope.$watch('userInput.type', function (type) {

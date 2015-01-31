@@ -14,7 +14,7 @@ describe('Main', function () {
 
   var navbar,
     keywordBox, gearIcon,
-    boxGroupBottom, searchOptionBox,
+    searchOptionBox,
     backdrop;
 
   beforeEach(function () {
@@ -31,7 +31,6 @@ describe('Main', function () {
     keywordBox = element(by.model('userInput.keyword'));
     gearIcon = $('.box-group-top button');
 
-    boxGroupBottom = $('.box-group-bottom > .box-group');
     searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
 
     backdrop = $('#dsBackdrop');
@@ -42,31 +41,52 @@ describe('Main', function () {
   });
 
   describe('searching', function () {
-    beforeEach(function () {
-      expect(boxGroupBottom.isDisplayed()).toBeFalsy();
-      expect(backdrop.isPresent()).toBeFalsy();
-    });
+    describe('keyword box', function () {
+      beforeEach(function () {
+        expect(searchOptionBox.elem.isDisplayed()).toBeFalsy();
+        expect(backdrop.isPresent()).toBeFalsy();
+      });
 
-    describe('should open the box group of search option box and search result box with backdrop', function () {
-      it('when the keyword box is focused', function () {
+      describe('when element is focused', function () {
+        it('should open option box with backdrop when the keyword box is focused', function () {
+          keywordBox.click();
+        });
+
+        it('should open option box with backdrop when the gear icon is clicked', function () {
+          gearIcon.click();
+        });
+
+        afterEach(function () {
+          expect(searchOptionBox.elem.isDisplayed()).toBeTruthy();
+          expect(backdrop.isPresent()).toBeTruthy();
+        });
+      });
+
+      it('should hide backdrop and boxes when backdrop is clicked', function () {
         keywordBox.click();
+        backdrop.click();
+        expect(backdrop.isPresent()).toBeFalsy();
+        expect(searchOptionBox.elem.isDisplayed()).toBeFalsy();
       });
 
-      it('when the gear icon is clicked', function () {
-        gearIcon.click();
-      });
+      describe('toggling option box', function () {
+        it('should toggle option box with gear icon', function () {
+          keywordBox.click();
+          gearIcon.click();
+          expect(searchOptionBox.elem.isDisplayed()).toBeFalsy();
+          gearIcon.click();
+          expect(searchOptionBox.elem.isDisplayed()).toBeTruthy();
+        });
 
-      afterEach(function () {
-        expect(boxGroupBottom.isDisplayed()).toBeTruthy();
-        expect(backdrop.isPresent()).toBeTruthy();
+        it('should preserve status of option box even if keyword box is focused out', function () {
+          keywordBox.click();
+          gearIcon.click();
+          expect(searchOptionBox.elem.isDisplayed()).toBeFalsy();
+          backdrop.click();
+          keywordBox.click();
+          expect(searchOptionBox.elem.isDisplayed()).toBeFalsy();
+        });
       });
-    });
-
-    it('should hide backdrop and the box group when backdrop is clicked', function () {
-      keywordBox.click();
-      backdrop.click();
-      expect(backdrop.isPresent()).toBeFalsy();
-      expect(boxGroupBottom.isDisplayed()).toBeFalsy();
     });
 
     describe('search options', function () {

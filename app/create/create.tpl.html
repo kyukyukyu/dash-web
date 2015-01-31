@@ -7,14 +7,20 @@
         <div class="input-group" ng-click="focusOnSearchBox()">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
           <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="userInput.keyword" ng-focus="focusOnSearchBox()">
-          <span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-gear"></i></button></span>
+          <span class="input-group-btn">
+            <button class="btn btn-default"
+                    type="button"
+                    ng-click="uiStatus.isSearchBoxFocused && (uiStatus.isOptionBoxOpen = !uiStatus.isOptionBoxOpen)">
+              <i class="fa fa-gear"></i>
+            </button>
+          </span>
         </div>
       </div>
     </div>
 
     <div class="box-group box-group-bottom">
       <div class="box-group" ng-show="uiStatus.isSearchBoxFocused">
-        <div class="box box-search-option">
+        <div class="box box-search-option" ng-show="uiStatus.isOptionBoxOpen">
           <form class="form-horizontal" role="form">
             <div class="form-group">
               <label id="dsCatalogSearchBoxLabelType" class="col-sm-2">Type</label>
