@@ -2,7 +2,7 @@
 
 var HttpBackend = require('http-backend-proxy');
 var mockCampuses = require('../../mock/campuses');
-var NavBar = require('../page/navbar');
+var NavBar = require('../page/common/navbar');
 
 describe('Navigation bar', function () {
 

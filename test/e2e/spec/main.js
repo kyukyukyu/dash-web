@@ -5,13 +5,16 @@ var mockCampuses = require('../../mock/campuses');
 var mockDepartments = require('../../mock/departments');
 var mockGenEduCategories = require('../../mock/gen_edu_categories');
 
+var NavBar = require('../page/common/navbar');
+var SearchOptionBox = require('../page/create/search_option_box');
+
 describe('Main', function () {
 
   var proxy;
 
   var navbar,
     keywordBox, gearIcon,
-    boxGroupBottom, btnGroupType, btnGroupGrade, selectBoxDepartment, selectBoxCategory,
+    boxGroupBottom, searchOptionBox,
     backdrop;
 
   beforeEach(function () {
@@ -23,16 +26,13 @@ describe('Main', function () {
   });
 
   beforeEach(function () {
-    navbar = $('nav');
+    navbar = new NavBar();
 
     keywordBox = element(by.model('userInput.keyword'));
     gearIcon = $('.box-group-top button');
 
     boxGroupBottom = $('.box-group-bottom > .box-group');
-    btnGroupType = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelType]');
-    btnGroupGrade = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelGrade]');
-    selectBoxDepartment = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelDept]');
-    selectBoxCategory = boxGroupBottom.$('[aria-labelledby=dsCatalogSearchBoxLabelCat]');
+    searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
 
     backdrop = $('#dsBackdrop');
   });
@@ -75,25 +75,27 @@ describe('Main', function () {
       });
 
       it('should show no other options than course type at first', function () {
-        expect(btnGroupGrade.isDisplayed()).toBeFalsy();
+        expect(searchOptionBox.btnGroupGrade.isDisplayed()).toBeFalsy();
       });
 
       it('should show options related to major courses when type option is set to major', function () {
-        btnGroupType.$('[btn-radio="\'major\'"]').click();
-        expect(btnGroupGrade.isDisplayed()).toBeTruthy();
+        var selectBoxDepartment = searchOptionBox.selectBoxDepartment;
+        searchOptionBox.setType(searchOptionBox.TYPE_MAJOR);
+        expect(searchOptionBox.btnGroupGrade.isDisplayed()).toBeTruthy();
         expect(selectBoxDepartment.isDisplayed()).toBeTruthy();
         expect(selectBoxDepartment.$('option:checked').getText()).toEqual('(All)');
         expect(selectBoxDepartment.$$('option').count()).toBe(1 + 11);
-        expect(selectBoxCategory.isDisplayed()).toBeFalsy();
+        expect(searchOptionBox.selectBoxCategory.isDisplayed()).toBeFalsy();
       });
 
       it('should show options related to general courses when type option is set to general', function () {
-        btnGroupType.$('[btn-radio="\'general\'"]').click();
+        var selectBoxCategory = searchOptionBox.selectBoxCategory;
+        searchOptionBox.setType(searchOptionBox.TYPE_GENERAL);
         expect(selectBoxCategory.isDisplayed()).toBeTruthy();
         expect(selectBoxCategory.$('option:checked').getText()).toEqual('(All)');
         expect(selectBoxCategory.$$('option').count()).toBe(1 + 4);
-        expect(btnGroupGrade.isDisplayed()).toBeFalsy();
-        expect(selectBoxDepartment.isDisplayed()).toBeFalsy();
+        expect(searchOptionBox.btnGroupGrade.isDisplayed()).toBeFalsy();
+        expect(searchOptionBox.selectBoxDepartment.isDisplayed()).toBeFalsy();
       });
     });
   });
