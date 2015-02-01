@@ -1,9 +1,19 @@
+// color variables
+$text-color-normal: #2c2c2c;
+$text-color-bright: #9a9994;
+$border-color-bright: #9a9994;
+$border-color-focused: #469ede;
+$view-background-color-selected: #ecebeb;
+
+$white-box-vertical-padding: 11px;
+$white-box-horizontal-padding: 11px;
 $white-box-margin-bottom: 12px;
 
 @mixin white-box() {
   background: #fff;
+  border: 1px solid transparent;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-  padding: 12px 10px;
+  padding: $white-box-vertical-padding $white-box-horizontal-padding;
   margin-bottom: $white-box-margin-bottom;
 
   &:last-child {
