@@ -1,13 +1,30 @@
 // color variables
-$text-color-normal: #2c2c2c;
-$text-color-bright: #9a9994;
-$border-color-bright: #9a9994;
-$border-color-focused: #469ede;
-$view-background-color-selected: #ecebeb;
+$text-color-normal: #2c2c2c !default;
+$text-color-bright: #9a9994 !default;
+$border-color-bright: #9a9994 !default;
+$border-color-focused: #469ede !default;
+$view-background-color-selected: #ecebeb !default;
 
-$white-box-vertical-padding: 11px;
-$white-box-horizontal-padding: 11px;
-$white-box-margin-bottom: 12px;
+// footer height variable
+$footer-height: 40px !default;
+
+// variables for white box
+$white-box-vertical-padding: 11px !default;
+$white-box-horizontal-padding: 11px !default;
+$white-box-margin-bottom: 12px !default;
+
+// variables for ds-subject directive
+$subject-vertical-padding: 8px !default;
+$subject-left-border: 6px solid !default;
+$subject-search-result-left-padding: 24px + $white-box-horizontal-padding !default;
+$subject-margin-bottom: 1px !default;
+$course-vertical-padding: 8px !default;
+
+$icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$text-color: $text-color-normal;
+
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
 
 @mixin white-box() {
   background: #fff;
