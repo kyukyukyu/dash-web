@@ -45,13 +45,14 @@ describe('Service: ClassCart', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
+  function addToCart(courseId) {
+    var course = Courses.get(courseId).$object;
+    $httpBackend.flush();
+    ClassCart.add(course);
+    return course;
+  }
+
   describe('the function that adds course objects', function () {
-    var addToCart = function (courseId) {
-      var course = Courses.get(courseId).$object;
-      $httpBackend.flush();
-      ClassCart.add(course);
-      return course;
-    };
 
     it('should add a course object', function () {
       var course = addToCart(1);
@@ -123,27 +124,53 @@ describe('Service: ClassCart', function () {
       $timeout.flush();
       expect($rootScope.$broadcast.calls.count()).toBe(1);
     });
+
   });
 
-  /*
-  describe('removing course objects', function () {
+  describe('the function that removes course objects', function () {
+
     // add some course objects in advance
     var courses;
     beforeEach(function () {
       courses = [];
-      var c;
       for (var i = 1; i <= 3; ++i) {
-        c = Courses.get(i).$object;
-        courses.push(c);
-        ClassCart.add(c);
+        courses.push(addToCart(i));
       }
-      $httpBackend.flush();
     });
 
-    it('should provide function that removes course objects', function () {
+    it('should remove course objects', function () {
       ClassCart.remove(courses[0]);
+      var courseGroups = ClassCart.getCourseGroups();
+      expect(courseGroups.length).toBe(2);
+      var courseGroup;
+      courseGroup = courseGroups[0];
+      expect(courseGroup.subject.code).toEqual(courses[1].subject.code);
+      expect(courseGroup.courses.length).toBe(1);
+      expect(courseGroup.courses[0].code).toEqual(courses[1].code);
+      courseGroup = courseGroups[1];
+      expect(courseGroup.subject.code).toEqual(courses[2].subject.code);
+      expect(courseGroup.courses.length).toBe(1);
+      expect(courseGroup.courses[0].code).toEqual(courses[2].code);
     });
+
+    it('should broadcast removefromcart event when a course object is removed', function () {
+      spyOn($rootScope, '$broadcast');
+      ClassCart.remove(courses[0]);
+      $timeout.flush();
+      expect($rootScope.$broadcast).toHaveBeenCalledWith('removefromcart', courses[0]);
+    });
+
+    it('should remove course object when no course is in it', function () {
+      ClassCart.remove(courses[2]);
+      var courseGroups = ClassCart.getCourseGroups();
+      expect(courseGroups.length).toBe(1);
+      var courseGroup = courseGroups[0];
+      expect(courseGroup.subject.code).toEqual(courses[0].subject.code);
+      expect(courseGroup.courses.length).toBe(2);
+      expect(courseGroup.courses[0].code).toBe(courses[0].code);
+      expect(courseGroup.courses[1].code).toBe(courses[1].code);
+    });
+
   });
-  */
 
 });

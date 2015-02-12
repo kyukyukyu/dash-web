@@ -38,6 +38,31 @@ angular.module('dashApp.common')
         $rootScope.$broadcast('addtocart', course);
       },
 
+      remove: function (course) {
+        /* jshint camelcase: false */
+        if (!(course.subject_id in _courseGroupsMap)) {
+          return;
+        }
+        var courseGroup = _courseGroupsMap[course.subject_id];
+        var i;
+        for (i = 0; i < courseGroup.courses.length; ++i) {
+          if (courseGroup.courses[i].code === course.code) {
+            courseGroup.courses.splice(i, 1);
+            break;
+          }
+        }
+        if (courseGroup.courses.length === 0) {
+          delete _courseGroupsMap[course.subject_id];
+          for (i = 0; i < _courseGroupsList.length; ++i) {
+            if (_courseGroupsList[i].subject.code === course.subject.code) {
+              _courseGroupsList.splice(i, 1);
+              break;
+            }
+          }
+        }
+        $rootScope.$broadcast('removefromcart', course);
+      },
+
       getCourseGroups: function () {
         return _courseGroupsList;
       }
