@@ -48,6 +48,7 @@ describe('Service: ClassCart', function () {
   function addToCart(courseId) {
     var course = Courses.get(courseId).$object;
     $httpBackend.flush();
+    $timeout.flush();
     ClassCart.add(course);
     return course;
   }
@@ -76,7 +77,6 @@ describe('Service: ClassCart', function () {
     it('should broadcast addtocart event when a course object is added', function () {
       spyOn($rootScope, '$broadcast');
       var course = addToCart(1);
-      $timeout.flush();
       expect($rootScope.$broadcast).toHaveBeenCalledWith('addtocart', course);
     });
 
@@ -121,7 +121,6 @@ describe('Service: ClassCart', function () {
       spyOn($rootScope, '$broadcast');
       addToCart(1);
       addToCart(1);
-      $timeout.flush();
       expect($rootScope.$broadcast.calls.count()).toBe(1);
     });
 
@@ -156,7 +155,6 @@ describe('Service: ClassCart', function () {
     it('should broadcast removefromcart event when a course object is removed', function () {
       spyOn($rootScope, '$broadcast');
       ClassCart.remove(courses[0]);
-      $timeout.flush();
       expect($rootScope.$broadcast).toHaveBeenCalledWith('removefromcart', courses[0]);
     });
 
