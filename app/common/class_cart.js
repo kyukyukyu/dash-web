@@ -16,6 +16,15 @@ angular.module('dashApp.common')
       return subjectId in _courseGroupsMap;
     }
 
+    $rootScope.$on('campusselected', function () {
+      if (_courseGroupsList.length === 0) {
+        return;
+      }
+      _courseGroupsMap = {};
+      _courseGroupsList = [];
+      $rootScope.$broadcast('clearcart');
+    });
+
     return {
       add: function (course) {
         /* jshint camelcase: false */

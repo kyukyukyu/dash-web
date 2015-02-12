@@ -204,4 +204,51 @@ describe('Service: ClassCart', function () {
 
   });
 
+  describe('when selected campus is changed', function () {
+    var Campuses;
+    beforeEach(inject(function (_Campuses_) {
+      Campuses = _Campuses_;
+    }));
+
+    function fillCart() {
+      for (var i = 1; i <= 3; ++i) {
+        addToCart(i);
+      }
+    }
+
+    it('should clear itself', function () {
+      fillCart();
+
+      Campuses.setSelectedCampus(2);
+      $httpBackend.flush();
+      $timeout.flush();
+
+      var courseGroups = ClassCart.getCourseGroups();
+      expect(courseGroups.length).toBe(0);
+    });
+
+    it('should broadcast clearcart event if class cart was not empty', function () {
+      fillCart();
+
+      spyOn($rootScope, '$broadcast').and.callThrough();
+
+      Campuses.setSelectedCampus(2);
+      $httpBackend.flush();
+      $timeout.flush();
+
+      expect($rootScope.$broadcast).toHaveBeenCalledWith('clearcart');
+    });
+
+    it('should not broadcast any event if class cart was empty', function () {
+      spyOn($rootScope, '$broadcast').and.callThrough();
+
+      Campuses.setSelectedCampus(2);
+      $httpBackend.flush();
+      $timeout.flush();
+
+      expect($rootScope.$broadcast).not.toHaveBeenCalledWith('clearcart');
+    });
+
+  });
+
 });
