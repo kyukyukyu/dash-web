@@ -3,7 +3,9 @@
 
 var mock = function ($httpBackend, fxCampuses) {
   $httpBackend.when('GET', '/api/campuses').respond(fxCampuses);
-  $httpBackend.when('GET', '/api/campuses/1').respond(fxCampuses.objects[0]);
+  fxCampuses.objects.forEach(function (campus) {
+    $httpBackend.when('GET', '/api/campuses/' + campus.id).respond(campus);
+  });
 };
 
 if (module !== undefined && module.exports) {
