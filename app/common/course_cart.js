@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name dashApp.common.ClassCart
+ * @name dashApp.common.CourseCart
  * @description
- * # ClassCart
+ * # CourseCart
  * Factory in the dashApp.common.
  */
 angular.module('dashApp.common')
-  .factory('ClassCart', function ($rootScope) {
+  .factory('CourseCart', function ($rootScope) {
     var _courseGroupsMap = {},
       _courseGroupsList = [];
 

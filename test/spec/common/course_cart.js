@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: ClassCart', function () {
+describe('Service: CourseCart', function () {
 
   // load the service's module
   beforeEach(module('dashApp.common'));
@@ -31,9 +31,9 @@ describe('Service: ClassCart', function () {
   }));
 
   // instantiate service
-  var ClassCart;
-  beforeEach(inject(function (_ClassCart_) {
-    ClassCart = _ClassCart_;
+  var CourseCart;
+  beforeEach(inject(function (_CourseCart_) {
+    CourseCart = _CourseCart_;
   }));
 
   // flush HTTP request made by Campuses service
@@ -49,7 +49,7 @@ describe('Service: ClassCart', function () {
     var course = Courses.get(courseId).$object;
     $httpBackend.flush();
     $timeout.flush();
-    ClassCart.add(course);
+    CourseCart.add(course);
     return course;
   }
 
@@ -57,7 +57,7 @@ describe('Service: ClassCart', function () {
 
     it('should add a course object', function () {
       var course = addToCart(1);
-      var courseGroups = ClassCart.getCourseGroups();
+      var courseGroups = CourseCart.getCourseGroups();
 
       expect(courseGroups.length).toBe(1);
       var courseGroup = courseGroups[0];
@@ -82,14 +82,14 @@ describe('Service: ClassCart', function () {
 
     it('should add a major course object and set it required', function () {
       addToCart(1);
-      var courseGroups = ClassCart.getCourseGroups();
+      var courseGroups = CourseCart.getCourseGroups();
       var courseGroup = courseGroups[0];
       expect(courseGroup.required).toBe(true);
     });
 
     it('should add a general course object and set it optional', function () {
       addToCart(5);
-      var courseGroups = ClassCart.getCourseGroups();
+      var courseGroups = CourseCart.getCourseGroups();
       var courseGroup = courseGroups[0];
       expect(courseGroup.required).toBe(false);
     });
@@ -102,7 +102,7 @@ describe('Service: ClassCart', function () {
       course = addToCart(2);
       courses.push(course);
 
-      var courseGroups = ClassCart.getCourseGroups();
+      var courseGroups = CourseCart.getCourseGroups();
 
       expect(courseGroups.length).toBe(1);
       var courseGroup = courseGroups[0];
@@ -138,8 +138,8 @@ describe('Service: ClassCart', function () {
     });
 
     it('should remove course objects', function () {
-      ClassCart.remove(courses[0]);
-      var courseGroups = ClassCart.getCourseGroups();
+      CourseCart.remove(courses[0]);
+      var courseGroups = CourseCart.getCourseGroups();
       expect(courseGroups.length).toBe(2);
       var courseGroup;
       courseGroup = courseGroups[0];
@@ -154,13 +154,13 @@ describe('Service: ClassCart', function () {
 
     it('should broadcast removefromcart event when a course object is removed', function () {
       spyOn($rootScope, '$broadcast');
-      ClassCart.remove(courses[0]);
+      CourseCart.remove(courses[0]);
       expect($rootScope.$broadcast).toHaveBeenCalledWith('removefromcart', courses[0]);
     });
 
     it('should remove course object when no course is in it', function () {
-      ClassCart.remove(courses[2]);
-      var courseGroups = ClassCart.getCourseGroups();
+      CourseCart.remove(courses[2]);
+      var courseGroups = CourseCart.getCourseGroups();
       expect(courseGroups.length).toBe(1);
       var courseGroup = courseGroups[0];
       expect(courseGroup.subject.code).toEqual(courses[0].subject.code);
@@ -180,15 +180,15 @@ describe('Service: ClassCart', function () {
 
       spyOn($rootScope, '$broadcast').and.callThrough();
 
-      ClassCart.setCourseGroupRequired(subject.id, false);
+      CourseCart.setCourseGroupRequired(subject.id, false);
       expect($rootScope.$broadcast.calls.count()).toBe(1);
       expect($rootScope.$broadcast.calls.mostRecent().args)
         .toEqual(['changerequiredincart', subject.id, false]);
 
-      ClassCart.setCourseGroupRequired(subject.id, false);
+      CourseCart.setCourseGroupRequired(subject.id, false);
       expect($rootScope.$broadcast.calls.count()).toBe(1);
 
-      ClassCart.setCourseGroupRequired(subject.id, true);
+      CourseCart.setCourseGroupRequired(subject.id, true);
       expect($rootScope.$broadcast.calls.mostRecent().args)
         .toEqual(['changerequiredincart', subject.id, true]);
       expect($rootScope.$broadcast.calls.count()).toBe(2);
@@ -198,7 +198,7 @@ describe('Service: ClassCart', function () {
     'group to required/optional one if it is not in the cart', function () {
       var fxCourse = fxCourses.objects[0];
       spyOn($rootScope, '$broadcast');
-      ClassCart.setCourseGroupRequired(fxCourse.subject.id, false);
+      CourseCart.setCourseGroupRequired(fxCourse.subject.id, false);
       expect($rootScope.$broadcast).not.toHaveBeenCalled();
     });
 
@@ -223,11 +223,11 @@ describe('Service: ClassCart', function () {
       $httpBackend.flush();
       $timeout.flush();
 
-      var courseGroups = ClassCart.getCourseGroups();
+      var courseGroups = CourseCart.getCourseGroups();
       expect(courseGroups.length).toBe(0);
     });
 
-    it('should broadcast clearcart event if class cart was not empty', function () {
+    it('should broadcast clearcart event if course cart was not empty', function () {
       fillCart();
 
       spyOn($rootScope, '$broadcast').and.callThrough();
@@ -239,7 +239,7 @@ describe('Service: ClassCart', function () {
       expect($rootScope.$broadcast).toHaveBeenCalledWith('clearcart');
     });
 
-    it('should not broadcast any event if class cart was empty', function () {
+    it('should not broadcast any event if course cart was empty', function () {
       spyOn($rootScope, '$broadcast').and.callThrough();
 
       Campuses.setSelectedCampus(2);
