@@ -171,4 +171,37 @@ describe('Service: ClassCart', function () {
 
   });
 
+  describe('the function that changes course group to required/optional one', function () {
+
+    it('should broadcast changerequiredincart event when a required course ' +
+    'group is changed to optional one or vice versa', function () {
+      var course = addToCart(1);
+      var subject = course.subject;
+
+      spyOn($rootScope, '$broadcast').and.callThrough();
+
+      ClassCart.setCourseGroupRequired(subject.id, false);
+      expect($rootScope.$broadcast.calls.count()).toBe(1);
+      expect($rootScope.$broadcast.calls.mostRecent().args)
+        .toEqual(['changerequiredincart', subject.id, false]);
+
+      ClassCart.setCourseGroupRequired(subject.id, false);
+      expect($rootScope.$broadcast.calls.count()).toBe(1);
+
+      ClassCart.setCourseGroupRequired(subject.id, true);
+      expect($rootScope.$broadcast.calls.mostRecent().args)
+        .toEqual(['changerequiredincart', subject.id, true]);
+      expect($rootScope.$broadcast.calls.count()).toBe(2);
+    });
+
+    it('should not broadcast any event when someone tries to change course ' +
+    'group to required/optional one if it is not in the cart', function () {
+      var fxCourse = fxCourses.objects[0];
+      spyOn($rootScope, '$broadcast');
+      ClassCart.setCourseGroupRequired(fxCourse.subject.id, false);
+      expect($rootScope.$broadcast).not.toHaveBeenCalled();
+    });
+
+  });
+
 });

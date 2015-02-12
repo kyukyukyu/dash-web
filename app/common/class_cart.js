@@ -12,11 +12,15 @@ angular.module('dashApp.common')
     var _courseGroupsMap = {},
       _courseGroupsList = [];
 
+    function _contains(subjectId) {
+      return subjectId in _courseGroupsMap;
+    }
+
     return {
       add: function (course) {
         /* jshint camelcase: false */
         var courseGroup;
-        if (course.subject_id in _courseGroupsMap) {
+        if (_contains(course.subject_id)) {
           courseGroup = _courseGroupsMap[course.subject_id];
         } else {
           courseGroup = {
@@ -40,7 +44,7 @@ angular.module('dashApp.common')
 
       remove: function (course) {
         /* jshint camelcase: false */
-        if (!(course.subject_id in _courseGroupsMap)) {
+        if (!_contains(course.subject_id)) {
           return;
         }
         var courseGroup = _courseGroupsMap[course.subject_id];
@@ -61,6 +65,17 @@ angular.module('dashApp.common')
           }
         }
         $rootScope.$broadcast('removefromcart', course);
+      },
+
+      setCourseGroupRequired: function (subjectId, required) {
+        if (!_contains(subjectId)) {
+          return;
+        }
+        if (_courseGroupsMap[subjectId].required === required) {
+          return;
+        }
+        _courseGroupsMap[subjectId].required = required;
+        $rootScope.$broadcast('changerequiredincart', subjectId, required);
       },
 
       getCourseGroups: function () {
