@@ -124,6 +124,14 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
           margin-bottom: 1px;
         }
       }
+
+      .box-search-result {
+        padding: 0;
+
+        .subjects {
+          @include ds-subject-list-style;
+        }
+      }
     }
 
     .class-cart {

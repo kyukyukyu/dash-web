@@ -95,8 +95,14 @@
             </div>
           </form>
         </div>
-        <div class="box box-search-result">
-          Search result box
+        <div class="box box-search-result" ng-show="uiStatus.isResultBoxOpen">
+          <ul class="subjects">
+            <ds-subject ng-repeat="courseGroup in searchResult track by courseGroup.subject.id"
+                        subject="courseGroup.subject"
+                        courses="courseGroup.courses"
+                        expanded="true"
+                        added-to-cart="false"></ds-subject>
+          </ul>
         </div>
       </div>
 

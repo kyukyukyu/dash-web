@@ -271,5 +271,14 @@ describe('Controller: CourseSearchCtrl', function () {
       $timeout.flush();
       expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
     });
+
+    it('should set uiStatus.isResultBoxOpen true when search result is retrieved', function () {
+      expect(scope.uiStatus.isResultBoxOpen).toBe(false);
+      Campuses.setSelectedCampus(1);
+      $httpBackend.flush();
+      scope.searchCourses();
+      $httpBackend.flush();
+      expect(scope.uiStatus.isResultBoxOpen).toBe(true);
+    });
   });
 });

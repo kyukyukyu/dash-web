@@ -64,7 +64,8 @@ angular.module('dashApp.create')
     $scope.searchResult = null;
     $scope.uiStatus = {
       isSearchBoxFocused: false,
-      isOptionBoxOpen: true
+      isOptionBoxOpen: true,
+      isResultBoxOpen: false
     };
 
     $scope.$watch('userInput.type', function (type) {
@@ -109,6 +110,7 @@ angular.module('dashApp.create')
         });
 
         $scope.searchResult = searchResult;
+        $scope.uiStatus.isResultBoxOpen = true;
       }, function (reason) {
         if (reason === Courses.REASON_CAMPUS_NOT_SELECTED) {
           // TODO: Warn the user that there is no selected campus.

@@ -4,9 +4,11 @@ var HttpBackend = require('http-backend-proxy');
 var mockCampuses = require('../../mock/campuses');
 var mockDepartments = require('../../mock/departments');
 var mockGenEduCategories = require('../../mock/gen_edu_categories');
+var mockCourses = require('../../mock/courses');
 
 var NavBar = require('../page/common/navbar');
 var SearchOptionBox = require('../page/create/search_option_box');
+var SearchResultBox = require('../page/create/search_result_box');
 
 describe('Main', function () {
 
@@ -15,6 +17,7 @@ describe('Main', function () {
   var navbar,
     keywordBox, gearIcon,
     searchOptionBox,
+    searchResultBox,
     backdrop;
 
   beforeEach(function () {
@@ -22,6 +25,7 @@ describe('Main', function () {
     mockCampuses(proxy.onLoad);
     mockDepartments(proxy.onLoad);
     mockGenEduCategories(proxy.onLoad);
+    mockCourses(proxy.onLoad);
     browser.get('index_e2e.html');
   });
 
@@ -32,6 +36,7 @@ describe('Main', function () {
     gearIcon = $('.box-group-top button');
 
     searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
+    searchResultBox = new SearchResultBox($('.box-group-bottom .box-search-result'));
 
     backdrop = $('#dsBackdrop');
   });
@@ -116,6 +121,30 @@ describe('Main', function () {
         expect(selectBoxCategory.$$('option').count()).toBe(1 + 4);
         expect(searchOptionBox.btnGroupGrade.isDisplayed()).toBeFalsy();
         expect(searchOptionBox.selectBoxDepartment.isDisplayed()).toBeFalsy();
+      });
+    });
+
+    describe('result box', function () {
+      it('should appear only after retrieving search results', function () {
+        keywordBox.click();
+        expect(searchResultBox.elem.isDisplayed()).toBeFalsy();
+        keywordBox.sendKeys('software engineering', protractor.Key.ENTER);
+        expect(searchResultBox.elem.isDisplayed()).toBeTruthy();
+
+        var subject, course;
+        expect(searchResultBox.numOfSubjects).toBe(4);
+
+        subject = searchResultBox.getSubjectAt(0);
+        expect(subject.code).toEqual('CSE4006');
+        expect(subject.name).toEqual('Software Engineering');
+        expect(subject.credit).toEqual('3.00');
+        expect(subject.numOfCourses).toBe(2);
+        course = subject.getCourseAt(0);
+        expect(course.code).toEqual('10029');
+        expect(course.instructor).toEqual('Minsoo Ryu');
+        course = subject.getCourseAt(1);
+        expect(course.code).toEqual('10030');
+        expect(course.instructor).toEqual('IN RYU');
       });
     });
   });

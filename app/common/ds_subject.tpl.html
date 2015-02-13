@@ -1,0 +1,40 @@
+<div class="cell">
+  <span class="credit">{{subject.credit | number:2}}</span>
+  <div class="left-side">
+    <span class="name">{{subject.name}}</span>
+    <span class="code">{{subject.code}}</span>
+  </div>
+
+  <div class="actions" role="group" aria-label="Actions for subject">
+    <button class="chevron" type="button" aria-label="Expand/Collapse">
+      <i class="fa"
+         ng-class="{'fa-chevron-right': !expanded, 'fa-chevron-down': expanded}"
+         aria-hidden="true"></i>
+    </button>
+    <button class="btn btn-cart"
+            ng-class="{'btn-cart-add': !addedToCart, 'btn-cart-remove': addedToCart}"
+            aria-label="Add to/Remove from cart">
+      <i class="fa"
+         ng-class="{'fa-plus': !addedToCart, 'fa-minus': addedToCart}"
+         aria-hidden="true"></i>
+      {{!addedToCart ? 'Add to cart' : 'Remove from cart'}}
+    </button>
+  </div>
+</div>
+
+<ul class="courses" ng-show="expanded">
+  <li class="course" ng-repeat="course in courses track by course.id">
+    <span class="code">{{course.code}}</span>
+    <span class="instructor">{{course.instructor}}</span>
+
+    <div class="actions" role="group"
+         aria-label="Actions for course">
+      <button class="btn btn-cart btn-xs"
+              ng-class="{'btn-cart-add': !courseAddedToCart[course.id], 'btn-cart-remove': courseAddedToCart[course.id]}"
+              type="button">
+        <i class="fa"
+           ng-class="{'fa-plus': !courseAddedToCart[course.id], 'fa-minus': courseAddedToCart[course.id]}"></i>
+      </button>
+    </div>
+  </li>
+</ul>

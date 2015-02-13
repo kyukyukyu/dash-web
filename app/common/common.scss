@@ -38,4 +38,160 @@ $text-color: $text-color-normal;
   }
 }
 
-$footer-height: 40px;
+@function get-button-height($padding-vertical, $font-size, $line-height) {
+  // 2 * 1px is for border on top and bottom
+  @return $font-size * $line-height + 2 * $padding-vertical + 2 * 1px;
+}
+
+@mixin ds-subject-list-style {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin ds-subject-info {
+  display: block;
+  line-height: normal;
+}
+
+@mixin ds-subject-info-left {
+  @include ds-subject-info;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+@mixin ds-subject-info-right {
+  @include ds-subject-info;
+
+  float: right !important;
+  white-space: nowrap;
+  color: $text-color-bright;
+}
+
+@mixin ds-subject-actions {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: $white-box-horizontal-padding;
+  right: $white-box-horizontal-padding;
+
+  > * {
+    display: block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+  }
+
+  > .btn-cart {
+    display: none;
+    right: 0;
+  }
+
+  &:hover > .btn-cart {
+    display: inline-block;
+  }
+}
+
+ds-subject {
+  @include clearfix();
+
+  display: block;
+  border-left: $subject-left-border;
+  margin-bottom: $subject-margin-bottom;
+
+  > .cell {
+    position: relative;
+    padding:
+    $subject-vertical-padding $white-box-horizontal-padding $subject-vertical-padding $subject-search-result-left-padding;
+    width: 100%;
+    height: 100%;
+
+    &:hover {
+      background-color: $view-background-color-selected;
+    }
+
+    > .credit {
+      @include ds-subject-info-right;
+    }
+
+    > .left-side {
+      > * {
+        @include ds-subject-info-left;
+      }
+
+      > .name {
+        margin-bottom: 4px;
+      }
+
+      > .code {
+        font-size: 80%;
+        color: $text-color-bright;
+      }
+    }
+
+    > .actions {
+      @include ds-subject-actions;
+
+      > .chevron {
+        left: 0;
+        width: 16px;
+        height: 16px;
+        line-height: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      > .btn-cart {
+        height: get-button-height(
+            $padding-base-vertical,
+            $font-size-base,
+            $line-height-base
+        );
+      }
+    }
+  }
+
+  > .courses {
+    @include ds-subject-list-style;
+
+    > .course {
+      @include clearfix();
+
+      padding:
+      $course-vertical-padding $white-box-horizontal-padding
+      $course-vertical-padding $subject-search-result-left-padding;
+      position: relative;
+
+      &:hover {
+        background-color: $view-background-color-selected;
+      }
+
+
+      > .code {
+        @include ds-subject-info-right;
+      }
+
+      > .instructor {
+        @include ds-subject-info-left;
+        float: left !important;
+      }
+
+      > .actions {
+        @include ds-subject-actions;
+
+        > .btn-cart {
+          height: get-button-height(
+              $padding-xs-vertical,
+              $font-size-small,
+              $line-height-small
+          );
+        }
+      }
+    }
+  }
+}
