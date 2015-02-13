@@ -28,8 +28,7 @@ angular.module('dashApp.common')
       scope: {
         subject: '=',
         courses: '=',
-        expanded: '=',
-        addedToCart: '='
+        expanded: '='
       },
       link: function postLink(scope, element, attrs) {
         var actionsElem = element.find('.actions');
