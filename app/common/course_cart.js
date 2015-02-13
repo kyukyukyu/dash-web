@@ -48,7 +48,7 @@ angular.module('dashApp.common')
         }
 
         courseGroup.courses.push(course);
-        $rootScope.$broadcast('addtocart', course);
+        $rootScope.$broadcast('addtocart', course, courseGroup);
       },
 
       remove: function (course) {

@@ -77,7 +77,8 @@ describe('Service: CourseCart', function () {
     it('should broadcast addtocart event when a course object is added', function () {
       spyOn($rootScope, '$broadcast');
       var course = addToCart(1);
-      expect($rootScope.$broadcast).toHaveBeenCalledWith('addtocart', course);
+      var courseGroup = CourseCart.getCourseGroup(course.subject.id);
+      expect($rootScope.$broadcast).toHaveBeenCalledWith('addtocart', course, courseGroup);
     });
 
     it('should add a major course object and set it required', function () {
