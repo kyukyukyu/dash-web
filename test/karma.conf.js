@@ -16,6 +16,11 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
+    // list of preprocessors
+    preprocessors: {
+      'app/**/*.tpl.html': ['ng-html2js']
+    },
+
     // list of files / patterns to load in the browser
     files: [
       'node_modules/jasmine-jquery/vendor/jquery/jquery.js',
@@ -34,6 +39,7 @@ module.exports = function(config) {
       'app/common/common.js',
       'app/create/create.js',
       'app/**/*.js',
+      'app/**/*.tpl.html',
       'test/mock/**/*.js',
       {
         pattern: 'test/mock/**/*.json',
@@ -46,6 +52,11 @@ module.exports = function(config) {
 
     // list of files / patterns to exclude
     exclude: [],
+
+    ngHtml2JsPreprocessor: {
+      // strip this from the file path
+      stripPrefix: 'app/'
+    },
 
     // web server port
     port: 8080,
@@ -65,7 +76,8 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Continuous Integration mode
