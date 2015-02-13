@@ -6,7 +6,9 @@
       <div class="box search-box" ng-class="{focused: uiStatus.isSearchBoxFocused}">
         <div class="input-group" ng-click="focusOnSearchBox()">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="userInput.keyword" ng-focus="focusOnSearchBox()">
+          <form ng-submit="searchCourses()">
+            <input class="form-control" placeholder="Name, Instructor, Code..." type="search" ng-model="userInput.keyword" ng-focus="focusOnSearchBox()">
+          </form>
           <span class="input-group-btn">
             <button class="btn btn-default"
                     type="button"
