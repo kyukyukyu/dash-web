@@ -6,6 +6,10 @@ describe('Directive: dsSubject', function () {
   beforeEach(module('dashApp.common'));
   beforeEach(module('common/ds_subject.tpl.html'));
 
+  // load mock modules
+  beforeEach(module('dashApp.mock.campuses'));
+  beforeEach(module('dashApp.mock.courses'));
+
   // load mock data
   var mockSubject, mockSubject2, mockCourses;
   beforeEach(function () {
@@ -117,4 +121,113 @@ describe('Directive: dsSubject', function () {
 
     expect(element.find('ds-subject').length).toBe(2);
   });
+
+  describe('syncing with course cart', function () {
+
+    // load dependency
+    var $httpBackend,
+      Courses,
+      CourseCart;
+    beforeEach(inject(function (_$httpBackend_, _Courses_, _CourseCart_) {
+      $httpBackend = _$httpBackend_;
+      Courses = _Courses_;
+      CourseCart = _CourseCart_;
+    }));
+
+    // flush HTTP request made by Campuses service
+    beforeEach(function () { $httpBackend.flush(1); });
+
+    // make sure there is no outstanding http expectation/request
+    afterEach(function () {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    function addToCart(courseId) {
+      var course = Courses.get(courseId).$object;
+      $httpBackend.flush();
+      $timeout.flush();
+      CourseCart.add(course);
+      return course;
+    }
+
+    it('should show \'Add to cart\' button if no course of the subject is ' +
+       'in cart', function () {
+      scope.mockSubject = mockSubject;
+      scope.mockCourses = mockCourses;
+      element = angular.element(
+        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+      );
+      element = $compile(element)(scope);
+      $timeout.flush();
+
+      var btnCart = element.find('.actions > .btn-cart').not('.courses *');
+      expect(btnCart).toHaveClass('btn-cart-add');
+      expect(btnCart).not.toHaveClass('btn-cart-remove');
+    });
+
+    it('should show \'Add to cart\' button if not all course of the ' +
+       'subject is in cart', function () {
+      scope.mockSubject = mockSubject;
+      scope.mockCourses = mockCourses;
+      addToCart(1);
+      element = angular.element(
+        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+      );
+      element = $compile(element)(scope);
+      $timeout.flush();
+
+      var btnCart = element.find('.actions > .btn-cart').not('.courses *');
+      expect(btnCart).toHaveClass('btn-cart-add');
+      expect(btnCart).not.toHaveClass('btn-cart-remove');
+    });
+
+    it('should show \'Remove from cart\' button if all course of the ' +
+    'subject is in cart', function () {
+      scope.mockSubject = mockSubject;
+      scope.mockCourses = mockCourses;
+      addToCart(1);
+      addToCart(2);
+      element = angular.element(
+        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+      );
+      element = $compile(element)(scope);
+      $timeout.flush();
+
+      var btnCart = element.find('.actions > .btn-cart').not('.courses *');
+      expect(btnCart).not.toHaveClass('btn-cart-add');
+      expect(btnCart).toHaveClass('btn-cart-remove');
+    });
+
+    it('should show \'Add to cart\' button if the course is not in cart', function () {
+      scope.mockSubject = mockSubject;
+      scope.mockCourses = mockCourses;
+      element = angular.element(
+        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+      );
+      element = $compile(element)(scope);
+      $timeout.flush();
+
+      var btnCart = element.find('.courses .btn-cart');
+      expect(btnCart).toHaveClass('btn-cart-add');
+      expect(btnCart).not.toHaveClass('btn-cart-remove');
+    });
+
+    it('should show \'Remove from cart\' button if the course is in cart', function () {
+      scope.mockSubject = mockSubject;
+      scope.mockCourses = mockCourses.slice(0, 1);
+      addToCart(1);
+      element = angular.element(
+        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+      );
+      element = $compile(element)(scope);
+      $timeout.flush();
+
+      var btnCart = element.find('.courses .btn-cart');
+      expect(btnCart).not.toHaveClass('btn-cart-add');
+      expect(btnCart).toHaveClass('btn-cart-remove');
+    });
+
+  });
+
 });

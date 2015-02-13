@@ -12,10 +12,10 @@
          aria-hidden="true"></i>
     </button>
     <button class="btn btn-cart"
-            ng-class="{'btn-cart-add': !addedToCart, 'btn-cart-remove': addedToCart}"
+            ng-class="{'btn-cart-add': !allInCart, 'btn-cart-remove': allInCart}"
             aria-label="Add to/Remove from cart">
       <i class="fa"
-         ng-class="{'fa-plus': !addedToCart, 'fa-minus': addedToCart}"
+         ng-class="{'fa-plus': !allInCart, 'fa-minus': allInCart}"
          aria-hidden="true"></i>
       {{!addedToCart ? 'Add to cart' : 'Remove from cart'}}
     </button>

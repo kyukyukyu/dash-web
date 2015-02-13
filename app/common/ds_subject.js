@@ -8,7 +8,7 @@
  * # dsSubject
  */
 angular.module('dashApp.common')
-  .directive('dsSubject', function () {
+  .directive('dsSubject', function (CourseCart) {
     var SUBJECT_ACTIONS_ARIA_LABEL = function (code) {
       return 'Actions for subject ' + code;
     };
@@ -19,7 +19,7 @@ angular.module('dashApp.common')
     var BTN_CART_ARIA_LABEL_REMOVE = 'Remove from cart';
 
     var COURSE_ACTIONS_ARIA_LABEL = function (code) {
-      return 'Actions for cousre ' + code;
+      return 'Actions for course ' + code;
     };
 
     return {
@@ -36,7 +36,15 @@ angular.module('dashApp.common')
         var chevronElem = actionsElem.find('.chevron');
         var btnCartElem = actionsElem.find('.btn-cart');
 
-        // array of deregisteration functions for $watch listener
+        // initialize scope
+        scope.courseAddedToCart = {};
+        angular.forEach(CourseCart.getCourseGroups(), function (courseGroup) {
+          angular.forEach(courseGroup.courses, function (course) {
+            scope.courseAddedToCart[course.id] = true;
+          });
+        });
+
+        // array of deregisteration functions for listener
         var deregFns = [];
         var deregFn;
 
@@ -54,14 +62,19 @@ angular.module('dashApp.common')
         deregFn = scope.$watchCollection(
           'courses',
           function (courses, _, scope) {
-            scope.courseAddedToCart = {};
-            // TODO: populate scope.courseAddedToCart by querying ClassCart
             element.find('.courses > .course').each(function (index, courseElem) {
               var course = courses[index];
               courseElem = angular.element(courseElem);
               courseElem.data('id', course.id);
               courseElem.find('.actions').attr('aria-label', COURSE_ACTIONS_ARIA_LABEL(course.code));
             });
+
+            if (!courses) {
+              return;
+            }
+            scope.allInCart = courses.reduce(function (prev, course) {
+              return prev && (scope.courseAddedToCart[course.id] === true);
+            }, true);
           }
         );
         deregFns.push(deregFn);
