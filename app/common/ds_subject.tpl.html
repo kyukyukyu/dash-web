@@ -1,3 +1,10 @@
+<div class="is-required"
+     ng-class="{
+       'is-required-true': !nothingInCart && required,
+       'is-required-false': !nothingInCart && !required,
+       'is-required-unavailable': nothingInCart
+     }"></div>
+
 <div class="cell">
   <span class="credit">{{subject.credit | number:2}}</span>
   <div class="left-side">

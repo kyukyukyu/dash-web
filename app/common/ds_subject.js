@@ -38,11 +38,6 @@ angular.module('dashApp.common')
 
         // initialize scope
         scope.courseAddedToCart = {};
-        angular.forEach(CourseCart.getCourseGroups(), function (courseGroup) {
-          angular.forEach(courseGroup.courses, function (course) {
-            scope.courseAddedToCart[course.id] = true;
-          });
-        });
 
         // array of deregisteration functions for listener
         var deregFns = [];
@@ -55,6 +50,18 @@ angular.module('dashApp.common')
           } else {
             element.data('id', subject.id);
             actionsElem.attr('aria-label', SUBJECT_ACTIONS_ARIA_LABEL(subject.code));
+
+            try {
+              scope.courseAddedToCart = {};
+              var courseGroup = CourseCart.getCourseGroup(subject.id);
+              angular.forEach(courseGroup.courses, function (course) {
+                scope.courseAddedToCart[course.id] = true;
+              });
+              scope.required = courseGroup.required;
+            } catch (e) {
+              scope.allInCart = false;
+              scope.nothingInCart = true;
+            }
           }
         });
         deregFns.push(deregFn);
@@ -74,6 +81,9 @@ angular.module('dashApp.common')
             }
             scope.allInCart = courses.reduce(function (prev, course) {
               return prev && (scope.courseAddedToCart[course.id] === true);
+            }, true);
+            scope.nothingInCart = courses.reduce(function (prev, course) {
+              return prev && (scope.courseAddedToCart[course.id] !== true);
             }, true);
           }
         );

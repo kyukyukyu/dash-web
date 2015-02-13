@@ -228,6 +228,42 @@ describe('Directive: dsSubject', function () {
       expect(btnCart).toHaveClass('btn-cart-remove');
     });
 
+    describe('setting proper class on whether course group is required or unavailable', function () {
+
+      function prepareElement(courseIndex, putInCart) {
+        var element;
+        var mockDataSource = getJSONFixture('courses.json');
+        var mockCourse = mockDataSource.objects[courseIndex];
+        scope.mockCourses = [mockCourse];
+        scope.mockSubject = mockCourse.subject;
+        if (putInCart) {
+          addToCart(mockCourse.id);
+        }
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+        return element;
+      }
+
+      it('should set proper class if the course group is required', function () {
+        element = prepareElement(0, true);
+        expect(element.find('.is-required')).toHaveClass('is-required-true');
+      });
+
+      it('should set proper class if the course group is optional', function () {
+        element = prepareElement(4, true);
+        expect(element.find('.is-required')).toHaveClass('is-required-false');
+      });
+
+      it('should set proper class if the course group is not in cart', function () {
+        element = prepareElement(0, false);
+        expect(element.find('.is-required')).toHaveClass('is-required-unavailable');
+      });
+
+    });
+
   });
 
 });
