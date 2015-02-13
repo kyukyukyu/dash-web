@@ -251,4 +251,20 @@ describe('Service: CourseCart', function () {
 
   });
 
+  describe('the function that returns single course group', function () {
+
+    it('should return single course group', function () {
+      var course = addToCart(1);
+      var courseGroups = CourseCart.getCourseGroups();
+      expect(CourseCart.getCourseGroup(course.subject.id)).toBe(courseGroups[0]);
+    });
+
+    it('should throw an error when no course group is found by given subject id', function () {
+      expect(function () {
+        CourseCart.getCourseGroup(1);
+      }).toThrow('no course group found');
+    });
+
+  });
+
 });

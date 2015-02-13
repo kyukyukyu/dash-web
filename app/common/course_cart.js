@@ -89,6 +89,13 @@ angular.module('dashApp.common')
 
       getCourseGroups: function () {
         return _courseGroupsList;
+      },
+
+      getCourseGroup: function (subjectId) {
+        if (!_contains(subjectId)) {
+          throw 'no course group found';
+        }
+        return _courseGroupsMap[subjectId];
       }
     };
   });
