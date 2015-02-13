@@ -125,10 +125,12 @@ describe('Directive: dsSubject', function () {
   describe('syncing with course cart', function () {
 
     // load dependency
-    var $httpBackend,
+    var $rootScope,
+      $httpBackend,
       Courses,
       CourseCart;
-    beforeEach(inject(function (_$httpBackend_, _Courses_, _CourseCart_) {
+    beforeEach(inject(function (_$rootScope_, _$httpBackend_, _Courses_, _CourseCart_) {
+      $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
       Courses = _Courses_;
       CourseCart = _CourseCart_;
@@ -148,6 +150,14 @@ describe('Directive: dsSubject', function () {
       $httpBackend.flush();
       $timeout.flush();
       CourseCart.add(course);
+      return course;
+    }
+
+    function removeFromCart(courseId) {
+      var course = Courses.get(courseId).$object;
+      $httpBackend.flush();
+      $timeout.flush();
+      CourseCart.remove(course);
       return course;
     }
 
@@ -259,6 +269,102 @@ describe('Directive: dsSubject', function () {
 
       it('should set proper class if the course group is not in cart', function () {
         element = prepareElement(0, false);
+        expect(element.find('.is-required')).toHaveClass('is-required-unavailable');
+      });
+
+    });
+
+    describe('reacting to events occured by course cart', function () {
+
+      function getCourseElem(courseId) {
+        return element.find('.courses > .course').filter(function () {
+          return angular.element(this).data('id') === courseId;
+        });
+      }
+
+      it('should react to changerequiredincart event', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        addToCart(1);
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        $rootScope.$broadcast('changerequiredincart', mockSubject.id, false);
+        expect(element.find('.is-required')).toHaveClass('is-required-false');
+
+        $rootScope.$broadcast('changerequiredincart', mockSubject.id, true);
+        expect(element.find('.is-required')).toHaveClass('is-required-true');
+      });
+
+      it('should react to addtocart event', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var courseElem, btnCartElem;
+
+        // this occurs addtocart event
+        addToCart(1);
+
+        expect(element.find('.is-required')).toHaveClass('is-required-true');
+
+        courseElem = getCourseElem(1);
+        btnCartElem = courseElem.find('.actions .btn-cart');
+        expect(btnCartElem).not.toHaveClass('btn-cart-add');
+        expect(btnCartElem).toHaveClass('btn-cart-remove');
+
+        // this occurs addtocart event, again
+        addToCart(2);
+
+        courseElem = getCourseElem(2);
+        btnCartElem = courseElem.find('.actions .btn-cart');
+        expect(btnCartElem).not.toHaveClass('btn-cart-add');
+        expect(btnCartElem).toHaveClass('btn-cart-remove');
+
+        btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
+        expect(btnCartElem).not.toHaveClass('btn-cart-add');
+        expect(btnCartElem).toHaveClass('btn-cart-remove');
+      });
+
+      it('should react to removefromcart event', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        addToCart(1);
+        addToCart(2);
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var courseElem, btnCartElem;
+
+        // this occurs removefromcart event
+        removeFromCart(2);
+
+        courseElem = getCourseElem(2);
+        btnCartElem = courseElem.find('.actions .btn-cart');
+        expect(btnCartElem).toHaveClass('btn-cart-add');
+        expect(btnCartElem).not.toHaveClass('btn-cart-remove');
+        btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
+        expect(btnCartElem).toHaveClass('btn-cart-add');
+        expect(btnCartElem).not.toHaveClass('btn-cart-remove');
+
+        // this occurs removefromcart event, again
+        removeFromCart(1);
+
+        courseElem = getCourseElem(1);
+        btnCartElem = courseElem.find('.actions .btn-cart');
+        expect(btnCartElem).toHaveClass('btn-cart-add');
+        expect(btnCartElem).not.toHaveClass('btn-cart-remove');
+
         expect(element.find('.is-required')).toHaveClass('is-required-unavailable');
       });
 

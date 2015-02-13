@@ -8,7 +8,7 @@
  * # dsSubject
  */
 angular.module('dashApp.common')
-  .directive('dsSubject', function (CourseCart) {
+  .directive('dsSubject', function ($rootScope, CourseCart) {
     var SUBJECT_ACTIONS_ARIA_LABEL = function (code) {
       return 'Actions for subject ' + code;
     };
@@ -36,32 +36,72 @@ angular.module('dashApp.common')
         var chevronElem = actionsElem.find('.chevron');
         var btnCartElem = actionsElem.find('.btn-cart');
 
-        // initialize scope
+        // This is an object which course objects are in course cart.
+        // If a course is in the cart, the ID of course exists as a key with value `true` in this object.
         scope.courseAddedToCart = {};
 
         // array of deregisteration functions for listener
         var deregFns = [];
-        var deregFn;
+        var deregFnsForCart = [];
 
-        deregFn = scope.$watch('subject', function (subject) {
+        var deregFn;
+        var deregFnForCart;
+
+        deregFn = scope.$watch('subject', function (subject, _, scope) {
+
+          // deregister listeners for events occurred by course cart
+          angular.forEach(deregFnsForCart, function (deregFnForCart) {
+            deregFnForCart();
+          });
+
           if (!subject) {
+            // remove data bound to DOM
             element.removeData('id');
             actionsElem.removeAttr('aria-label');
-          } else {
-            element.data('id', subject.id);
-            actionsElem.attr('aria-label', SUBJECT_ACTIONS_ARIA_LABEL(subject.code));
+            return;
+          }
 
-            try {
-              scope.courseAddedToCart = {};
-              var courseGroup = CourseCart.getCourseGroup(subject.id);
-              angular.forEach(courseGroup.courses, function (course) {
-                scope.courseAddedToCart[course.id] = true;
+          // bind subject data to DOM
+          element.data('id', subject.id);
+          actionsElem.attr('aria-label', SUBJECT_ACTIONS_ARIA_LABEL(subject.code));
+
+          // register listeners for events occurred by course cart
+          deregFnForCart = $rootScope.$on('changerequiredincart', function (event, subjectId, required) {
+            if (scope.subject.id === subjectId) {
+              scope.$apply(function (scope) {
+                scope.required = required;
               });
-              scope.required = courseGroup.required;
-            } catch (e) {
-              scope.allInCart = false;
-              scope.nothingInCart = true;
             }
+          });
+          deregFnsForCart.push(deregFnForCart);
+
+          deregFnForCart = $rootScope.$on('addtocart', function (event, course, courseGroup) {
+            scope.$apply(function (scope) {
+              scope.courseAddedToCart[course.id] = true;
+              scope.required = courseGroup.required;
+              refreshAllOrNothing(scope);
+            });
+          });
+          deregFnsForCart.push(deregFnForCart);
+
+          deregFnForCart = $rootScope.$on('removefromcart', function (event, course) {
+            scope.$apply(function (scope) {
+              delete scope.courseAddedToCart[course.id];
+              refreshAllOrNothing(scope);
+            });
+          });
+          deregFnsForCart.push(deregFnForCart);
+
+          try {
+            scope.courseAddedToCart = {};
+            var courseGroup = CourseCart.getCourseGroup(subject.id);
+            angular.forEach(courseGroup.courses, function (course) {
+              scope.courseAddedToCart[course.id] = true;
+            });
+            scope.required = courseGroup.required;
+          } catch (e) {
+            scope.allInCart = false;
+            scope.nothingInCart = true;
           }
         });
         deregFns.push(deregFn);
@@ -79,12 +119,7 @@ angular.module('dashApp.common')
             if (!courses) {
               return;
             }
-            scope.allInCart = courses.reduce(function (prev, course) {
-              return prev && (scope.courseAddedToCart[course.id] === true);
-            }, true);
-            scope.nothingInCart = courses.reduce(function (prev, course) {
-              return prev && (scope.courseAddedToCart[course.id] !== true);
-            }, true);
+            refreshAllOrNothing(scope);
           }
         );
         deregFns.push(deregFn);
@@ -104,6 +139,15 @@ angular.module('dashApp.common')
           btnCartElem.attr('aria-label', ariaLabel);
         });
         deregFns.push(deregFn);
+
+        function refreshAllOrNothing(scope) {
+          scope.allInCart = scope.courses.reduce(function (prev, course) {
+            return prev && (scope.courseAddedToCart[course.id] === true);
+          }, true);
+          scope.nothingInCart = scope.courses.reduce(function (prev, course) {
+            return prev && (scope.courseAddedToCart[course.id] !== true);
+          }, true);
+        }
 
         element.on('$destroy', function () {
           angular.forEach(deregFns, function (deregFn) {
