@@ -69,13 +69,13 @@ describe('Directive: dsSubject', function () {
     });
   });
 
-  it('should expand courses when expanded attribute has truthy value', function () {
+  it('should expand courses when expanded attribute exists', function () {
     scope.mockSubject = mockSubject;
     scope.mockCourses = mockCourses;
     element =
       angular.element(
         '<ds-subject subject="mockSubject" courses="mockCourses"' +
-        ' expanded="true">' +
+        ' expanded>' +
         '</ds-subject>'
       );
     element = $compile(element)(scope);
@@ -87,13 +87,12 @@ describe('Directive: dsSubject', function () {
     expect(element.find('.courses')).not.toHaveClass('ng-hide');
   });
 
-  it('should collapse courses when expanded attribute has falsy value', function () {
+  it('should collapse courses when expanded attribute does not exist', function () {
     scope.mockSubject = mockSubject;
     scope.mockCourses = mockCourses;
     element =
       angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"' +
-        ' expanded="false">' +
+        '<ds-subject subject="mockSubject" courses="mockCourses">' +
         '</ds-subject>'
       );
     element = $compile(element)(scope);
@@ -461,6 +460,25 @@ describe('Directive: dsSubject', function () {
 
     });
 
+  });
+
+  it('should expand and collapse the list of courses', function () {
+    scope.mockSubject = mockSubject;
+    scope.mockCourses = mockCourses;
+    element = angular.element(
+      '<ds-subject subject="mockSubject" courses="mockCourses" expanded></ds-subject>'
+    );
+    element = $compile(element)(scope);
+    $timeout.flush();
+
+    var chevronElem = element.find('.actions .chevron');
+    var coursesElem = element.find('.courses');
+
+    chevronElem.click();
+    expect(coursesElem).toHaveClass('ng-hide');
+
+    chevronElem.click();
+    expect(coursesElem).not.toHaveClass('ng-hide');
   });
 
 });

@@ -27,13 +27,14 @@ angular.module('dashApp.common')
       restrict: 'E',
       scope: {
         subject: '=',
-        courses: '=',
-        expanded: '='
+        courses: '='
       },
       link: function postLink(scope, element, attrs) {
         var actionsElem = element.find('.actions').not('.courses *');
         var chevronElem = actionsElem.find('.chevron');
         var btnCartElem = actionsElem.find('.btn-cart');
+
+        scope.expanded = attrs.hasOwnProperty('expanded');
 
         // This is an object that says which course objects of the subject are in course cart.
         // If a course is in the cart, the ID of course exists as a key with value `true` in this object.
