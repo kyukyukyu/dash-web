@@ -4,6 +4,9 @@ $text-color-bright: #9a9994 !default;
 $border-color-bright: #9a9994 !default;
 $border-color-focused: #469ede !default;
 $view-background-color-selected: #ecebeb !default;
+$subject-left-border-color-required: #529bc0 !default;
+$subject-left-border-color-optional: #7aad4c !default;
+$subject-left-border-color-unavailable: #9a9994 !default;
 
 // footer height variable
 $footer-height: 40px !default;
@@ -15,7 +18,8 @@ $white-box-margin-bottom: 12px !default;
 
 // variables for ds-subject directive
 $subject-vertical-padding: 8px !default;
-$subject-left-border: 6px solid !default;
+$subject-left-border-width: 6px !default;
+$subject-left-border: $subject-left-border-width solid !default;
 $subject-search-result-left-padding: 24px + $white-box-horizontal-padding !default;
 $subject-margin-bottom: 1px !default;
 $course-vertical-padding: 8px !default;
@@ -96,12 +100,47 @@ $text-color: $text-color-normal;
   }
 }
 
+@mixin ds-subject-is-required($base-color) {
+  background-color: $base-color;
+
+  &:hover {
+    background-color: lighten($base-color, 20%);
+  }
+}
+
 ds-subject {
   @include clearfix();
 
   display: block;
-  border-left: $subject-left-border;
+  position: relative;
   margin-bottom: $subject-margin-bottom;
+  padding-left: $subject-left-border-width;
+
+  > .is-required {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: $subject-left-border-width;
+    background-color: #000;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.is-required-true {
+      @include ds-subject-is-required($subject-left-border-color-required);
+    }
+
+    &.is-required-false {
+      @include ds-subject-is-required($subject-left-border-color-optional);
+    }
+
+    &.is-required-unavailable {
+      @include ds-subject-is-required($subject-left-border-color-unavailable);
+    }
+  }
 
   > .cell {
     position: relative;
