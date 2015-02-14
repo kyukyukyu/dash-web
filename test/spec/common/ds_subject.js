@@ -293,9 +293,11 @@ describe('Directive: dsSubject', function () {
         $timeout.flush();
 
         $rootScope.$broadcast('changerequiredincart', mockSubject.id, false);
+        $rootScope.$digest();
         expect(element.find('.is-required')).toHaveClass('is-required-false');
 
         $rootScope.$broadcast('changerequiredincart', mockSubject.id, true);
+        $rootScope.$digest();
         expect(element.find('.is-required')).toHaveClass('is-required-true');
       });
 
@@ -312,6 +314,7 @@ describe('Directive: dsSubject', function () {
 
         // this occurs addtocart event
         addToCart(1);
+        $rootScope.$digest();
 
         expect(element.find('.is-required')).toHaveClass('is-required-true');
 
@@ -322,6 +325,7 @@ describe('Directive: dsSubject', function () {
 
         // this occurs addtocart event, again
         addToCart(2);
+        $rootScope.$digest();
 
         courseElem = getCourseElem(2);
         btnCartElem = courseElem.find('.actions .btn-cart');
@@ -348,6 +352,7 @@ describe('Directive: dsSubject', function () {
 
         // this occurs removefromcart event
         removeFromCart(2);
+        $rootScope.$digest();
 
         courseElem = getCourseElem(2);
         btnCartElem = courseElem.find('.actions .btn-cart');
@@ -359,6 +364,7 @@ describe('Directive: dsSubject', function () {
 
         // this occurs removefromcart event, again
         removeFromCart(1);
+        $rootScope.$digest();
 
         courseElem = getCourseElem(1);
         btnCartElem = courseElem.find('.actions .btn-cart');
@@ -366,6 +372,51 @@ describe('Directive: dsSubject', function () {
         expect(btnCartElem).not.toHaveClass('btn-cart-remove');
 
         expect(element.find('.is-required')).toHaveClass('is-required-unavailable');
+      });
+
+    });
+
+    describe('cart button on subject', function () {
+
+      it('should add all courses to cart', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
+        btnCartElem.click();
+
+        var courseGroup = CourseCart.getCourseGroup(mockSubject.id);
+        var courses = angular.copy(courseGroup.courses).sort(function (ca, cb) {
+          return ca.id - cb.id;
+        });
+        expect(courses.length).toEqual(mockCourses.length);
+        angular.forEach(courses, function (course, i) {
+          expect(course).toEqual(mockCourses[i]);
+        });
+      });
+
+      it('should remove all courses from cart', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        addToCart(1);
+        addToCart(2);
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
+        btnCartElem.click();
+
+        expect(function () {
+          CourseCart.getCourseGroup(mockSubject.id);
+        }).toThrow('no course group found');
       });
 
     });

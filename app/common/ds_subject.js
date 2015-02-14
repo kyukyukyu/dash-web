@@ -31,7 +31,7 @@ angular.module('dashApp.common')
         expanded: '='
       },
       link: function postLink(scope, element, attrs) {
-        var actionsElem = element.find('.actions');
+        var actionsElem = element.find('.actions').not('.courses *');
         var chevronElem = actionsElem.find('.chevron');
         var btnCartElem = actionsElem.find('.btn-cart');
 
@@ -66,16 +66,16 @@ angular.module('dashApp.common')
 
           // register listeners for events occurred by course cart
           deregFnForCart = $rootScope.$on('changerequiredincart', function (event, subjectId, required) {
-            if (scope.subject.id === subjectId) {
-              scope.$apply(function (scope) {
+            scope.$evalAsync(function (scope) {
+              if (scope.subject.id === subjectId) {
                 scope.required = required;
-              });
-            }
+              }
+            });
           });
           deregFnsForCart.push(deregFnForCart);
 
           deregFnForCart = $rootScope.$on('addtocart', function (event, course, courseGroup) {
-            scope.$apply(function (scope) {
+            scope.$evalAsync(function (scope) {
               scope.courseAddedToCart[course.id] = true;
               scope.required = courseGroup.required;
               refreshAllOrNothing(scope);
@@ -84,7 +84,7 @@ angular.module('dashApp.common')
           deregFnsForCart.push(deregFnForCart);
 
           deregFnForCart = $rootScope.$on('removefromcart', function (event, course) {
-            scope.$apply(function (scope) {
+            scope.$evalAsync(function (scope) {
               delete scope.courseAddedToCart[course.id];
               refreshAllOrNothing(scope);
             });
@@ -147,6 +147,24 @@ angular.module('dashApp.common')
             return prev && (scope.courseAddedToCart[course.id] !== true);
           }, true);
         }
+
+        function btnCartHandler() {
+          scope.$apply(function (scope) {
+            var task;
+
+            if (scope.allInCart) {
+              // remove from cart
+              task = function (course) { CourseCart.remove(course); };
+            } else {
+              // add to cart
+              task = function (course) { CourseCart.add(course); };
+            }
+
+            angular.forEach(scope.courses, task);
+          });
+        }
+
+        btnCartElem.click(btnCartHandler);
 
         element.on('$destroy', function () {
           angular.forEach(deregFns, function (deregFn) {
