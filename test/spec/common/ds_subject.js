@@ -421,6 +421,46 @@ describe('Directive: dsSubject', function () {
 
     });
 
+    describe('cart button on course', function () {
+
+      it('should add course to cart', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var btnCartElem = element.find('.courses .course:first .btn-cart');
+        btnCartElem.click();
+
+        var courseGroup = CourseCart.getCourseGroup(mockSubject.id);
+        var courses = courseGroup.courses;
+        expect(courses.length).toEqual(1);
+        expect(courses[0]).toEqual(mockCourses[0]);
+      });
+
+      it('should remove course from cart', function () {
+        scope.mockSubject = mockSubject;
+        scope.mockCourses = mockCourses;
+        addToCart(1);
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+        );
+        element = $compile(element)(scope);
+        $timeout.flush();
+
+        var btnCartElem = element.find('.courses .course:first .btn-cart');
+        btnCartElem.click();
+
+        expect(function () {
+          CourseCart.getCourseGroup(mockSubject.id);
+        }).toThrow('no course group found');
+      });
+
+    });
+
   });
 
 });

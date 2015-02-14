@@ -178,6 +178,23 @@ angular.module('dashApp.common')
 
         btnCartElem.click(btnCartHandler);
 
+        function btnCartForCourseHandler() {
+          /* jshint -W040 */
+          var elem = angular.element(this);
+          var scopeByNgRepeat = elem.scope();
+          scope.$apply(function (scope) {
+            var course = scopeByNgRepeat.course;
+
+            if (scope.courseAddedToCart[course.id]) {
+              CourseCart.remove(course);
+            } else {
+              CourseCart.add(course);
+            }
+          });
+        }
+
+        element.find('.courses').on('click', '.btn-cart', btnCartForCourseHandler);
+
         element.on('$destroy', function () {
           angular.forEach(independentDeregFns.concat(dependentDeregFns), function (deregFn) {
             deregFn();
