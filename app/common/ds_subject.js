@@ -35,7 +35,10 @@ angular.module('dashApp.common')
         var btnCartElem = actionsElem.find('.btn-cart');
         var verticalBarElem = element.find('.is-required');
 
-        scope.expanded = attrs.hasOwnProperty('expanded');
+        scope.uiStatus = {};
+        scope.uiStatus.expanded = attrs.hasOwnProperty('expanded');
+        scope.uiStatus.allInCart = false;
+        scope.uiStatus.nothingInCart = true;
 
         // This is an object that says which course objects of the subject are in course cart.
         // If a course is in the cart, the ID of course exists as a key with value `true` in this object.
@@ -68,11 +71,11 @@ angular.module('dashApp.common')
             angular.forEach(courseGroup.courses, function (course) {
               scope.courseAddedToCart[course.id] = true;
             });
-            scope.required = courseGroup.required;
+            scope.uiStatus.required = courseGroup.required;
           } catch (e) {
             // no course object of this subject is in course cart
             // or subject is falsy
-            scope.required = false;
+            scope.uiStatus.required = false;
           }
 
           refreshAllOrNothing(scope);
@@ -99,7 +102,7 @@ angular.module('dashApp.common')
           var deregFn = $rootScope.$on('changerequiredincart', function (event, subjectId, required) {
             scope.$evalAsync(function (scope) {
               if (scope.subject.id === subjectId) {
-                scope.required = required;
+                scope.uiStatus.required = required;
               }
             });
           });
@@ -122,7 +125,7 @@ angular.module('dashApp.common')
         );
         independentDeregFns.push(deregFn);
 
-        deregFn = scope.$watch('expanded', function (expanded) {
+        deregFn = scope.$watch('uiStatus.expanded', function (expanded) {
           var ariaLabel = expanded ?
               CHEVRON_ARIA_LABEL_COLLAPSE :
               CHEVRON_ARIA_LABEL_EXPAND;
@@ -130,7 +133,7 @@ angular.module('dashApp.common')
         });
         independentDeregFns.push(deregFn);
 
-        deregFn = scope.$watch('allInCart', function (allInCart) {
+        deregFn = scope.$watch('uiStatus.allInCart', function (allInCart) {
           var ariaLabel = allInCart ?
               BTN_CART_ARIA_LABEL_REMOVE :
               BTN_CART_ARIA_LABEL_ADD;
@@ -141,8 +144,11 @@ angular.module('dashApp.common')
         // register listeners for events occurred by course cart
         deregFn = $rootScope.$on('addtocart', function (event, course, courseGroup) {
           scope.$evalAsync(function (scope) {
+            if (scope.subject.id !== course.subject.id) {
+              return;
+            }
             scope.courseAddedToCart[course.id] = true;
-            scope.required = courseGroup.required;
+            scope.uiStatus.required = courseGroup.required;
             refreshAllOrNothing(scope);
           });
         });
@@ -150,6 +156,9 @@ angular.module('dashApp.common')
 
         deregFn = $rootScope.$on('removefromcart', function (event, course) {
           scope.$evalAsync(function (scope) {
+            if (scope.subject.id !== course.subject.id) {
+              return;
+            }
             delete scope.courseAddedToCart[course.id];
             refreshAllOrNothing(scope);
           });
@@ -158,10 +167,10 @@ angular.module('dashApp.common')
 
         function refreshAllOrNothing(scope) {
           var courses = scope.courses || [];
-          scope.allInCart = courses.reduce(function (prev, course) {
+          scope.uiStatus.allInCart = courses.reduce(function (prev, course) {
             return prev && (scope.courseAddedToCart[course.id] === true);
           }, true);
-          scope.nothingInCart = courses.reduce(function (prev, course) {
+          scope.uiStatus.nothingInCart = courses.reduce(function (prev, course) {
             return prev && (scope.courseAddedToCart[course.id] !== true);
           }, true);
         }
@@ -170,7 +179,7 @@ angular.module('dashApp.common')
           scope.$apply(function (scope) {
             var task;
 
-            if (scope.allInCart) {
+            if (scope.uiStatus.allInCart) {
               // remove from cart
               task = function (course) { CourseCart.remove(course); };
             } else {
@@ -203,14 +212,14 @@ angular.module('dashApp.common')
 
         function verticalBarHandler() {
           scope.$apply(function (scope) {
-            if (scope.nothingInCart) {
+            if (scope.uiStatus.nothingInCart) {
               // unavailable -> required/optional (determined by the first course)
               angular.forEach(scope.courses, function (course) {
                 CourseCart.add(course);
               });
             } else {
-              scope.required = !scope.required;
-              CourseCart.setCourseGroupRequired(scope.subject.id, scope.required);
+              scope.uiStatus.required = !scope.uiStatus.required;
+              CourseCart.setCourseGroupRequired(scope.subject.id, scope.uiStatus.required);
             }
           });
         }

@@ -1,8 +1,8 @@
 <div class="is-required"
      ng-class="{
-       'is-required-true': !nothingInCart && required,
-       'is-required-false': !nothingInCart && !required,
-       'is-required-unavailable': nothingInCart
+       'is-required-true': !uiStatus.nothingInCart && uiStatus.required,
+       'is-required-false': !uiStatus.nothingInCart && !uiStatus.required,
+       'is-required-unavailable': uiStatus.nothingInCart
      }"></div>
 
 <div class="cell">
@@ -13,23 +13,26 @@
   </div>
 
   <div class="actions" role="group" aria-label="Actions for subject">
-    <button class="chevron" type="button" aria-label="Expand/Collapse" ng-click="expanded = !expanded">
+    <button class="chevron"
+            type="button"
+            aria-label="Expand/Collapse"
+            ng-click="uiStatus.expanded = !uiStatus.expanded">
       <i class="fa"
-         ng-class="{'fa-chevron-right': !expanded, 'fa-chevron-down': expanded}"
+         ng-class="{'fa-chevron-right': !uiStatus.expanded, 'fa-chevron-down': uiStatus.expanded}"
          aria-hidden="true"></i>
     </button>
     <button class="btn btn-cart"
-            ng-class="{'btn-cart-add': !allInCart, 'btn-cart-remove': allInCart}"
+            ng-class="{'btn-cart-add': !uiStatus.allInCart, 'btn-cart-remove': uiStatus.allInCart}"
             aria-label="Add to/Remove from cart">
       <i class="fa"
-         ng-class="{'fa-plus': !allInCart, 'fa-minus': allInCart}"
+         ng-class="{'fa-plus': !uiStatus.allInCart, 'fa-minus': uiStatus.allInCart}"
          aria-hidden="true"></i>
-      {{!allInCart ? 'Add to cart' : 'Remove from cart'}}
+      {{!uiStatus.allInCart ? 'Add to cart' : 'Remove from cart'}}
     </button>
   </div>
 </div>
 
-<ul class="courses" ng-show="expanded">
+<ul class="courses" ng-show="uiStatus.expanded">
   <li class="course"
       ng-repeat="course in courses track by course.id"
       ds-repeat-done="updateCourses()">
