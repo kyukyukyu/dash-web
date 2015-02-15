@@ -30,7 +30,9 @@
 </div>
 
 <ul class="courses" ng-show="expanded">
-  <li class="course" ng-repeat="course in courses track by course.id">
+  <li class="course"
+      ng-repeat="course in courses track by course.id"
+      ds-repeat-done="updateCourses()">
     <span class="code">{{course.code}}</span>
     <span class="instructor">{{course.instructor}}</span>
 

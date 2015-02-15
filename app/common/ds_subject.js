@@ -41,6 +41,17 @@ angular.module('dashApp.common')
         // If a course is in the cart, the ID of course exists as a key with value `true` in this object.
         scope.courseAddedToCart = {};
 
+        // This function is called after DOM objects representing the list of courses are updated.
+        function updateCourses() {
+          element.find('.courses > .course').each(function (index) {
+            var course = scope.courses[index];
+            var courseElem = angular.element(this);
+            courseElem.data('id', course.id);
+            courseElem.find('.actions').attr('aria-label', COURSE_ACTIONS_ARIA_LABEL(course.code));
+          });
+        }
+        scope.updateCourses = updateCourses;
+
         // array of deregisteration functions for listener
         var independentDeregFns = [];
         var dependentDeregFns = [];
@@ -106,13 +117,6 @@ angular.module('dashApp.common')
             if (!courses) {
               return;
             }
-
-            element.find('.courses > .course').each(function (index) {
-              var course = courses[index];
-              var courseElem = angular.element(this);
-              courseElem.data('id', course.id);
-              courseElem.find('.actions').attr('aria-label', COURSE_ACTIONS_ARIA_LABEL(course.code));
-            });
 
           }
         );
