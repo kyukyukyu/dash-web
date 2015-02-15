@@ -124,13 +124,21 @@ describe('Main', function () {
       });
     });
 
-    describe('result box', function () {
-      it('should appear only after retrieving search results', function () {
-        keywordBox.click();
-        expect(searchResultBox.elem.isDisplayed()).toBeFalsy();
-        keywordBox.sendKeys('software engineering', protractor.Key.ENTER);
-        expect(searchResultBox.elem.isDisplayed()).toBeTruthy();
+    it('should show result box only after retrieving search results', function () {
+      keywordBox.click();
+      expect(searchResultBox.elem.isDisplayed()).toBeFalsy();
+      keywordBox.sendKeys('software engineering', protractor.Key.ENTER);
+      expect(searchResultBox.elem.isDisplayed()).toBeTruthy();
+    });
 
+    describe('result box', function () {
+
+      beforeEach(function () {
+        keywordBox.click();
+        keywordBox.sendKeys('software engineering', protractor.Key.ENTER);
+      });
+
+      it('should show search results', function () {
         var subject, course;
         expect(searchResultBox.numOfSubjects).toBe(4);
 
