@@ -408,6 +408,77 @@ describe('Directive: dsSubject', function () {
 
     });
 
+    describe('when is-required vertical bar is clicked', function () {
+
+      var verticalBarElem;
+      var courseGroup;
+
+      function getVerticalBarElem(element) {
+        return element.find('.is-required');
+      }
+
+      it('should change from unavailable one to required one and add all courses ' +
+         'if the first course is major one', function () {
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        element = compileElement(scope);
+
+        verticalBarElem = getVerticalBarElem(element);
+        verticalBarElem.click();
+        $rootScope.$digest();
+
+        courseGroup = CourseCart.getCourseGroup(scope.mockSubject.id);
+        expect(courseGroup.required).toBe(true);
+        expect(courseGroup.courses.length).toEqual(2);
+      });
+
+      it('should change from unavailable one to optional one and add all courses ' +
+         'if the first course is general one', function () {
+        scope.mockSubject = mockGeneralSubject;
+        scope.mockCourses = mockGeneralCourses;
+        element = compileElement(scope);
+
+        verticalBarElem = getVerticalBarElem(element);
+        verticalBarElem.click();
+        $rootScope.$digest();
+
+        courseGroup = CourseCart.getCourseGroup(scope.mockSubject.id);
+        expect(courseGroup.required).toBe(false);
+        expect(courseGroup.courses.length).toEqual(1);
+      });
+
+      it('should change from required one to optional one and not add or remove any course', function () {
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        addToCart(1);
+        element = compileElement(scope);
+
+        verticalBarElem = getVerticalBarElem(element);
+        verticalBarElem.click();
+        $rootScope.$digest();
+
+        courseGroup = CourseCart.getCourseGroup(scope.mockSubject.id);
+        expect(courseGroup.required).toBe(false);
+        expect(courseGroup.courses.length).toEqual(1);
+      });
+
+      it('should change from optional one to required one and not add or remove any course', function () {
+        scope.mockSubject = mockGeneralSubject;
+        scope.mockCourses = mockGeneralCourses;
+        addToCart(5);
+        element = compileElement(scope);
+
+        verticalBarElem = getVerticalBarElem(element);
+        verticalBarElem.click();
+        $rootScope.$digest();
+
+        courseGroup = CourseCart.getCourseGroup(scope.mockSubject.id);
+        expect(courseGroup.required).toBe(true);
+        expect(courseGroup.courses.length).toEqual(1);
+      });
+
+    });
+
   });
 
   it('should expand and collapse the list of courses', function () {

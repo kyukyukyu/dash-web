@@ -33,6 +33,7 @@ angular.module('dashApp.common')
         var actionsElem = element.find('.actions').not('.courses *');
         var chevronElem = actionsElem.find('.chevron');
         var btnCartElem = actionsElem.find('.btn-cart');
+        var verticalBarElem = element.find('.is-required');
 
         scope.expanded = attrs.hasOwnProperty('expanded');
 
@@ -195,6 +196,22 @@ angular.module('dashApp.common')
         }
 
         element.find('.courses').on('click', '.btn-cart', btnCartForCourseHandler);
+
+        function verticalBarHandler() {
+          scope.$apply(function (scope) {
+            if (scope.nothingInCart) {
+              // unavailable -> required/optional (determined by the first course)
+              angular.forEach(scope.courses, function (course) {
+                CourseCart.add(course);
+              });
+            } else {
+              scope.required = !scope.required;
+              CourseCart.setCourseGroupRequired(scope.subject.id, scope.required);
+            }
+          });
+        }
+
+        verticalBarElem.click(verticalBarHandler);
 
         element.on('$destroy', function () {
           angular.forEach(independentDeregFns.concat(dependentDeregFns), function (deregFn) {
