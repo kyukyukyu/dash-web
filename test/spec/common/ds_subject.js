@@ -11,17 +11,28 @@ describe('Directive: dsSubject', function () {
   beforeEach(module('dashApp.mock.courses'));
 
   // load mock data
-  var mockSubject, mockSubject2, mockCourses;
+  var mockMajorSubject, mockMajorCourses, mockGeneralSubject, mockGeneralCourses;
   beforeEach(function () {
     var mockDataSource = getJSONFixture('courses.json');
-    mockSubject = mockDataSource.objects[0].subject;
-    mockSubject2 = mockDataSource.objects[2].subject;
-    mockCourses = mockDataSource.objects.slice(0, 2);
+    mockMajorSubject = mockDataSource.objects[0].subject;
+    mockGeneralSubject = mockDataSource.objects[4].subject;
+    mockMajorCourses = mockDataSource.objects.slice(0, 2);
+    mockGeneralCourses = mockDataSource.objects.slice(4, 5);
   });
 
   var $compile, $timeout;
   var element,
     scope;
+
+  function compileElement(scope) {
+    var element = angular.element(
+      '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
+    );
+    element = $compile(element)(scope);
+    $timeout.flush();
+
+    return element;
+  }
 
   beforeEach(inject(function (_$compile_, _$timeout_, $rootScope) {
     $compile = _$compile_;
@@ -32,11 +43,10 @@ describe('Directive: dsSubject', function () {
   it('should show subject information', function () {
     var cellElement;
 
-    scope.mockSubject = mockSubject;
-    element =
-      angular.element(
-        '<ds-subject subject="mockSubject"></ds-subject>'
-      );
+    scope.mockSubject = mockMajorSubject;
+    element = angular.element(
+      '<ds-subject subject="mockSubject"></ds-subject>'
+    );
     element = $compile(element)(scope);
     $timeout.flush();
 
@@ -48,20 +58,14 @@ describe('Directive: dsSubject', function () {
   });
 
   it('should show course information when provided', function () {
-    scope.mockSubject = mockSubject;
-    scope.mockCourses = mockCourses;
-    element =
-      angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses">' +
-        '</ds-subject>'
-      );
-    element = $compile(element)(scope);
-    $timeout.flush();
+    scope.mockSubject = mockMajorSubject;
+    scope.mockCourses = mockMajorCourses;
+    element = compileElement(scope);
 
     var courseElems = element.find('.courses > .course');
     expect(courseElems.length).toBe(2);
     courseElems.each(function (index, courseElem) {
-      var mockCourse = mockCourses[index];
+      var mockCourse = mockMajorCourses[index];
       courseElem = angular.element(courseElem);
       expect(courseElem.data('id')).toBe(mockCourse.id);
       expect(courseElem.find('.instructor').text()).toBe(mockCourse.instructor);
@@ -70,8 +74,8 @@ describe('Directive: dsSubject', function () {
   });
 
   it('should expand courses when expanded attribute exists', function () {
-    scope.mockSubject = mockSubject;
-    scope.mockCourses = mockCourses;
+    scope.mockSubject = mockMajorSubject;
+    scope.mockCourses = mockMajorCourses;
     element =
       angular.element(
         '<ds-subject subject="mockSubject" courses="mockCourses"' +
@@ -88,8 +92,8 @@ describe('Directive: dsSubject', function () {
   });
 
   it('should collapse courses when expanded attribute does not exist', function () {
-    scope.mockSubject = mockSubject;
-    scope.mockCourses = mockCourses;
+    scope.mockSubject = mockMajorSubject;
+    scope.mockCourses = mockMajorCourses;
     element =
       angular.element(
         '<ds-subject subject="mockSubject" courses="mockCourses">' +
@@ -105,7 +109,7 @@ describe('Directive: dsSubject', function () {
   });
 
   it('should be able to be used with ng-repeat directive', function () {
-    scope.mockSubjects = [mockSubject, mockSubject2];
+    scope.mockSubjects = [mockMajorSubject, mockGeneralSubject];
     // It is strongly recommended to use `track by` expression to not add
     // $$hashKey property to original object.
     element =
@@ -162,13 +166,9 @@ describe('Directive: dsSubject', function () {
 
     it('should show \'Add to cart\' button if no course of the subject is ' +
        'in cart', function () {
-      scope.mockSubject = mockSubject;
-      scope.mockCourses = mockCourses;
-      element = angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-      );
-      element = $compile(element)(scope);
-      $timeout.flush();
+      scope.mockSubject = mockMajorSubject;
+      scope.mockCourses = mockMajorCourses;
+      element = compileElement(scope);
 
       var btnCart = element.find('.actions > .btn-cart').not('.courses *');
       expect(btnCart).toHaveClass('btn-cart-add');
@@ -177,14 +177,10 @@ describe('Directive: dsSubject', function () {
 
     it('should show \'Add to cart\' button if not all course of the ' +
        'subject is in cart', function () {
-      scope.mockSubject = mockSubject;
-      scope.mockCourses = mockCourses;
+      scope.mockSubject = mockMajorSubject;
+      scope.mockCourses = mockMajorCourses;
       addToCart(1);
-      element = angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-      );
-      element = $compile(element)(scope);
-      $timeout.flush();
+      element = compileElement(scope);
 
       var btnCart = element.find('.actions > .btn-cart').not('.courses *');
       expect(btnCart).toHaveClass('btn-cart-add');
@@ -193,15 +189,11 @@ describe('Directive: dsSubject', function () {
 
     it('should show \'Remove from cart\' button if all course of the ' +
     'subject is in cart', function () {
-      scope.mockSubject = mockSubject;
-      scope.mockCourses = mockCourses;
+      scope.mockSubject = mockMajorSubject;
+      scope.mockCourses = mockMajorCourses;
       addToCart(1);
       addToCart(2);
-      element = angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-      );
-      element = $compile(element)(scope);
-      $timeout.flush();
+      element = compileElement(scope);
 
       var btnCart = element.find('.actions > .btn-cart').not('.courses *');
       expect(btnCart).not.toHaveClass('btn-cart-add');
@@ -209,13 +201,9 @@ describe('Directive: dsSubject', function () {
     });
 
     it('should show \'Add to cart\' button if the course is not in cart', function () {
-      scope.mockSubject = mockSubject;
-      scope.mockCourses = mockCourses;
-      element = angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-      );
-      element = $compile(element)(scope);
-      $timeout.flush();
+      scope.mockSubject = mockMajorSubject;
+      scope.mockCourses = mockMajorCourses;
+      element = compileElement(scope);
 
       var btnCart = element.find('.courses .btn-cart');
       expect(btnCart).toHaveClass('btn-cart-add');
@@ -223,14 +211,10 @@ describe('Directive: dsSubject', function () {
     });
 
     it('should show \'Remove from cart\' button if the course is in cart', function () {
-      scope.mockSubject = mockSubject;
-      scope.mockCourses = mockCourses.slice(0, 1);
+      scope.mockSubject = mockMajorSubject;
+      scope.mockCourses = mockMajorCourses.slice(0, 1);
       addToCart(1);
-      element = angular.element(
-        '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-      );
-      element = $compile(element)(scope);
-      $timeout.flush();
+      element = compileElement(scope);
 
       var btnCart = element.find('.courses .btn-cart');
       expect(btnCart).not.toHaveClass('btn-cart-add');
@@ -239,35 +223,27 @@ describe('Directive: dsSubject', function () {
 
     describe('setting proper class on whether course group is required or unavailable', function () {
 
-      function prepareElement(courseIndex, putInCart) {
-        var element;
-        var mockDataSource = getJSONFixture('courses.json');
-        var mockCourse = mockDataSource.objects[courseIndex];
-        scope.mockCourses = [mockCourse];
-        scope.mockSubject = mockCourse.subject;
-        if (putInCart) {
-          addToCart(mockCourse.id);
-        }
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
-        return element;
-      }
-
       it('should set proper class if the course group is required', function () {
-        element = prepareElement(0, true);
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        addToCart(1);
+        addToCart(2);
+        element = compileElement(scope);
         expect(element.find('.is-required')).toHaveClass('is-required-true');
       });
 
       it('should set proper class if the course group is optional', function () {
-        element = prepareElement(4, true);
+        scope.mockSubject = mockGeneralSubject;
+        scope.mockCourses = mockGeneralCourses;
+        addToCart(5);
+        element = compileElement(scope);
         expect(element.find('.is-required')).toHaveClass('is-required-false');
       });
 
       it('should set proper class if the course group is not in cart', function () {
-        element = prepareElement(0, false);
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        element = compileElement(scope);
         expect(element.find('.is-required')).toHaveClass('is-required-unavailable');
       });
 
@@ -282,32 +258,24 @@ describe('Directive: dsSubject', function () {
       }
 
       it('should react to changerequiredincart event', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
         addToCart(1);
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        element = compileElement(scope);
 
-        $rootScope.$broadcast('changerequiredincart', mockSubject.id, false);
+        $rootScope.$broadcast('changerequiredincart', mockMajorSubject.id, false);
         $rootScope.$digest();
         expect(element.find('.is-required')).toHaveClass('is-required-false');
 
-        $rootScope.$broadcast('changerequiredincart', mockSubject.id, true);
+        $rootScope.$broadcast('changerequiredincart', mockMajorSubject.id, true);
         $rootScope.$digest();
         expect(element.find('.is-required')).toHaveClass('is-required-true');
       });
 
       it('should react to addtocart event', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        element = compileElement(scope);
 
         var courseElem, btnCartElem;
 
@@ -337,15 +305,11 @@ describe('Directive: dsSubject', function () {
       });
 
       it('should react to removefromcart event', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
         addToCart(1);
         addToCart(2);
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        element = compileElement(scope);
 
         var courseElem, btnCartElem;
 
@@ -378,43 +342,35 @@ describe('Directive: dsSubject', function () {
     describe('cart button on subject', function () {
 
       it('should add all courses to cart', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        element = compileElement(scope);
 
         var btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
         btnCartElem.click();
 
-        var courseGroup = CourseCart.getCourseGroup(mockSubject.id);
+        var courseGroup = CourseCart.getCourseGroup(mockMajorSubject.id);
         var courses = angular.copy(courseGroup.courses).sort(function (ca, cb) {
           return ca.id - cb.id;
         });
-        expect(courses.length).toEqual(mockCourses.length);
+        expect(courses.length).toEqual(mockMajorCourses.length);
         angular.forEach(courses, function (course, i) {
-          expect(course).toEqual(mockCourses[i]);
+          expect(course).toEqual(mockMajorCourses[i]);
         });
       });
 
       it('should remove all courses from cart', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
         addToCart(1);
         addToCart(2);
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        element = compileElement(scope);
 
         var btnCartElem = element.find('.actions > .btn-cart').not('.courses *');
         btnCartElem.click();
 
         expect(function () {
-          CourseCart.getCourseGroup(mockSubject.id);
+          CourseCart.getCourseGroup(mockMajorSubject.id);
         }).toThrow('no course group found');
       });
 
@@ -423,38 +379,30 @@ describe('Directive: dsSubject', function () {
     describe('cart button on course', function () {
 
       it('should add course to cart', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        element = compileElement(scope);
 
         var btnCartElem = element.find('.courses .course:first .btn-cart');
         btnCartElem.click();
 
-        var courseGroup = CourseCart.getCourseGroup(mockSubject.id);
+        var courseGroup = CourseCart.getCourseGroup(mockMajorSubject.id);
         var courses = courseGroup.courses;
         expect(courses.length).toEqual(1);
-        expect(courses[0]).toEqual(mockCourses[0]);
+        expect(courses[0]).toEqual(mockMajorCourses[0]);
       });
 
       it('should remove course from cart', function () {
-        scope.mockSubject = mockSubject;
-        scope.mockCourses = mockCourses;
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
         addToCart(1);
-        element = angular.element(
-          '<ds-subject subject="mockSubject" courses="mockCourses"></ds-subject>'
-        );
-        element = $compile(element)(scope);
-        $timeout.flush();
+        element = compileElement(scope);
 
         var btnCartElem = element.find('.courses .course:first .btn-cart');
         btnCartElem.click();
 
         expect(function () {
-          CourseCart.getCourseGroup(mockSubject.id);
+          CourseCart.getCourseGroup(mockMajorSubject.id);
         }).toThrow('no course group found');
       });
 
@@ -463,8 +411,8 @@ describe('Directive: dsSubject', function () {
   });
 
   it('should expand and collapse the list of courses', function () {
-    scope.mockSubject = mockSubject;
-    scope.mockCourses = mockCourses;
+    scope.mockSubject = mockMajorSubject;
+    scope.mockCourses = mockMajorCourses;
     element = angular.element(
       '<ds-subject subject="mockSubject" courses="mockCourses" expanded></ds-subject>'
     );
