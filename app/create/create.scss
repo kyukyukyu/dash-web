@@ -78,7 +78,8 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
           line-height: 100%;
         }
 
-        > .form-control {
+        > form > .form-control {
+          border: 0;
           height: $search-box-height - 2;
           outline: none;
           box-shadow: none;
