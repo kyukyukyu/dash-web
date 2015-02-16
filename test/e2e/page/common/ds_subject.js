@@ -13,6 +13,8 @@
 
   function Course(elem) {
     this.elem = elem;
+    this.actions = this.elem.$('.actions');
+    this.btnCart = this.actions.$('.btn-cart');
   }
 
   var defineFunc = function (prototype, prefixSelector) {
@@ -28,13 +30,36 @@
   Object.defineProperties(Subject.prototype, {
     'numOfCourses': {
       get: function () { return this.courses.count(); }
+    },
+
+    'verticalBarBgColor': {
+      get: function () { return this.verticalBar.getCssValue('background-color'); }
     }
   });
+  Subject.prototype.VERTICAL_BAR_COLOR = {
+    REQUIRED: 'rgba(82, 155, 192, 1)',
+    OPTIONAL: 'rgba(122, 173, 76, 1)',
+    UNAVAILABLE: 'rgba(154, 153, 148, 1)'
+  };
   Subject.prototype.getCourseAt = function (index) {
     return new Course(this.courses.get(index));
   };
+  Subject.prototype.clickCartButton = function () {
+    browser.actions().mouseMove(this.actions).perform();
+    this.btnCart.click();
+  };
+  Subject.prototype.clickVerticalBar = function (mouseout) {
+    this.verticalBar.click();
+    if (mouseout === undefined || mouseout) {
+      browser.actions().mouseMove(this.actions).perform();
+    }
+  };
   'code name credit'.split(' ').forEach(defineFunc(Subject.prototype, '.cell '));
 
+  Course.prototype.clickCartButton = function () {
+    browser.actions().mouseMove(this.actions).perform();
+    this.btnCart.click();
+  };
   'code instructor'.split(' ').forEach(defineFunc(Course.prototype));
 
   module.exports = Subject;
