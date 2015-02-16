@@ -235,7 +235,7 @@ describe('Main', function () {
         courseInResult.clickCartButton();
         expect(subjectInResult.verticalBarBgColor).toEqual(subjectInResult.VERTICAL_BAR_COLOR.UNAVAILABLE);
         expect(courseCartBox.numOfSubjects).toBe(0);
-      });
+      }, 45000);
 
       it('should set the course group required or optional when one is created in course cart', function () {
         var subjectInResult;
