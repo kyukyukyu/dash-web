@@ -187,7 +187,7 @@ angular.module('dashApp.common')
               task = function (course) { CourseCart.add(course); };
             }
 
-            angular.forEach(scope.courses, task);
+            angular.forEach(angular.extend([], scope.courses), task);
           });
         }
 
