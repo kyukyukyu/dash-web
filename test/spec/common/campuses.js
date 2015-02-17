@@ -4,7 +4,7 @@ describe('Service: Campuses', function () {
   /* jshint unused: false */
 
   // load the service's module
-  beforeEach(module('dashApp.entity'));
+  beforeEach(module('dashApp.common'));
 
   // load module for mocking backend
   beforeEach(module('dashApp.mock.campuses'));

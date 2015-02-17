@@ -6,9 +6,5 @@ angular
     'ngCookies',
     'ngSanitize',
     'restangular',
-    'ui.router',
-    'dashApp.entity'
-  ])
-  .config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/');
-  });
+    'ui.router'
+  ]);

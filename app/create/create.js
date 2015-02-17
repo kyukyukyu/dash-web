@@ -12,7 +12,6 @@ angular
   .module('dashApp.create', [
     'ngAnimate',
     'ui.bootstrap',
-    'dashApp.entity',
     'dashApp.common'
   ])
   .config(function ($stateProvider) {

@@ -1,12 +1,10 @@
-'use strict';
+(function () {
+  'use strict';
 
-angular
-  .module('dashApp.entity', [
-    'ngCookies',
-    'ngSanitize',
-    'restangular'
-  ])
-  .config(function (RestangularProvider) {
+  var common = angular.module('dashApp.common');
+
+  /* @ngInject */
+  function configRestangular(RestangularProvider) {
     RestangularProvider
       .setBaseUrl('/api')
       .addResponseInterceptor(function (data, operation) {
@@ -22,4 +20,15 @@ angular
         }
         return extractedData;
       });
-  });
+  }
+
+  common.config(configRestangular);
+
+  /* @ngInject */
+  function configUiRouter($urlRouterProvider) {
+    $urlRouterProvider.otherwise('/');
+  }
+
+  common.config(configUiRouter);
+
+})();
