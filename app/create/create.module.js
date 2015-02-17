@@ -13,12 +13,4 @@ angular
     'ngAnimate',
     'ui.bootstrap',
     'dashApp.common'
-  ])
-  .config(function ($stateProvider) {
-    $stateProvider
-      .state('create', {
-        url: '/',
-        templateUrl: 'create/create.tpl.html',
-        controller: 'MainCtrl'
-      });
-  });
+  ]);
