@@ -10,7 +10,7 @@
  *
  * Source: http://stackoverflow.com/questions/15207788/calling-a-function-when-ng-repeat-has-finished
  */
-angular.module('dashApp.common')
+angular.module('dashApp.widgets')
   .directive('dsRepeatDone', function () {
 
     return {

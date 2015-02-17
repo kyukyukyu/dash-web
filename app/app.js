@@ -10,5 +10,7 @@
  */
 angular
   .module('dashApp', [
+    'dashApp.common',
+    'dashApp.widgets',
     'dashApp.create'
   ]);

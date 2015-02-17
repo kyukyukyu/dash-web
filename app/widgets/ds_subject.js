@@ -7,7 +7,7 @@
  * @description
  * # dsSubject
  */
-angular.module('dashApp.common')
+angular.module('dashApp.widgets')
   .directive('dsSubject', function ($rootScope, CourseCart) {
     var SUBJECT_ACTIONS_ARIA_LABEL = function (code) {
       return 'Actions for subject ' + code;
@@ -23,7 +23,7 @@ angular.module('dashApp.common')
     };
 
     return {
-      templateUrl: 'common/ds_subject.tpl.html',
+      templateUrl: 'widgets/ds_subject.tpl.html',
       restrict: 'E',
       scope: {
         subject: '=',

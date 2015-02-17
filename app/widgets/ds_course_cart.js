@@ -8,7 +8,7 @@
  *
  * dsCourseCart shows what's in the course cart.
  */
-angular.module('dashApp.common')
+angular.module('dashApp.widgets')
   .directive('dsCourseCart', function (CourseCart) {
     /* jshint unused: false */
 
@@ -18,7 +18,7 @@ angular.module('dashApp.common')
     }
 
     return {
-      templateUrl: 'common/ds_course_cart.tpl.html',
+      templateUrl: 'widgets/ds_course_cart.tpl.html',
       restrict: 'E',
       scope: {},
       link: postLink

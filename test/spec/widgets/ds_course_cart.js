@@ -3,9 +3,9 @@
 describe('Directive: dsCourseCart', function () {
 
   // load the directive's module
-  beforeEach(module('dashApp.common'));
-  beforeEach(module('common/ds_subject.tpl.html'));
-  beforeEach(module('common/ds_course_cart.tpl.html'));
+  beforeEach(module('dashApp.widgets'));
+  beforeEach(module('widgets/ds_subject.tpl.html'));
+  beforeEach(module('widgets/ds_course_cart.tpl.html'));
 
   // load mock modules
   beforeEach(module('dashApp.mock.campuses'));
