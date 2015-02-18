@@ -26,12 +26,19 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
   }
 }
 
+/* Timetable column */
+.col-timetable {
+  height: 100%;
+  @include make-md-column(8);
+  @include make-lg-column(8.5);
+}
+
 /* Right column */
 .col-right {
   height: 100%;
   position: relative;
   @include make-md-column(4);
-  @include make-lg-column(4);
+  @include make-lg-column(3.5);
 
   .box {
     @include white-box();
