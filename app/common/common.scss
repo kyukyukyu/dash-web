@@ -25,6 +25,10 @@ $subject-search-result-left-padding: 24px + $white-box-horizontal-padding !defau
 $subject-margin-bottom: 1px !default;
 $course-vertical-padding: 8px !default;
 
+// variables for ds-timetable directive
+$timetable-marking-font-size: 11px;
+$timetable-hour-height: 60px;
+
 $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 $text-color: $text-color-normal;
 

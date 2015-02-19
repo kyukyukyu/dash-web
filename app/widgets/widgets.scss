@@ -188,6 +188,8 @@ ds-subject {
   }
 }
 
+$timetable-thirty-height: $timetable-hour-height / 2;
+
 ds-timetable {
   display: table;
   width: 100%;
@@ -213,10 +215,10 @@ ds-timetable {
     > .ruler-marking {
       display: block;
       color: #b9b8bb;
-      font-size: 11px;
+      font-size: $timetable-marking-font-size;
       font-weight: 300;
       line-height: 100%;
-      margin-bottom: 49px;
+      margin-bottom: $timetable-hour-height - $timetable-marking-font-size;
 
       &:last-child {
         margin-bottom: 0;
@@ -227,14 +229,10 @@ ds-timetable {
   > .col-table {
     position: relative;
 
-    > .table-ruler, .table-courses {
+    > .table-ruler, .table-fixed {
       width: 100%;
       table-layout: fixed;
       position: absolute;
-
-      > tbody > tr {
-        height: 30px;
-      }
     }
 
     > .table-ruler {
@@ -254,6 +252,7 @@ ds-timetable {
 
       > tbody > tr {
         border-bottom: 1px #b9b8bb;
+        height: $timetable-thirty-height;
 
         &.row-o-clock {
           border-bottom-style: dotted;
@@ -265,8 +264,8 @@ ds-timetable {
       }
     }
 
-    > .table-courses {
-      margin-top: 57px;
+    > .table-fixed {
+      top: 57px;
     }
   }
 }

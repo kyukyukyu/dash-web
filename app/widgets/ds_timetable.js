@@ -27,24 +27,32 @@
       link: postLink
     };
 
+    var startHour = 8;
+    var minutePerTerm = 30;
+    var minutePerBreak = 0;
+
     function postLink(scope, element, attrs) {
+      scope.ui = {};
+
       scope.$watchCollection('timeRange', function (timeRange) {
         var startTime = timeRange[0],
           endTime = timeRange[1];
 
         scope.$evalAsync(function (scope) {
-          drawTimeRuler(element, startTime, endTime);
+          drawTimeRuler(scope, element, startTime, endTime);
         });
       });
 
       scope.$watchCollection('fixedCourses', function (fixedCourses) {
         scope.$evalAsync(function (scope) {
-          drawFixedCourses(element, fixedCourses, scope.timeRange);
+          drawFixedCourses(scope, element, fixedCourses, scope.timeRange);
         });
       });
     }
 
-    function drawTimeRuler(element, startTime, endTime) {
+    var markingTpl = angular.element('<span></span>').addClass('ruler-marking').text('12:34');
+
+    function drawTimeRuler(scope, element, startTime, endTime) {
       // calculate hour range and margins
       var startHour = timeToHour(startTime);
       var endHour = timeToHour(endTime + 1);
@@ -60,14 +68,11 @@
       colRuler.empty();
       tableBody.empty();
 
-      // calculate the height of unit marking
-      var markingTpl = angular.element('<span></span>').addClass('ruler-marking').text('12:34');
-      var markingTplClone = markingTpl.clone();
-      markingTpl.appendTo(colRuler);
-      markingTplClone.appendTo(colRuler);
-      var hourHeight = markingTpl.outerHeight(true);
-      markingTplClone.remove();
-      markingTpl.detach();
+      // calculate the height of one hour
+      if (!scope.ui.hourHeight) {
+        scope.ui.hourHeight = getHourHeight(element);
+      }
+      var hourHeight = scope.ui.hourHeight;
 
       // draw markings
       var marking,
@@ -128,17 +133,37 @@
     }
 
     function timeToHour(time) {
-      var startHour = 8;
-      var minutePerTime = 30;
-      var minutePerBreak = 0;
-      return (time - 1) * ((minutePerTime + minutePerBreak) / 60) + startHour;
+      return (time - 1) * ((minutePerTerm + minutePerBreak) / 60) + startHour;
     }
 
-    function drawFixedCourses(element, fixedCourses, timeRange) {
+    function getHourHeight(element) {
+      var hourHeight;
+
+      var colRuler = element.find('.col-ruler');
+      var marking1 = markingTpl.clone();
+      var marking2 = markingTpl.clone();
+      marking1.appendTo(colRuler);
+      marking2.appendTo(colRuler);
+
+      hourHeight = marking1.outerHeight(true);
+
+      marking2.remove();
+      marking1.detach();
+
+      return hourHeight;
+    }
+
+    function drawFixedCourses(scope, element, fixedCourses, timeRange) {
       var m = getDrawMatrix(fixedCourses, timeRange);
 
       var table = element.find('.table-fixed');
       var tableBody = table.find('tbody');
+
+      // calculate the height of one hour
+      if (!scope.ui.hourHeight) {
+        scope.ui.hourHeight = getHourHeight(element);
+      }
+      var hourHeight = scope.ui.hourHeight;
 
       // empty table
       tableBody.empty();
@@ -168,6 +193,7 @@
           }
         }
 
+        row.height(hourHeight * (minutePerTerm / 60));
         tableBody.append(row);
       }
     }
