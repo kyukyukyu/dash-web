@@ -31,6 +31,14 @@ $text-color: $text-color-normal;
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
 
+// variables for layout
+$body-padding-top: 70px !default;
+$body-padding-bottom: 20px !default;
+$columns-md-right: 4 !default;
+$columns-md-left: $grid-columns - $columns-md-right !default;
+$columns-lg-right: 3.5 !default;
+$columns-lg-left: $grid-columns - $columns-lg-right !default;
+
 @mixin white-box() {
   background: #fff;
   border: 1px solid transparent;
@@ -46,4 +54,16 @@ $text-color: $text-color-normal;
 @function get-button-height($padding-vertical, $font-size, $line-height) {
   // 2 * 1px is for border on top and bottom
   @return $font-size * $line-height + 2 * $padding-vertical + 2 * 1px;
+}
+
+@mixin md-column-width-pixel($columns) {
+  @media (min-width: $screen-md-min) {
+    width: ($columns / $grid-columns) * $container-md - $grid-gutter-width;
+  }
+}
+
+@mixin lg-column-width-pixel($columns) {
+  @media (min-width: $screen-lg-min) {
+    width: ($columns / $grid-columns) * $container-lg - $grid-gutter-width;
+  }
 }

@@ -7,11 +7,13 @@ $search-box-height: 40px;
 $search-box-icon-horizontal-padding: 12px;
 $search-ui-top-when-shown: 0;
 $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
+$course-cart-top: $body-padding-top + $search-box-height + $white-box-margin-bottom;
+$course-cart-bottom: $body-padding-bottom + $footer-height;
 
 @mixin keyframe-search-ui-hidden {
   display: block;
   opacity: 0;
-  top: $search-ui-top-when-hidden;
+  top: $course-cart-top + $search-ui-top-when-hidden;
 }
 
 @keyframes search-ui-hide {
@@ -29,23 +31,34 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
 /* Timetable column */
 .col-timetable {
   height: 100%;
-  @include make-md-column(8);
-  @include make-lg-column(8.5);
+  @include make-md-column($columns-md-left);
+  @include make-lg-column($columns-lg-left);
+}
+
+@mixin right-column-width {
+  @include md-column-width-pixel($columns-md-right);
+  @include lg-column-width-pixel($columns-lg-right);
+}
+
+@mixin course-cart-position {
+  @include right-column-width;
+
+  top: $course-cart-top;
+  bottom: $course-cart-bottom;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: fixed;
 }
 
 /* Right column */
 .col-right {
   height: 100%;
   position: relative;
-  @include make-md-column(4);
-  @include make-lg-column(3.5);
+  @include make-md-column($columns-md-right);
+  @include make-lg-column($columns-lg-right);
 
   .box {
     @include white-box();
-  }
-
-  .box-group {
-    position: relative;
   }
 
   > .box-group {
@@ -59,9 +72,11 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
     top: 0;
 
     .search-box {
+      @include right-column-width;
+
       padding: 0;
       height: $search-box-height;
-      position: relative;
+      position: fixed;
 
       &.focused {
         border-color: $border-color-focused;
@@ -103,9 +118,8 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
     bottom: 0;
 
     .box-group {
-      position: absolute;
-      top: $search-ui-top-when-shown;
-      width: 100%;
+      @include course-cart-position;
+
       z-index: $zindex-modal;
       opacity: 1;
 
@@ -136,6 +150,7 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
 
       .box-search-result {
         padding: 0;
+        width: 100%;
 
         .subjects {
           @include ds-subject-list-style;
@@ -144,8 +159,8 @@ $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
     }
 
     .box-course-cart {
-      width: 100%;
-      height: 100%;
+      @include course-cart-position;
+
       z-index: $zindex-modal-background - 10;
       padding: 0;
     }
