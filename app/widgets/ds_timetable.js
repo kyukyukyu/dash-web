@@ -38,18 +38,27 @@
       var deregFn;
       scope.ui = {};
 
+      var autoFit = attrs.autoFit !== undefined;
       var firstRun = true;
       var scheduledRuler = false;
       var scheduledFixed = false;
       var scheduledPreview = false;
 
-      deregFn = scope.$watchCollection('timeRange', function () {
+      deregFn = scope.$watchCollection('timeRange', function (timeRange) {
         scope.$evalAsync(function (scope) {
+          if (timeRange) {
+            autoFit = false;
+            scope._timeRange = timeRange;
+          } else {
+            autoFit = attrs.autoFit !== undefined;
+          }
+
           if (firstRun) {
             scheduledRuler = true;
           } else {
             scheduledRuler = scheduledFixed = scheduledPreview = true;
           }
+
           checkAndDraw();
         });
       });
@@ -58,6 +67,10 @@
       deregFn = scope.$watchCollection('fixedCourses', function () {
         scope.$evalAsync(function (scope) {
           scheduledFixed = true;
+          if (!firstRun && autoFit) {
+            scheduledRuler = true;
+            scheduledPreview = true;
+          }
           checkAndDraw();
         });
       });
@@ -66,6 +79,10 @@
       deregFn = scope.$watchCollection('freeHours', function () {
         scope.$evalAsync(function (scope) {
           scheduledFixed = true;
+          if (!firstRun && autoFit) {
+            scheduledRuler = true;
+            scheduledPreview = true;
+          }
           checkAndDraw();
         });
       });
@@ -74,6 +91,10 @@
       deregFn = scope.$watchCollection('previewCourse', function () {
         scope.$evalAsync(function (scope) {
           scheduledPreview = true;
+          if (!firstRun && autoFit) {
+            scheduledRuler = true;
+            scheduledFixed = true;
+          }
           checkAndDraw();
         });
       });
@@ -86,6 +107,10 @@
           }
           firstRun = false;
           scope.ui.hourHeight = getHourHeight(element);
+        }
+
+        if (autoFit) {
+          calculateTimeRange(scope);
         }
 
         if (scheduledRuler) {
@@ -130,7 +155,7 @@
 
     function drawTimeRuler(scope, element) {
       // calculate hour range and margins
-      var timeRange = scope.timeRange;
+      var timeRange = scope._timeRange;
       var startHour = timeToHour(timeRange[0]);
       var endHour = timeToHour(timeRange[1] + 1);
       var marginTopHour = Math.ceil(startHour) - startHour;
@@ -215,7 +240,7 @@
 
       var hourHeight = scope.ui.hourHeight;
 
-      var m = getDrawMatrix(scope.fixedCourses, scope.timeRange, scope.freeHours);
+      var m = getDrawMatrix(scope.fixedCourses, scope._timeRange, scope.freeHours);
 
       drawTimetable(tableBody, hourHeight, m);
     }
@@ -227,7 +252,7 @@
       var hourHeight = scope.ui.hourHeight;
 
       var previewCourse = scope.previewCourse;
-      var m = getDrawMatrix(previewCourse ? [previewCourse] : [], scope.timeRange);
+      var m = getDrawMatrix(previewCourse ? [previewCourse] : [], scope._timeRange);
 
       drawTimetable(tableBody, hourHeight, m);
     }
@@ -314,6 +339,36 @@
       cell.attr('colspan', duration);
       cell.find('.name').text(course.subject.name);
       return cell;
+    }
+
+    function calculateTimeRange(scope) {
+      /* jshint camelcase: false */
+      var fixedCourses = scope.fixedCourses;
+      var previewCourse = scope.previewCourse;
+      var freeHours = scope.freeHours || [];
+
+      var courses = fixedCourses.concat(previewCourse ? previewCourse : []);
+      var timeArr =
+        courses
+          .map(function (course) { return course.hours; })
+          .reduce(function (prevArr, currArr) {
+            Array.prototype.push.apply(prevArr, currArr);
+            return prevArr;
+          }, [])
+          .map(function (courseHour) { return [courseHour.start_time, courseHour.end_time]; })
+          .reduce(function (prevArr, currArr) {
+            Array.prototype.push.apply(prevArr, currArr);
+            return prevArr;
+          }, []);
+      Array.prototype.push.apply(
+        timeArr,
+        freeHours.map(function (point) { return point[1]; })
+      );
+
+      var startTime = Math.min.apply(null, timeArr);
+      var endTime = Math.max.apply(null, timeArr);
+
+      scope._timeRange = [startTime, endTime];
     }
 
     return directive;

@@ -210,4 +210,54 @@ describe('Directive: dsTimetable', function () {
     }
   });
 
+  it('should accept auto-fit attribute and calculate time-range correctly', function () {
+    var fixedCourses = [mockCourses[0]];  // Tues 2:00 ~ 3:30, Thu 10:30 ~ 12:00
+    var freeHours = [[1, 16], [2, 16], [3, 16]];  // Mon/Tues/Wed 3:30 ~ 4:00
+    var previewCourse = mockCourses[2];   // Thu 3:00 ~ 4:30, Fri 3:00 ~ 4:30
+
+    scope.fixedCourses = fixedCourses;
+    element = compileElement(scope, {
+      'fixed-courses': 'fixedCourses',
+      'free-hours': 'freeHours',
+      'preview-course': 'previewCourse',
+      'auto-fit': ''
+    });
+
+    var rulerMarkings,
+      tableRulerRows,
+      tableFixedRows,
+      tablePreviewRows;
+
+    function findElements() {
+      rulerMarkings = element.find('.ruler-marking');
+      tableRulerRows = element.find('.table-ruler > tbody > tr');
+      tableFixedRows = element.find('.table-fixed > tbody > tr');
+      tablePreviewRows = element.find('.table-preview > tbody > tr');
+    }
+
+    findElements();
+    expect(rulerMarkings.length).toBe(5);               // 11:00, 12:00, 1:00, 2:00, 3:00
+    expect(tableRulerRows.length).toBe(15 - 6 + 1);     // 10:30 ~ 3:30
+    expect(tableFixedRows.length).toBe(15 - 6 + 1);     // 6 ~ 15
+    expect(tablePreviewRows.length).toBe(15 - 6 + 1);   // 6 ~ 15
+
+    scope.freeHours = freeHours;
+    $rootScope.$digest();
+
+    findElements();
+    expect(rulerMarkings.length).toBe(6);               // 11:00, 12:00, 1:00, 2:00, 3:00, 4:00
+    expect(tableRulerRows.length).toBe(16 - 6 + 1);     // 10:30 ~ 4:00
+    expect(tableFixedRows.length).toBe(16 - 6 + 1);     // 6 ~ 16
+    expect(tablePreviewRows.length).toBe(16 - 6 + 1);   // 6 ~ 16
+
+    scope.previewCourse = previewCourse;
+    $rootScope.$digest();
+
+    findElements();
+    expect(rulerMarkings.length).toBe(6);               // 11:00, 12:00, 1:00, 2:00, 3:00, 4:00
+    expect(tableRulerRows.length).toBe(17 - 6 + 1);     // 10:30 ~ 4:30
+    expect(tableFixedRows.length).toBe(17 - 6 + 1);     // 6 ~ 17
+    expect(tablePreviewRows.length).toBe(17 - 6 + 1);   // 6 ~ 17
+  });
+
 });
