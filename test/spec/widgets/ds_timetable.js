@@ -70,7 +70,7 @@ describe('Directive: dsTimetable', function () {
     expect(tableRulerElem.find('tbody > tr').length).toBe(17 - 6 + 1);
   });
 
-  it('should accept fixed-course attribute and render fixed courses', function () {
+  it('should accept fixed-courses attribute and render fixed courses', function () {
     var fixedCourses = [mockCourses[0], mockCourses[2], mockCourses[3]];
     var timeRange = [6, 17];
     scope.fixedCourses = fixedCourses;
@@ -115,6 +115,53 @@ describe('Directive: dsTimetable', function () {
           var duration = courseHour.end_time - courseHour.start_time + 1;
           expect(tableFixedCellElem).toHaveAttr('colspan', duration.toString());
           expect(tableFixedCellElem.find('.name')).toContainText(course.subject.name);
+        }
+      }
+    }
+  });
+
+  it('should accept preview-course attribute and render fixed courses', function () {
+    var previewCourse = mockCourses[0];
+    var timeRange = [6, 15];
+    scope.previewCourse = previewCourse;
+    scope.timeRange = timeRange;
+    element = compileElement(scope, {'preview-course': 'previewCourse', 'time-range': 'timeRange'});
+
+    // check if preview course was rendered correct
+    var expectedVector = [
+      /* 6*/ [null, null, null, 1, null, null],
+      /* 7*/ [null, null, null, null, null],
+      /* 8*/ [null, null, null, null, null],
+      /* 9*/ [null, null, null, null, null, null],
+      /*10*/ [null, null, null, null, null, null],
+      /*11*/ [null, null, null, null, null, null],
+      /*12*/ [null, null, null, null, null, null],
+      /*13*/ [null, 0, null, null, null, null],
+      /*14*/ [null, null, null, null, null],
+      /*15*/ [null, null, null, null, null]
+    ];
+
+    var tablePreviewElem = element.find('.table-preview');
+    var tablePreviewRowElems = tablePreviewElem.find('tbody > tr');
+
+    for (var i = 0; i < expectedVector.length; ++i) {
+      var tablePreviewRowElem = angular.element(tablePreviewRowElems[i]);
+      var tablePreviewCellElems = tablePreviewRowElem.find('td');
+      expect(tablePreviewCellElems.length).toBe(expectedVector[i].length);
+
+      for (var j = 0; j < expectedVector[i].length; ++j) {
+        var vectElem = expectedVector[i][j];
+        var tablePreviewCellElem = angular.element(tablePreviewCellElems[j]);
+
+        if (vectElem === null) {
+          expect(tablePreviewCellElem).not.toHaveAttr('colspan');
+          expect(tablePreviewCellElem).toBeEmpty();
+        } else {
+          /* jshint camelcase: false */
+          var courseHour = previewCourse.hours[vectElem];
+          var duration = courseHour.end_time - courseHour.start_time + 1;
+          expect(tablePreviewCellElem).toHaveAttr('colspan', duration.toString());
+          expect(tablePreviewCellElem.find('.name')).toContainText(previewCourse.subject.name);
         }
       }
     }

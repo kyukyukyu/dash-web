@@ -229,7 +229,7 @@ ds-timetable {
   > .col-table {
     position: relative;
 
-    > .table-ruler, .table-fixed {
+    > .table-ruler, .table-fixed, .table-preview {
       width: 100%;
       table-layout: fixed;
       position: absolute;
@@ -264,7 +264,7 @@ ds-timetable {
       }
     }
 
-    > .table-fixed {
+    > .table-fixed, > .table-preview {
       top: 57px;
     }
   }

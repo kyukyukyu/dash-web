@@ -22,7 +22,8 @@
       restrict: 'E',
       scope: {
         timeRange: '=',
-        fixedCourses: '='
+        fixedCourses: '=',
+        previewCourse: '='
       },
       link: postLink
     };
@@ -46,6 +47,12 @@
       scope.$watchCollection('fixedCourses', function (fixedCourses) {
         scope.$evalAsync(function (scope) {
           drawFixedCourses(scope, element, fixedCourses, scope.timeRange);
+        });
+      });
+
+      scope.$watchCollection('previewCourse', function (previewCourse) {
+        scope.$evalAsync(function (scope) {
+          drawPreviewCourse(scope, element, previewCourse, scope.timeRange);
         });
       });
     }
@@ -154,8 +161,6 @@
     }
 
     function drawFixedCourses(scope, element, fixedCourses, timeRange) {
-      var m = getDrawMatrix(fixedCourses, timeRange);
-
       var table = element.find('.table-fixed');
       var tableBody = table.find('tbody');
 
@@ -165,24 +170,45 @@
       }
       var hourHeight = scope.ui.hourHeight;
 
+      var m = getDrawMatrix(fixedCourses, timeRange);
+
+      drawTimetable(tableBody, hourHeight, m);
+    }
+
+    function drawPreviewCourse(scope, element, previewCourse, timeRange) {
+      var table = element.find('.table-preview');
+      var tableBody = table.find('tbody');
+
+      // calculate the height of one hour
+      if (!scope.ui.hourHeight) {
+        scope.ui.hourHeight = getHourHeight(element);
+      }
+      var hourHeight = scope.ui.hourHeight;
+
+      var m = getDrawMatrix(previewCourse ? [previewCourse] : [], timeRange);
+
+      drawTimetable(tableBody, hourHeight, m);
+    }
+
+    function drawTimetable(tableBody, hourHeight, matrix) {
       // empty table
       tableBody.empty();
 
       // iterate over matrix and create rows and cells
-      for (var i = 0; i < m.length; ++i) {
+      for (var i = 0; i < matrix.length; ++i) {
         var row = angular.element('<tr></tr>');
 
-        for (var j = 0; j < m[i].length; ++j) {
+        for (var j = 0; j < matrix[i].length; ++j) {
           var cell;
 
-          if (m[i][j] === null) {
+          if (matrix[i][j] === null) {
             // no course here: append an empty cell
             cell = angular.element('<td></td>');
-          } else if (m[i][j] === undefined) {
+          } else if (matrix[i][j] === undefined) {
             // taken by a course started earlier: append nothing
           } else {
             // a course started here: append a cell representing the course
-            var e = m[i][j];
+            var e = matrix[i][j];
             var course = e[0];
             var duration = e[1];
             cell = createCourseCell(course, duration);
