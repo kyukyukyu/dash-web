@@ -37,29 +37,61 @@
       var deregFn;
       scope.ui = {};
 
-      deregFn = scope.$watchCollection('timeRange', function (timeRange) {
-        var startTime = timeRange[0],
-          endTime = timeRange[1];
+      var firstRun = true;
+      var scheduledRuler = false;
+      var scheduledFixed = false;
+      var scheduledPreview = false;
 
+      deregFn = scope.$watchCollection('timeRange', function () {
         scope.$evalAsync(function (scope) {
-          drawTimeRuler(scope, element, startTime, endTime);
+          if (firstRun) {
+            scheduledRuler = true;
+          } else {
+            scheduledRuler = scheduledFixed = scheduledPreview = true;
+          }
+          checkAndDraw();
         });
       });
       deregFns.push(deregFn);
 
-      deregFn = scope.$watchCollection('fixedCourses', function (fixedCourses) {
+      deregFn = scope.$watchCollection('fixedCourses', function () {
         scope.$evalAsync(function (scope) {
-          drawFixedCourses(scope, element, fixedCourses, scope.timeRange);
+          scheduledFixed = true;
+          checkAndDraw();
         });
       });
       deregFns.push(deregFn);
 
-      deregFn = scope.$watchCollection('previewCourse', function (previewCourse) {
+      deregFn = scope.$watchCollection('previewCourse', function () {
         scope.$evalAsync(function (scope) {
-          drawPreviewCourse(scope, element, previewCourse, scope.timeRange);
+          scheduledPreview = true;
+          checkAndDraw();
         });
       });
       deregFns.push(deregFn);
+
+      function checkAndDraw() {
+        if (firstRun) {
+          if (!(scheduledRuler && scheduledFixed && scheduledPreview)) {
+            return;
+          }
+          firstRun = false;
+          scope.ui.hourHeight = getHourHeight(element);
+        }
+
+        if (scheduledRuler) {
+          scheduledRuler = false;
+          drawTimeRuler(scope, element);
+        }
+        if (scheduledFixed) {
+          scheduledFixed = false;
+          drawFixedCourses(scope, element);
+        }
+        if (scheduledPreview) {
+          scheduledPreview = false;
+          drawPreviewCourse(scope, element);
+        }
+      }
 
       scope.$on('$destroy', function () {
         while (deregFns.length) {
@@ -70,10 +102,28 @@
 
     var markingTpl = angular.element('<span></span>').addClass('ruler-marking').text('12:34');
 
-    function drawTimeRuler(scope, element, startTime, endTime) {
+    function getHourHeight(element) {
+      var hourHeight;
+
+      var colRuler = element.find('.col-ruler');
+      var marking1 = markingTpl.clone();
+      var marking2 = markingTpl.clone();
+      marking1.appendTo(colRuler);
+      marking2.appendTo(colRuler);
+
+      hourHeight = marking1.outerHeight(true);
+
+      marking2.remove();
+      marking1.detach();
+
+      return hourHeight;
+    }
+
+    function drawTimeRuler(scope, element) {
       // calculate hour range and margins
-      var startHour = timeToHour(startTime);
-      var endHour = timeToHour(endTime + 1);
+      var timeRange = scope.timeRange;
+      var startHour = timeToHour(timeRange[0]);
+      var endHour = timeToHour(timeRange[1] + 1);
       var marginTopHour = Math.ceil(startHour) - startHour;
       var marginBottomHour = endHour - Math.floor(endHour);
 
@@ -86,10 +136,6 @@
       colRuler.empty();
       tableBody.empty();
 
-      // calculate the height of one hour
-      if (!scope.ui.hourHeight) {
-        scope.ui.hourHeight = getHourHeight(element);
-      }
       var hourHeight = scope.ui.hourHeight;
 
       // draw markings
@@ -154,49 +200,25 @@
       return (time - 1) * ((minutePerTerm + minutePerBreak) / 60) + startHour;
     }
 
-    function getHourHeight(element) {
-      var hourHeight;
-
-      var colRuler = element.find('.col-ruler');
-      var marking1 = markingTpl.clone();
-      var marking2 = markingTpl.clone();
-      marking1.appendTo(colRuler);
-      marking2.appendTo(colRuler);
-
-      hourHeight = marking1.outerHeight(true);
-
-      marking2.remove();
-      marking1.detach();
-
-      return hourHeight;
-    }
-
-    function drawFixedCourses(scope, element, fixedCourses, timeRange) {
+    function drawFixedCourses(scope, element) {
       var table = element.find('.table-fixed');
       var tableBody = table.find('tbody');
 
-      // calculate the height of one hour
-      if (!scope.ui.hourHeight) {
-        scope.ui.hourHeight = getHourHeight(element);
-      }
       var hourHeight = scope.ui.hourHeight;
 
-      var m = getDrawMatrix(fixedCourses, timeRange);
+      var m = getDrawMatrix(scope.fixedCourses, scope.timeRange);
 
       drawTimetable(tableBody, hourHeight, m);
     }
 
-    function drawPreviewCourse(scope, element, previewCourse, timeRange) {
+    function drawPreviewCourse(scope, element) {
       var table = element.find('.table-preview');
       var tableBody = table.find('tbody');
 
-      // calculate the height of one hour
-      if (!scope.ui.hourHeight) {
-        scope.ui.hourHeight = getHourHeight(element);
-      }
       var hourHeight = scope.ui.hourHeight;
 
-      var m = getDrawMatrix(previewCourse ? [previewCourse] : [], timeRange);
+      var previewCourse = scope.previewCourse;
+      var m = getDrawMatrix(previewCourse ? [previewCourse] : [], scope.timeRange);
 
       drawTimetable(tableBody, hourHeight, m);
     }
