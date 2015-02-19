@@ -45,8 +45,7 @@ $course-cart-bottom: $body-padding-bottom + $footer-height;
 
   top: $course-cart-top;
   bottom: $course-cart-bottom;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
   position: fixed;
 }
 

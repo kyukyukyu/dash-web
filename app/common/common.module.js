@@ -6,5 +6,6 @@ angular
     'ngCookies',
     'ngSanitize',
     'restangular',
-    'ui.router'
+    'ui.router',
+    'perfect_scrollbar'
   ]);

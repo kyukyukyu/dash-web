@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/uri.js/src/URI.js',
+      'bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js',
       'app/common/common.module.js',
       'app/widgets/widgets.module.js',
       'app/create/create.module.js',

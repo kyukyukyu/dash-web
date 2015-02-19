@@ -11,7 +11,8 @@
     "angular-animate": "~1.2.0",
     "angular-ui-router": "~0.2.0",
     "restangular": "~1.4.0",
-    "angular-bootstrap": "~0.12.0"
+    "angular-bootstrap": "~0.12.0",
+    "angular-perfect-scrollbar": "https://github.com/kyukyukyu/angular-perfect-scrollbar.git#0.0.3-dash"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
