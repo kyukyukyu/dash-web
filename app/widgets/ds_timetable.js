@@ -33,9 +33,11 @@
     var minutePerBreak = 0;
 
     function postLink(scope, element, attrs) {
+      var deregFns = [];
+      var deregFn;
       scope.ui = {};
 
-      scope.$watchCollection('timeRange', function (timeRange) {
+      deregFn = scope.$watchCollection('timeRange', function (timeRange) {
         var startTime = timeRange[0],
           endTime = timeRange[1];
 
@@ -43,17 +45,26 @@
           drawTimeRuler(scope, element, startTime, endTime);
         });
       });
+      deregFns.push(deregFn);
 
-      scope.$watchCollection('fixedCourses', function (fixedCourses) {
+      deregFn = scope.$watchCollection('fixedCourses', function (fixedCourses) {
         scope.$evalAsync(function (scope) {
           drawFixedCourses(scope, element, fixedCourses, scope.timeRange);
         });
       });
+      deregFns.push(deregFn);
 
-      scope.$watchCollection('previewCourse', function (previewCourse) {
+      deregFn = scope.$watchCollection('previewCourse', function (previewCourse) {
         scope.$evalAsync(function (scope) {
           drawPreviewCourse(scope, element, previewCourse, scope.timeRange);
         });
+      });
+      deregFns.push(deregFn);
+
+      scope.$on('$destroy', function () {
+        while (deregFns.length) {
+          deregFns.shift()();
+        }
       });
     }
 
