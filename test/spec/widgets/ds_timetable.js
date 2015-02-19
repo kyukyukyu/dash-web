@@ -113,6 +113,7 @@ describe('Directive: dsTimetable', function () {
           var course = fixedCourses[vectElem[0]];
           var courseHour = course.hours[vectElem[1]];
           var duration = courseHour.end_time - courseHour.start_time + 1;
+          expect(tableFixedCellElem).toHaveClass('course-hour');
           expect(tableFixedCellElem).toHaveAttr('colspan', duration.toString());
           expect(tableFixedCellElem.find('.name')).toContainText(course.subject.name);
         }
@@ -160,8 +161,50 @@ describe('Directive: dsTimetable', function () {
           /* jshint camelcase: false */
           var courseHour = previewCourse.hours[vectElem];
           var duration = courseHour.end_time - courseHour.start_time + 1;
+          expect(tablePreviewCellElem).toHaveClass('course-hour');
           expect(tablePreviewCellElem).toHaveAttr('colspan', duration.toString());
           expect(tablePreviewCellElem.find('.name')).toContainText(previewCourse.subject.name);
+        }
+      }
+    }
+  });
+
+  it('should accept free-hours attribute and render free hours', function () {
+    var freeHours = [[1, 9], [1, 10], [2, 9], [2, 10], [3, 9], [3, 10], [4, 9], [4, 10]];
+    var timeRange = [6, 12];
+    scope.freeHours = freeHours;
+    scope.timeRange = timeRange;
+    element = compileElement(scope, {'free-hours': 'freeHours', 'time-range': 'timeRange'});
+
+    // check if preview course was rendered correct
+    var expectedVector = [
+      /* 6*/ [null, null, null, null, null, null],
+      /* 7*/ [null, null, null, null, null, null],
+      /* 8*/ [null, null, null, null, null, null],
+      /* 9*/ [1, 1, 1, 1, null, null],
+      /*10*/ [1, 1, 1, 1, null, null],
+      /*11*/ [null, null, null, null, null, null],
+      /*12*/ [null, null, null, null, null, null]
+    ];
+
+    var tableFixedElem = element.find('.table-fixed');
+    var tableFixedRowElems = tableFixedElem.find('tbody > tr');
+
+    for (var i = 0; i < expectedVector.length; ++i) {
+      var tableFixedRowElem = angular.element(tableFixedRowElems[i]);
+      var tableFixedCellElems = tableFixedRowElem.find('td');
+      expect(tableFixedCellElems.length).toBe(expectedVector[i].length);
+
+      for (var j = 0; j < expectedVector[i].length; ++j) {
+        var vectElem = expectedVector[i][j];
+        var tableFixedCellElem = angular.element(tableFixedCellElems[j]);
+
+        if (vectElem === null) {
+          expect(tableFixedCellElem).not.toHaveAttr('colspan');
+          expect(tableFixedCellElem).toBeEmpty();
+        } else {
+          /* jshint camelcase: false */
+          expect(tableFixedCellElem).toHaveClass('free-hour');
         }
       }
     }

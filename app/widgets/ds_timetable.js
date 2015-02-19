@@ -23,7 +23,8 @@
       scope: {
         timeRange: '=',
         fixedCourses: '=',
-        previewCourse: '='
+        previewCourse: '=',
+        freeHours: '='
       },
       link: postLink
     };
@@ -62,6 +63,14 @@
       });
       deregFns.push(deregFn);
 
+      deregFn = scope.$watchCollection('freeHours', function () {
+        scope.$evalAsync(function (scope) {
+          scheduledFixed = true;
+          checkAndDraw();
+        });
+      });
+      deregFns.push(deregFn);
+
       deregFn = scope.$watchCollection('previewCourse', function () {
         scope.$evalAsync(function (scope) {
           scheduledPreview = true;
@@ -85,11 +94,11 @@
         }
         if (scheduledFixed) {
           scheduledFixed = false;
-          drawFixedCourses(scope, element);
+          drawTableFixed(scope, element);
         }
         if (scheduledPreview) {
           scheduledPreview = false;
-          drawPreviewCourse(scope, element);
+          drawTablePreview(scope, element);
         }
       }
 
@@ -200,18 +209,18 @@
       return (time - 1) * ((minutePerTerm + minutePerBreak) / 60) + startHour;
     }
 
-    function drawFixedCourses(scope, element) {
+    function drawTableFixed(scope, element) {
       var table = element.find('.table-fixed');
       var tableBody = table.find('tbody');
 
       var hourHeight = scope.ui.hourHeight;
 
-      var m = getDrawMatrix(scope.fixedCourses, scope.timeRange);
+      var m = getDrawMatrix(scope.fixedCourses, scope.timeRange, scope.freeHours);
 
       drawTimetable(tableBody, hourHeight, m);
     }
 
-    function drawPreviewCourse(scope, element) {
+    function drawTablePreview(scope, element) {
       var table = element.find('.table-preview');
       var tableBody = table.find('tbody');
 
@@ -223,6 +232,8 @@
       drawTimetable(tableBody, hourHeight, m);
     }
 
+    var DRAW_MATRIX_ELEMENT_FREE_HOUR = -1;
+
     function drawTimetable(tableBody, hourHeight, matrix) {
       // empty table
       tableBody.empty();
@@ -233,15 +244,18 @@
 
         for (var j = 0; j < matrix[i].length; ++j) {
           var cell;
+          var e = matrix[i][j];
 
-          if (matrix[i][j] === null) {
+          if (e === null) {
             // no course here: append an empty cell
             cell = angular.element('<td></td>');
-          } else if (matrix[i][j] === undefined) {
+          } else if (e === undefined) {
             // taken by a course started earlier: append nothing
+          } else if (e === DRAW_MATRIX_ELEMENT_FREE_HOUR) {
+            // free hour here: append a cell representing free hour
+            cell = angular.element('<td class="free-hour"></td>');
           } else {
             // a course started here: append a cell representing the course
-            var e = matrix[i][j];
             var course = e[0];
             var duration = e[1];
             cell = createCourseCell(course, duration);
@@ -257,7 +271,7 @@
       }
     }
 
-    function getDrawMatrix(courses, timeRange) {
+    function getDrawMatrix(courses, timeRange, freeHours) {
       var m = [];
 
       // initialize matrix with null
@@ -285,11 +299,18 @@
         });
       });
 
+      angular.forEach(freeHours, function (freeHour) {
+        var dayOfWeek = freeHour[0];
+        var time = freeHour[1];
+
+        m[time - startTime][dayOfWeek - 1] = DRAW_MATRIX_ELEMENT_FREE_HOUR;
+      });
+
       return m;
     }
 
     function createCourseCell(course, duration) {
-      var cell = angular.element('<td><span class="name"></span></td>');
+      var cell = angular.element('<td class="course-hour"><span class="name"></span></td>');
       cell.attr('colspan', duration);
       cell.find('.name').text(course.subject.name);
       return cell;
