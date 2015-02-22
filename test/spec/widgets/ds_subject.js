@@ -500,4 +500,34 @@ describe('Directive: dsSubject', function () {
     expect(coursesElem).not.toHaveClass('ng-hide');
   });
 
+  describe('setting event listener on course elements', function () {
+    var $rootScope;
+
+    beforeEach(inject(function (_$rootScope_) {
+      $rootScope = _$rootScope_;
+    }));
+
+    angular.forEach('click mouseenter mouseleave'.split(' '), function (eventName) {
+      it('should be able to set event listener for ' + eventName + 'event on course elements', function () {
+        scope.mockSubject = mockMajorSubject;
+        scope.mockCourses = mockMajorCourses;
+        scope.callback = jasmine.createSpy('callback');
+        element = angular.element(
+          '<ds-subject subject="mockSubject" courses="mockCourses" expanded></ds-subject>'
+        );
+        element.attr('course-' + eventName, 'callback(course)');
+        element = $compile(element)(scope);
+        $rootScope.$digest();
+
+        var courseElems = element.find('.course');
+        angular.forEach(scope.mockCourses, function (course, i) {
+          var courseElem = angular.element(courseElems[i]);
+          courseElem.trigger(eventName);
+          $rootScope.$digest();
+          expect(scope.callback).toHaveBeenCalledWith(course);
+        });
+      });
+    });
+  });
+
 });

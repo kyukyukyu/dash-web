@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-timetable">
-    <ds-timetable time-range="[5, 20]"></ds-timetable>
+    <ds-timetable time-range="[1, 32]" preview-course="timetable.previewCourse"></ds-timetable>
   </div>
   <div class="col-right" ng-controller="CourseSearchCtrl">
     <div class="box-group box-group-top">
@@ -101,6 +101,8 @@
             <ds-subject ng-repeat="courseGroup in searchResult track by courseGroup.subject.id"
                         subject="courseGroup.subject"
                         courses="courseGroup.courses"
+                        course-mouseenter="timetable.previewCourse = course"
+                        course-mouseleave="timetable.previewCourse = null"
                         expanded></ds-subject>
           </ul>
         </div>

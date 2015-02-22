@@ -9,6 +9,7 @@
  */
 angular.module('dashApp.widgets')
   .directive('dsSubject', function ($rootScope, CourseCart) {
+    /* jshint latedef: nofunc */
     var SUBJECT_ACTIONS_ARIA_LABEL = function (code) {
       return 'Actions for subject ' + code;
     };
@@ -22,13 +23,25 @@ angular.module('dashApp.widgets')
       return 'Actions for course ' + code;
     };
 
+    var scopeDefinition = {
+      subject: '=',
+      courses: '='
+    };
+    var COURSE_EVENT_NAMES = 'click mouseenter mouseleave'.split(' ');
+
+    angular.forEach(COURSE_EVENT_NAMES, function (eventName) {
+      var attrName = eventNameToAttrName(eventName);
+      scopeDefinition[attrName] = '&';
+    });
+
+    function eventNameToAttrName(eventName) {
+      return 'course' + eventName.charAt(0).toUpperCase() + eventName.substring(1);
+    }
+
     return {
       templateUrl: 'widgets/ds_subject.tpl.html',
       restrict: 'E',
-      scope: {
-        subject: '=',
-        courses: '='
-      },
+      scope: scopeDefinition,
       link: function postLink(scope, element, attrs) {
         var actionsElem = element.find('.actions').not('.courses *');
         var chevronElem = actionsElem.find('.chevron');
@@ -208,7 +221,30 @@ angular.module('dashApp.widgets')
           });
         }
 
-        element.find('.courses').on('click', '.btn-cart', btnCartForCourseHandler);
+        var coursesElem = element.find('.courses');
+        coursesElem.on('click', '.btn-cart', btnCartForCourseHandler);
+        angular.forEach(COURSE_EVENT_NAMES, function (eventName) {
+          var attrName = eventNameToAttrName(eventName);
+          var fn = scope[attrName];
+
+          coursesElem.on(eventName, '.course', function (e) {
+            scope.$apply(function (scope) {
+              var courseId = angular.element(e.currentTarget).data('id');
+              var course;
+
+              angular.forEach(scope.courses, function (_course) {
+                if (course) {
+                  return;
+                }
+                if (_course.id === courseId) {
+                  course = _course;
+                }
+              });
+
+              fn({$event: e, course: course});
+            });
+          });
+        });
 
         function verticalBarHandler() {
           scope.$apply(function (scope) {
@@ -230,6 +266,10 @@ angular.module('dashApp.widgets')
           angular.forEach(independentDeregFns.concat(dependentDeregFns), function (deregFn) {
             deregFn();
           });
+          angular.forEach(COURSE_EVENT_NAMES, function (eventName) {
+            coursesElem.off(eventName, '.course');
+          });
+          coursesElem.off('click', '.btn-cart');
         });
       }
     };

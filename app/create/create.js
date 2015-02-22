@@ -9,9 +9,9 @@
  */
 angular.module('dashApp.create')
   .controller('CreateCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    $scope.timetable = {
+      fixedCourses: [],
+      previewCourse: null,
+      freeHours: []
+    };
   });

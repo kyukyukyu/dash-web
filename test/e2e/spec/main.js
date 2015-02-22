@@ -10,6 +10,7 @@ var NavBar = require('../page/common/navbar');
 var SearchOptionBox = require('../page/create/search_option_box');
 var SearchResultBox = require('../page/create/search_result_box');
 var CourseCartBox = require('../page/create/course_cart_box');
+var Timetable = require('../page/widgets/ds_timetable');
 
 describe('Main', function () {
 
@@ -20,6 +21,7 @@ describe('Main', function () {
     searchOptionBox,
     searchResultBox,
     courseCartBox,
+    timetable,
     backdrop;
 
   beforeEach(function () {
@@ -40,6 +42,8 @@ describe('Main', function () {
     searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
     searchResultBox = new SearchResultBox($('.box-group-bottom .box-search-result'));
     courseCartBox = new CourseCartBox($('.box-group-bottom .box-course-cart'));
+
+    timetable = new Timetable($('ds-timetable'));
 
     backdrop = $('#dsBackdrop');
   });
@@ -308,14 +312,12 @@ describe('Main', function () {
 
       it('should be able to switch any course group between required and ' +
          'optional in course cart by clicking vertical bars', function () {
-        var subjectInResult, verticalBar;
+        var subjectInResult;
         var subjectInCart;
 
         // add courses of the first subject
         subjectInResult = searchResultBox.getSubjectAt(0);
         subjectInCart = courseCartBox.getSubjectAt(0);
-
-        verticalBar = subjectInResult.verticalBar;
 
         subjectInResult.clickCartButton();
 
@@ -334,6 +336,25 @@ describe('Main', function () {
 
         expect(subjectInResult.verticalBarBgColor).toEqual(colorBefore);
         expect(subjectInCart.verticalBarBgColor).toEqual(colorBefore);
+      });
+
+      it('should show the hours of hovered course as preview course on timetable', function () {
+        var subject, course;
+        var courseHour;
+
+        expect(timetable.numOfPreviewHours).toBe(0);
+
+        subject = searchResultBox.getSubjectAt(0);
+        course = subject.getCourseAt(0);
+        browser.actions().mouseMove(course.elem).perform();
+
+        expect(timetable.numOfPreviewHours).toBe(2);
+        courseHour = timetable.getPreviewHourAt(12, 1, 0);
+        expect(courseHour.name).toEqual('Software Engineering');
+        expect(courseHour.duration).toBe(3);
+        courseHour = timetable.getPreviewHourAt(5, 3, 0);
+        expect(courseHour.name).toEqual('Software Engineering');
+        expect(courseHour.duration).toBe(3);
       });
 
     });
