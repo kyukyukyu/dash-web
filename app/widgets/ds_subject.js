@@ -227,6 +227,10 @@ angular.module('dashApp.widgets')
           var attrName = eventNameToAttrName(eventName);
           var fn = scope[attrName];
 
+          if (!attrs[attrName]) {
+            return;
+          }
+
           coursesElem.on(eventName, '.course', function (e) {
             scope.$apply(function (scope) {
               var courseId = angular.element(e.currentTarget).data('id');
