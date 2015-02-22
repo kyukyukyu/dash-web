@@ -6,7 +6,7 @@
     this.subjects = elem.$$('.subjects > ds-subject');
   }
 
-  var Subject = require('../common/ds_subject');
+  var Subject = require('../widgets/ds_subject');
 
   Object.defineProperties(SearchResultBox.prototype, {
     'numOfSubjects': {

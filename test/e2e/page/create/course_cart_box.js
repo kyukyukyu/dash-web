@@ -1,7 +1,7 @@
 'use strict';
 
 (function (module, undefined) {
-  var CourseCart = require('../common/ds_course_cart');
+  var CourseCart = require('../widgets/ds_course_cart');
 
   function CourseCartBox(elem) {
     this.elem = elem;
