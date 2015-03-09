@@ -42,7 +42,7 @@
 
       var n = courseGroups.length;
       while (n--) {
-        cIndexList.push(0);
+        cIndexList.push(-1);
       }
 
       function mapFunc(cIndex, cgIndex) {
@@ -65,13 +65,15 @@
           var ttCourses =
             _(cIndexList)
               .map(mapFunc)
-              .compact();
-          var timetable = {
-            courses: ttCourses.value()
-          };
-          timetables.push(timetable);
-
-          cIndexList[cgIndexA] = 0;
+              .compact()
+              .value();
+          if (ttCourses.length > 0) {
+            var timetable = {
+              courses: ttCourses
+            };
+            timetables.push(timetable);
+          }
+          cIndexList[cgIndexA] = -1;
           --cgIndexA;
           continue;
         }
@@ -80,7 +82,7 @@
         var coursesA = courseGroupA.courses;
         var cIndexA;    // 0 means that no course was selected in course group
 
-        if (cIndexList[cgIndexA] === 0) {
+        if (cIndexList[cgIndexA] === -1) {
           // the first course in course group #(cgIndexA) will be added to
           // timetable this time
           cIndexA = courseGroupA.required ? 1 : 0;
@@ -90,7 +92,7 @@
 
         if (cIndexA === coursesA.length + 1) {
           // course group #(cgIndexA) are exhausted
-          cIndexList[cgIndexA] = 0;
+          cIndexList[cgIndexA] = -1;
           --cgIndexA;
           continue;
         }
@@ -99,18 +101,20 @@
 
         // use (dirty) for-statement to avoid creating functions in loop
         var conflicts = false;
-        for (var cgIndexB = 0; cgIndexB < cgIndexA; ++cgIndexB) {
-          var cIndexB = cIndexList[cgIndexB];
-          if (cIndexB === 0) {
-            continue;
-          }
+        if (cIndexA > 0) {
+          for (var cgIndexB = 0; cgIndexB < cgIndexA; ++cgIndexB) {
+            var cIndexB = cIndexList[cgIndexB];
+            if (cIndexB === 0) {
+              continue;
+            }
 
-          var courseGroupB = courseGroups[cgIndexB];
-          var coursesB = courseGroupB.courses;
-          conflicts = cm.checkConflict(coursesA[cIndexA - 1].id,
-            coursesB[cIndexB - 1].id);
-          if (conflicts) {
-            break;
+            var courseGroupB = courseGroups[cgIndexB];
+            var coursesB = courseGroupB.courses;
+            conflicts = cm.checkConflict(coursesA[cIndexA - 1].id,
+              coursesB[cIndexB - 1].id);
+            if (conflicts) {
+              break;
+            }
           }
         }
         if (conflicts) {

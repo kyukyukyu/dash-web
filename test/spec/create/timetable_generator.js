@@ -66,10 +66,10 @@
       }
 
       function setCourseGroupRequired(subjectId, required) {
-        _(courseGroups).find(function (courseGroup) {
+        _(courseGroups).forEach(function (courseGroup) {
           if (courseGroup.subject.id === subjectId) {
             courseGroup.required = !!required;
-            return true;
+            return false;
           }
         });
       }
@@ -117,6 +117,44 @@
     });
 
     it('should generate possible timetables with required course groups', function () {
+      var expected = [
+        [2, 3, 4, 5]
+      ];
+      testTimetables(expected);
+    });
+
+    it('should generate possible timetables with optional course groups', function () {
+      var courseGroups = CourseCart.getCourseGroups();
+      _(courseGroups).forEach(function (courseGroup) {
+        var subject = courseGroup.subject;
+        CourseCart.setCourseGroupRequired(subject.id, false);
+      });
+
+      var expected = [
+        [1], [2], [3], [4], [5],  // 5
+        [1, 3], [1, 4], [2, 3], [2, 4], [2, 5], [3, 4], [3, 5], [4, 5],   // 8
+        [1, 3, 4], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5],  // 5
+        [2, 3, 4, 5]  // 1
+      ];
+      testTimetables(expected);
+    });
+
+    it('should generate possible timetables with required course groups and optional ones mixed', function () {
+      var courseGroups = CourseCart.getCourseGroups();
+      _(courseGroups).at(0, 3).forEach(function (courseGroup) {
+        var subject = courseGroup.subject;
+        CourseCart.setCourseGroupRequired(subject.id, false);
+      });
+
+      var expected = [
+        [3, 4],   // 1
+        [1, 3, 4], [2, 3, 4], [3, 4, 5],    // 3
+        [2, 3, 4, 5]  // 1
+      ];
+      testTimetables(expected);
+    });
+
+    function testTimetables(expected) {
       var timetables;
 
       TimetableGenerator.generate().then(function (_timetables) {
@@ -126,9 +164,12 @@
       $timeout.flush();
 
       sort(timetables);
-      expect(timetables.length).toBe(1);
-      expect(timetables[0]).toContainCoursesWithId([2, 3, 4, 5]);
-    });
+
+      expect(timetables.length).toBe(expected.length);
+      _(expected).forEach(function (courseIds, ttIndex) {
+        expect(timetables[ttIndex]).toContainCoursesWithId(courseIds);
+      });
+    }
 
     function sort(timetables) {
       timetables.sort(function (a, b) {
@@ -141,18 +182,17 @@
 
         var arrOfcourseIds = _([coursesA, coursesB])
           .map(function (courses) {
-            return _(courses).pluck('id').sort();
+            return _(courses).pluck('id').sort().value();
           });
-        var courseIdPairs = _.zip.apply(null, arrOfcourseIds);
-        var index = _.find(courseIdPairs, function (pair) {
+        var courseIdPairs = _.zip.apply(null, arrOfcourseIds.value());
+        var nonEqualPair = _.find(courseIdPairs, function (pair) {
           return pair[0] !== pair[1];
         });
 
-        if (_.isUndefined(index)) {
+        if (_.isUndefined(nonEqualPair)) {
           return 0;
         } else {
-          var pair = courseIdPairs[index];
-          return pair[0] - pair[1];
+          return nonEqualPair[0] - nonEqualPair[1];
         }
       });
     }
