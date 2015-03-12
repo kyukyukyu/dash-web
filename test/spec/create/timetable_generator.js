@@ -226,6 +226,50 @@
 
     });
 
+    describe('using provided options', function () {
+
+      beforeEach(function () {
+        var courseGroups = CourseCart.getCourseGroups();
+        _(courseGroups).forEach(function (courseGroup) {
+          var subject = courseGroup.subject;
+          CourseCart.setCourseGroupRequired(subject.id, false);
+        });
+      });
+
+      describe('limited range of credits', function () {
+
+        var minBoundIdsList = [
+          [1, 3], [1, 4], [2, 3], [2, 4], [3, 4],
+          [1, 3, 4], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5],
+          [2, 3, 4, 5]
+        ];
+        var maxBoundIdsList = [
+          [1], [2], [3], [4], [5],
+          [1, 3], [1, 4], [2, 3], [2, 4], [2, 5], [3, 4], [3, 5], [4, 5],
+          [2, 3, 5], [2, 4, 5], [3, 4, 5]
+        ];
+
+        it('should generate possible timetables whose credits >= arbitrary value', function () {
+          TimetableGenerator.setOption('minCredits', 6);
+          testTimetables(minBoundIdsList);
+        });
+
+        it('should generate possible timetables whose credits <= arbitrary value', function () {
+          TimetableGenerator.setOption('maxCredits', 8);
+          testTimetables(maxBoundIdsList);
+        });
+
+        it('should generate possible timetables whose arb. val. <= credits <= arb. val.', function () {
+          var expected = intersection(minBoundIdsList, maxBoundIdsList);
+          TimetableGenerator.setOption('minCredits', 6);
+          TimetableGenerator.setOption('maxCredits', 8);
+          testTimetables(expected);
+        });
+
+      });
+
+    });
+
     function testTimetables(expected) {
       var timetables;
 
@@ -248,25 +292,55 @@
         var coursesA = a.courses;
         var coursesB = b.courses;
 
-        if (coursesA.length !== coursesB.length) {
-          return coursesA.length - coursesB.length;
-        }
-
         var arrOfcourseIds = _([coursesA, coursesB])
           .map(function (courses) {
             return _(courses).pluck('id').sort().value();
           });
-        var courseIdPairs = _.zip.apply(null, arrOfcourseIds.value());
-        var nonEqualPair = _.find(courseIdPairs, function (pair) {
-          return pair[0] !== pair[1];
-        });
 
-        if (_.isUndefined(nonEqualPair)) {
-          return 0;
-        } else {
-          return nonEqualPair[0] - nonEqualPair[1];
-        }
+        return compareCourseIds.apply(null, arrOfcourseIds.value());
       });
+    }
+
+    function intersection(courseIdsListA, courseIdsListB) {
+      var _courseIdsListA = _.clone(courseIdsListA);
+      var _courseIdsListB = _.clone(courseIdsListB);
+      _([_courseIdsListA, _courseIdsListB]).forEach(function (courseIdsList) {
+        courseIdsList.sort(compareCourseIds);
+      });
+
+      var i = 0;
+      var j = 0;
+      var ret = [];
+      while (i < _courseIdsListA.length && j < _courseIdsListB.length) {
+        var comp = compareCourseIds(_courseIdsListA[i], _courseIdsListB[j]);
+        if (comp === 0) {
+          ret.push(_courseIdsListA[i]);
+          ++i;
+          ++j;
+        } else if (comp < 0) {
+          ++i;
+        } else {
+          ++j;
+        }
+      }
+
+      return ret;
+    }
+
+    function compareCourseIds(courseIdsA, courseIdsB) {
+      var comp = courseIdsA.length - courseIdsB.length;
+      if (comp === 0) {
+        var i = 0;
+        while (i < courseIdsA.length) {
+          if (courseIdsA[i] !== courseIdsB[i]) {
+            comp = courseIdsA[i] - courseIdsB[i];
+            break;
+          }
+          ++i;
+        }
+      }
+
+      return comp;
     }
 
   });

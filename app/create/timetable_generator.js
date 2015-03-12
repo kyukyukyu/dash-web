@@ -69,18 +69,37 @@
         return ret;
       }
 
+      function adder(sum, a) {
+        return sum + a;
+      }
+
       var timetables = [];
       while (cgIndexA >= 0) {
         if (cgIndexA === courseGroups.length) {
           // all the course groups were used, so generate timetable
           var ttCourses =
-            _(cIndexList)
-              .map(mapFunc)
-              .compact()
-              .value();
-          if (ttCourses.length > 0) {
+              _(cIndexList)
+                .map(mapFunc)
+                .compact();
+          var isValid = true;
+
+          if (ttCourses.size() === 0) {
+            isValid = false;
+          }
+
+          var credits =
+              ttCourses
+                .pluck('subject')
+                .pluck('credit')
+                .reduce(adder, 0);
+          if (!((_.isNull(options.minCredits) || credits >= options.minCredits) &&
+                (_.isNull(options.maxCredits) || credits <= options.maxCredits))) {
+            isValid = false;
+          }
+
+          if (isValid) {
             var timetable = {
-              courses: ttCourses
+              courses: ttCourses.value()
             };
             timetables.push(timetable);
           }
