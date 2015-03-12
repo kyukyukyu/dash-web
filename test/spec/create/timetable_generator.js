@@ -154,6 +154,78 @@
       testTimetables(expected);
     });
 
+    describe('interface for options', function () {
+
+      it('should have default options object with null values', function () {
+        var options = TimetableGenerator.getOptions();
+        expect(options.minCredits).toBeNull();
+        expect(options.maxCredits).toBeNull();
+        expect(options.minDailyClassCount).toBeNull();
+        expect(options.maxDailyClassCount).toBeNull();
+        expect(options.minWeeklyClassCount).toBeNull();
+        expect(options.maxWeeklyClassCount).toBeNull();
+      });
+
+      it('should be able to set options correctly', function () {
+        var options;
+
+        TimetableGenerator.setOption('minCredits', 10);
+        options = TimetableGenerator.getOptions();
+        expect(options.minCredits).toBe(10);
+
+        TimetableGenerator.setOption('maxCredits', 8);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxCredits).toBeNull();
+
+        TimetableGenerator.setOption('maxCredits', 20);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxCredits).toBe(20);
+
+        TimetableGenerator.setOption('minCredits', 30);
+        options = TimetableGenerator.getOptions();
+        expect(options.minCredits).toBe(10);
+
+
+        TimetableGenerator.setOption('minDailyClassCount', 2);
+        options = TimetableGenerator.getOptions();
+        expect(options.minDailyClassCount).toBe(2);
+
+        TimetableGenerator.setOption('maxDailyClassCount', 1);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxDailyClassCount).toBeNull();
+
+        TimetableGenerator.setOption('maxDailyClassCount', 4);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxDailyClassCount).toBe(4);
+
+        TimetableGenerator.setOption('minDailyClassCount', 5);
+        options = TimetableGenerator.getOptions();
+        expect(options.minDailyClassCount).toBe(2);
+
+
+        TimetableGenerator.setOption('minWeeklyClassCount', 3);
+        options = TimetableGenerator.getOptions();
+        expect(options.minWeeklyClassCount).toBe(3);
+
+        TimetableGenerator.setOption('maxWeeklyClassCount', 2);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxWeeklyClassCount).toBeNull();
+
+        TimetableGenerator.setOption('maxWeeklyClassCount', 4);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxWeeklyClassCount).toBe(4);
+
+        TimetableGenerator.setOption('maxWeeklyClassCount', 8);
+        options = TimetableGenerator.getOptions();
+        expect(options.maxWeeklyClassCount).toBe(4);
+
+        TimetableGenerator.setOption('minWeeklyClassCount', 5);
+        options = TimetableGenerator.getOptions();
+        expect(options.minWeeklyClassCount).toBe(3);
+      });
+
+    });
+
     function testTimetables(expected) {
       var timetables;
 

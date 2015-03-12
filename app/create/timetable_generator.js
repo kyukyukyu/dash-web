@@ -17,7 +17,18 @@
   /* @ngInject */
   function TimetableGenerator($timeout, $q, CourseCart) {
     var service = {
-      generate: generate
+      generate: generate,
+      getOptions: getOptions,
+      setOption: setOption
+    };
+
+    var options = {
+      minCredits: null,
+      maxCredits: null,
+      minDailyClassCount: null,
+      maxDailyClassCount: null,
+      minWeeklyClassCount: null,
+      maxWeeklyClassCount: null
     };
 
     return service;
@@ -126,6 +137,39 @@
       }
 
       return timetables;
+    }
+
+    function getOptions() {
+      return options;
+    }
+
+    function setOption(name, value) {
+      var prefix = name.substr(0, 3);
+      var suffix = name.substr(3);
+      var minBound = 0;
+      var maxBound;
+
+      if (suffix === 'WeeklyClassCount') {
+        minBound = 1;
+        maxBound = 7;
+      }
+
+      var isValid = false;
+      var oppositePrefix = (prefix === 'min') ? 'max' : 'min';
+      var counterPart = options[oppositePrefix + suffix];
+      if (prefix === 'min') {
+        isValid = (_.isUndefined(minBound) || value >= minBound) &&
+            (_.isNull(counterPart) || value <= counterPart);
+      } else {
+        isValid = (_.isUndefined(maxBound) || value <= maxBound) &&
+            (_.isNull(counterPart) || value >= counterPart);
+      }
+
+      if (!isValid) {
+        return;
+      }
+
+      options[name] = value;
     }
   }
 
