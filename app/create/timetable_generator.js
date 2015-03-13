@@ -83,19 +83,40 @@
                 .compact();
           var isValid = true;
 
-          if (ttCourses.size() === 0) {
-            isValid = false;
-          }
+          isValid = isValid && ttCourses.size() > 0;
 
           var credits =
               ttCourses
                 .pluck('subject')
                 .pluck('credit')
                 .reduce(adder, 0);
-          if (!((_.isNull(options.minCredits) || credits >= options.minCredits) &&
-                (_.isNull(options.maxCredits) || credits <= options.maxCredits))) {
-            isValid = false;
-          }
+          isValid = isValid &&
+              (_.isNull(options.minCredits) ||
+               credits >= options.minCredits) &&
+              (_.isNull(options.maxCredits) ||
+               credits <= options.maxCredits);
+
+          var classCounts =
+              ttCourses
+                .pluck('hours')
+                .flatten(true)
+                .pluck('day_of_week')
+                .countBy();
+
+          var minDailyClassCount = classCounts.min().value();
+          var maxDailyClassCount = classCounts.max().value();
+          isValid = isValid &&
+              (_.isNull(options.minDailyClassCount) ||
+               minDailyClassCount >= options.minDailyClassCount) &&
+              (_.isNull(options.maxDailyClassCount) ||
+               maxDailyClassCount <= options.maxDailyClassCount);
+
+          var weeklyClassCount = classCounts.size();
+          isValid = isValid &&
+              (_.isNull(options.minWeeklyClassCount) ||
+               weeklyClassCount >= options.minWeeklyClassCount) &&
+              (_.isNull(options.maxWeeklyClassCount) ||
+               weeklyClassCount <= options.maxWeeklyClassCount);
 
           if (isValid) {
             var timetable = {

@@ -268,6 +268,71 @@
 
       });
 
+      describe('limited range of the number of classes per day', function () {
+
+        var minBoundIdsList = [
+          [1], [2], [3], [4], [5],  // 5
+          [1, 3], [1, 4], [2, 3], [2, 4], [2, 5], [3, 4], [3, 5], [4, 5],   // 8
+          [1, 3, 4], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5],  // 5
+          [2, 3, 4, 5]  // 1
+        ];
+        var maxBoundIdsList = [
+          [1], [2], [3], [4], [5],  // 5
+          [2, 5], [3, 4], [3, 5]    // 3
+        ];
+
+        it('should generate possible timetables whose dailyClassCount >= arbitrary value', function () {
+          TimetableGenerator.setOption('minDailyClassCount', 1);
+          testTimetables(minBoundIdsList);
+        });
+
+        it('should generate possible timetables whose dailyClassCount <= arbitrary value', function () {
+          TimetableGenerator.setOption('maxDailyClassCount', 1);
+          testTimetables(maxBoundIdsList);
+        });
+
+        it('should generate possible timetables whose arb. val. <= dailyClassCount <= arb. val.', function () {
+          var expected = intersection(minBoundIdsList, maxBoundIdsList);
+          TimetableGenerator.setOption('minDailyClassCount', 1);
+          TimetableGenerator.setOption('maxDailyClassCount', 1);
+          testTimetables(expected);
+        });
+
+      });
+
+      describe('limited range of the number of days with classes', function () {
+
+        var minBoundIdsList = [
+          [1], [2], [3], [4],   // 4
+          [1, 3], [1, 4], [2, 3], [2, 4], [2, 5], [3, 4], [3, 5], [4, 5],   // 8
+          [1, 3, 4], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5],  // 5
+          [2, 3, 4, 5]  // 1
+        ];
+        var maxBoundIdsList = [
+          [1], [2], [3], [4], [5],    // 5
+          [1, 3], [1, 4], [2, 3], [2, 4], [2, 5], [3, 5], [4, 5],   // 7
+          [2, 4, 5]   // 1
+        ];
+
+        it('should generate possible timetables whose weeklyClassCount >= arbitrary value', function () {
+          TimetableGenerator.setOption('minWeeklyClassCount', 2);
+          testTimetables(minBoundIdsList);
+        });
+
+        it('should generate possible timetables whose weeklyClassCount <= arbitrary value', function () {
+          TimetableGenerator.setOption('maxWeeklyClassCount', 3);
+          testTimetables(maxBoundIdsList);
+        });
+
+        it('should generate possible timetables whose arb. val. <= weeklyClassCount <= arb. val.', function () {
+          var expected = intersection(minBoundIdsList, maxBoundIdsList);
+          TimetableGenerator.setOption('minWeeklyClassCount', 2);
+          TimetableGenerator.setOption('maxWeeklyClassCount', 3);
+          testTimetables(expected);
+        });
+
+      });
+
     });
 
     function testTimetables(expected) {
