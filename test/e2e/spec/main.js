@@ -10,6 +10,7 @@ var NavBar = require('../page/common/navbar');
 var SearchOptionBox = require('../page/create/search_option_box');
 var SearchResultBox = require('../page/create/search_result_box');
 var CourseCartBox = require('../page/create/course_cart_box');
+var GeneratorOptionsModal = require('../page/create/generator_options_modal');
 var Timetable = require('../page/widgets/ds_timetable');
 
 describe('Main', function () {
@@ -360,7 +361,6 @@ describe('Main', function () {
     });
   });
 
-  // TODO: test course cart
   describe('managing course cart', function () {
 
     function openResultBox() {
@@ -513,6 +513,115 @@ describe('Main', function () {
       expect(subjectInResult.verticalBarBgColor).toEqual(subjectInResult.VERTICAL_BAR_COLOR.REQUIRED);
       subjectInResult = searchResultBox.getSubjectAt(1);
       expect(subjectInResult.verticalBarBgColor).toEqual(subjectInResult.VERTICAL_BAR_COLOR.REQUIRED);
+    });
+
+  });
+
+  describe('setting options on generating timetables', function () {
+
+    var modal;
+
+    beforeEach(function () {
+      modal = new GeneratorOptionsModal($('.modal-genopt[role=modal]'));
+    });
+
+    it('should validate the range of credits', function () {
+      expect(modal.isValid('minCredits')).toBeTruthy();
+      expect(modal.isValid('maxCredits')).toBeTruthy();
+
+      modal.minCredits = '-1';
+      expect(modal.isValid('minCredits')).toBeFalsy();
+      expect(modal.isValid('maxCredits')).toBeTruthy();
+
+      modal.minCredits = '2';
+      expect(modal.isValid('minCredits')).toBeTruthy();
+      expect(modal.isValid('maxCredits')).toBeTruthy();
+
+      modal.maxCredits = '4';
+      expect(modal.isValid('minCredits')).toBeTruthy();
+      expect(modal.isValid('maxCredits')).toBeTruthy();
+
+      modal.minCredits = '8';
+      expect(modal.isValid('minCredits')).toBeFalsy();
+      expect(modal.isValid('maxCredits')).toBeFalsy();
+
+      modal.minCredits = '';
+      expect(modal.isValid('minCredits')).toBeTruthy();
+      expect(modal.isValid('maxCredits')).toBeTruthy();
+
+      modal.maxCredits = '-1';
+      expect(modal.isValid('minCredits')).toBeTruthy();
+      expect(modal.isValid('maxCredits')).toBeFalsy();
+    });
+
+    it('should validate the range of # of classes/day', function () {
+      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+
+      modal.minDailyClassCount = '-1';
+      expect(modal.isValid('minDailyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+
+      modal.minDailyClassCount = '2';
+      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+
+      modal.maxDailyClassCount = '4';
+      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+
+      modal.minDailyClassCount = '8';
+      expect(modal.isValid('minDailyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxDailyClassCount')).toBeFalsy();
+
+      modal.minDailyClassCount = '';
+      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+
+      modal.maxDailyClassCount = '-1';
+      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxDailyClassCount')).toBeFalsy();
+    });
+
+    it('should validate the range of # of days w/classes', function () {
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '-1';
+      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '0';
+      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '8';
+      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '2';
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.maxWeeklyClassCount = '4';
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '8';
+      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
+
+      modal.minWeeklyClassCount = '';
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+
+      modal.maxWeeklyClassCount = '8';
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
+
+      modal.maxWeeklyClassCount = '-1';
+      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
     });
 
   });
