@@ -6,13 +6,18 @@ describe('Controller: CreateCtrl', function () {
   beforeEach(module('dashApp.create'));
 
   var MainCtrl,
-    scope;
+    scope,
+    $modal;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
+    $modal = {
+      open: jasmine.createSpy('open')
+    };
     MainCtrl = $controller('CreateCtrl', {
-      $scope: scope
+      $scope: scope,
+      $modal: $modal
     });
   }));
 
@@ -22,4 +27,10 @@ describe('Controller: CreateCtrl', function () {
     expect(scope.timetable.previewCourse).toBeNull();
     expect(scope.timetable.freeHours).toEqual([]);
   });
+
+  it('should open generator options modal', function () {
+    scope.openGenOptions();
+    expect($modal.open).toHaveBeenCalled();
+  });
+
 });
