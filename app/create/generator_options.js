@@ -39,13 +39,6 @@
         _.forEach(['min', 'max'], function (boundPrefix) {
           var boundPropName = boundPrefix + _propertyName;
           vm.userInput[boundPropName] = options[boundPropName] || null;
-
-          $scope.$watch('vm.userInput.' + boundPropName, watchBound);
-
-          function watchBound(newValue) {
-            vm.validity.bound[boundPropName] = isValidBound(propertyName,
-                                                            newValue);
-          }
         });
 
         $scope.$watchCollection('[vm.userInput.min' + _propertyName + ',' +

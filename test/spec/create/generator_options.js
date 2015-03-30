@@ -151,12 +151,6 @@
       expect(GeneratorOptionsCtrl.validity.range.credits).toEqual(true);
       expect(GeneratorOptionsCtrl.validity.range.dailyClassCount).toEqual(true);
       expect(GeneratorOptionsCtrl.validity.range.weeklyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.minCredits).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.maxCredits).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.minDailyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.maxDailyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.minWeeklyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.maxWeeklyClassCount).toEqual(true);
 
       GeneratorOptionsCtrl.userInput.minCredits = '2';
       GeneratorOptionsCtrl.userInput.maxCredits = '-1.5';
@@ -170,12 +164,6 @@
       expect(GeneratorOptionsCtrl.validity.range.credits).toEqual(false);
       expect(GeneratorOptionsCtrl.validity.range.dailyClassCount).toEqual(true);
       expect(GeneratorOptionsCtrl.validity.range.weeklyClassCount).toEqual(false);
-      expect(GeneratorOptionsCtrl.validity.bound.minCredits).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.maxCredits).toEqual(false);
-      expect(GeneratorOptionsCtrl.validity.bound.minDailyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.maxDailyClassCount).toEqual(true);
-      expect(GeneratorOptionsCtrl.validity.bound.minWeeklyClassCount).toEqual(false);
-      expect(GeneratorOptionsCtrl.validity.bound.maxWeeklyClassCount).toEqual(true);
     });
   });
 })();
