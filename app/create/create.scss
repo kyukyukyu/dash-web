@@ -9,6 +9,12 @@ $search-ui-top-when-shown: 0;
 $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
 $course-cart-top: $body-padding-top + $search-box-height + $white-box-margin-bottom;
 $course-cart-bottom: $body-padding-bottom + $footer-height;
+$course-cart-btngroup-height: 50px;
+$course-cart-btngroup-bgcolor: #469ede;
+$course-cart-btngroup-bgcolor-lighten: rgba(#ffffff, 0.25);
+$course-cart-btngroup-color: #ffffff;
+$course-cart-btn-options-width: 36px;
+$course-cart-btn-options-border-left: 1px solid $course-cart-btngroup-bgcolor-lighten;
 
 @mixin keyframe-search-ui-hidden {
   display: block;
@@ -162,6 +168,52 @@ $course-cart-bottom: $body-padding-bottom + $footer-height;
 
       z-index: $zindex-modal-background - 10;
       padding: 0;
+
+      > .column {
+        display: table;
+        width: 100%;
+        height: 100%;
+
+        > .row {
+          display: table-row;
+          margin: 0;
+
+          &:before, &:after {
+            display: none;
+          }
+        }
+
+        > .row > .cell  {
+          display: table-cell;
+        }
+
+        > .row.row-buttons {
+          height: $course-cart-btngroup-height;
+          background-color: $course-cart-btngroup-bgcolor;
+
+          > .cell {
+            height: $course-cart-btngroup-height;
+
+            > .btn {
+              border-radius: 0;
+              width: 100%;
+              height: $course-cart-btngroup-height;
+              background-color: transparent;
+              color: $course-cart-btngroup-color;
+
+              &:hover {
+                background-color: $course-cart-btngroup-bgcolor-lighten;
+                color: $course-cart-btngroup-color;
+              }
+            }
+          }
+
+          > .cell.cell-options {
+            width: $course-cart-btn-options-width;
+            border-left: $course-cart-btn-options-border-left;
+          }
+        }
+      }
     }
   }
 }

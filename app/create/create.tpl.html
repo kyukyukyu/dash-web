@@ -108,8 +108,22 @@
         </div>
       </div>
 
-      <div class="box box-course-cart" perfect-scrollbar suppress-scroll-x="true">
-        <ds-course-cart></ds-course-cart>
+      <div class="box box-course-cart">
+        <div class="column">
+          <div class="row row-course-cart" perfect-scrollbar suppress-scroll-x="true">
+            <div class="cell">
+              <ds-course-cart></ds-course-cart>
+            </div>
+          </div>
+          <div class="row row-buttons" role="group" aria-label="Timetable generator button group">
+            <div class="cell cell-generate">
+              <button class="btn" type="button"><i class="fa fa-magic"></i> Generate Timetables</button>
+            </div>
+            <div class="cell cell-options">
+              <button class="btn" type="button"><i class="fa fa-gear"></i></button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
