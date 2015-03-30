@@ -43,6 +43,10 @@
       GeneratorOptionsCtrl.userInput.maxCredits = '4';
       expect(GeneratorOptionsCtrl.isValidRange('credits')).toEqual(true);
 
+      GeneratorOptionsCtrl.userInput.minCredits = '-2';
+      GeneratorOptionsCtrl.userInput.maxCredits = '4';
+      expect(GeneratorOptionsCtrl.isValidRange('credits')).toEqual(false);
+
       GeneratorOptionsCtrl.userInput.minCredits = '2';
       GeneratorOptionsCtrl.userInput.maxCredits = '4';
       expect(GeneratorOptionsCtrl.isValidRange('credits')).toEqual(true);
@@ -72,6 +76,10 @@
       GeneratorOptionsCtrl.userInput.maxDailyClassCount = '4';
       expect(GeneratorOptionsCtrl.isValidRange('dailyClassCount')).toEqual(true);
 
+      GeneratorOptionsCtrl.userInput.minDailyClassCount = '-2';
+      GeneratorOptionsCtrl.userInput.maxDailyClassCount = '4';
+      expect(GeneratorOptionsCtrl.isValidRange('dailyClassCount')).toEqual(false);
+
       GeneratorOptionsCtrl.userInput.minDailyClassCount = '2';
       GeneratorOptionsCtrl.userInput.maxDailyClassCount = '4';
       expect(GeneratorOptionsCtrl.isValidRange('dailyClassCount')).toEqual(true);
@@ -100,6 +108,10 @@
       GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '';
       GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
       expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(true);
+
+      GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '-2';
+      GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
+      expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(false);
 
       GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '2';
       GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
