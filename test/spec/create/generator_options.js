@@ -61,6 +61,10 @@
       GeneratorOptionsCtrl.userInput.minCredits = '8';
       GeneratorOptionsCtrl.userInput.maxCredits = '';
       expect(GeneratorOptionsCtrl.isValidRange('credits')).toEqual(true);
+
+      GeneratorOptionsCtrl.userInput.minCredits = '-8';
+      GeneratorOptionsCtrl.userInput.maxCredits = '';
+      expect(GeneratorOptionsCtrl.isValidRange('credits')).toEqual(false);
     });
 
     it('should check if lower/upper bound of credits is valid', function () {
@@ -94,6 +98,10 @@
       GeneratorOptionsCtrl.userInput.minDailyClassCount = '8';
       GeneratorOptionsCtrl.userInput.maxDailyClassCount = '';
       expect(GeneratorOptionsCtrl.isValidRange('dailyClassCount')).toEqual(true);
+
+      GeneratorOptionsCtrl.userInput.minDailyClassCount = '-8';
+      GeneratorOptionsCtrl.userInput.maxDailyClassCount = '';
+      expect(GeneratorOptionsCtrl.isValidRange('dailyClassCount')).toEqual(false);
     });
 
     it('should check if lower/upper bound of # of classes/day is valid', function () {
@@ -126,7 +134,7 @@
 
       GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '8';
       GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '';
-      expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(true);
+      expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(false);
     });
 
     it('should check if lower/upper bound of # of days w/classes is valid', function () {

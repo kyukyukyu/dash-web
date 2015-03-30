@@ -81,7 +81,9 @@
             .value();
       var minBound = boundary[0];
       var maxBound = boundary[1];
-      return (minBound === null || maxBound === null || minBound <= maxBound);
+      return ( (minBound === null && isValidBound(propertyName, maxBound)) ||
+               (maxBound === null && isValidBound(propertyName, minBound)) ||
+               minBound <= maxBound );
     }
 
     /**
