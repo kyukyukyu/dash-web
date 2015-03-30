@@ -217,3 +217,14 @@ $course-cart-btn-options-border-left: 1px solid $course-cart-btngroup-bgcolor-li
     }
   }
 }
+
+.modal.modal-genopt {
+  .col-tilde {
+    @include make-sm-column(0.25);
+
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    line-height: $input-height-small;
+  }
+}
