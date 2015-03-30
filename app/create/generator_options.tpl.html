@@ -9,11 +9,13 @@
 
       <div class="col-sm-2">
         <input class="form-control" type="number" min="0" step="0.01"
+               name="minCredits"
                ng-model="vm.userInput.minCredits">
       </div>
       <div class="col-tilde">~</div>
       <div class="col-sm-2">
         <input class="form-control" type="number" min="0" step="0.01"
+               name="maxCredits"
                ng-model="vm.userInput.maxCredits">
       </div>
     </div>
@@ -22,11 +24,13 @@
 
       <div class="col-sm-2">
         <input class="form-control" min="0" type="number"
+               name="minDailyClassCount"
                ng-model="vm.userInput.minDailyClassCount">
       </div>
       <div class="col-tilde">~</div>
       <div class="col-sm-2">
         <input class="form-control" min="0" type="number"
+               name="maxDailyClassCount"
                ng-model="vm.userInput.maxDailyClassCount">
       </div>
     </div>
@@ -35,11 +39,13 @@
 
       <div class="col-sm-2">
         <input class="form-control" min="0" type="number"
+               name="minWeeklyClassCount"
                ng-model="vm.userInput.minWeeklyClassCount">
       </div>
       <div class="col-tilde">~</div>
       <div class="col-sm-2">
         <input class="form-control" min="0" type="number"
+               name="maxWeeklyClassCount"
                ng-model="vm.userInput.maxWeeklyClassCount">
       </div>
     </div>
