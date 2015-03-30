@@ -16,12 +16,16 @@
   var PROPERTY_NAMES = 'credits dailyClassCount weeklyClassCount'.split(' ');
 
   /* @ngInject */
-  function GeneratorOptionsCtrl(TimetableGenerator) {
+  function GeneratorOptionsCtrl($scope, TimetableGenerator) {
     var vm = this;
 
     vm.isValidRange = isValidRange;
     vm.isValidBound = isValidBound;
     vm.userInput = {};
+    vm.validity = {
+      range: {},
+      bound: {}
+    };
 
     var getParseFunc = _.memoize(_getParseFunc);
 
@@ -34,8 +38,23 @@
 
         _.forEach(['min', 'max'], function (boundPrefix) {
           var boundPropName = boundPrefix + _propertyName;
-          vm.userInput[boundPropName] = options[boundPropName];
+          vm.userInput[boundPropName] = options[boundPropName] || null;
+
+          $scope.$watch('vm.userInput.' + boundPropName, watchBound);
+
+          function watchBound(newValue) {
+            vm.validity.bound[boundPropName] = isValidBound(propertyName,
+                                                            newValue);
+          }
         });
+
+        $scope.$watchCollection('[vm.userInput.min' + _propertyName + ',' +
+                                ' vm.userInput.max' + _propertyName + ']',
+                                watchRange);
+
+        function watchRange() {
+          vm.validity.range[propertyName] = isValidRange(propertyName);
+        }
       });
     }
 

@@ -4,6 +4,7 @@
 
   describe('Controller: GeneratorOptionsCtrl', function () {
 
+    var $scope;
     var TimetableGenerator;
     var GeneratorOptionsCtrl;
 
@@ -28,9 +29,11 @@
       }
     });
 
-    beforeEach(inject(function ($controller) {
-      GeneratorOptionsCtrl = $controller('GeneratorOptionsCtrl', {
-        'TimetableGenerator': TimetableGenerator
+    beforeEach(inject(function ($controller, $rootScope) {
+      $scope = $rootScope.$new();
+      GeneratorOptionsCtrl = $controller('GeneratorOptionsCtrl as vm', {
+        'TimetableGenerator': TimetableGenerator,
+        '$scope': $scope
       });
     }));
 
@@ -132,6 +135,39 @@
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '2')).toEqual(true);
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '8')).toEqual(false);
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '-1')).toEqual(false);
+    });
+
+    it('should watch bound values and check their validity', function () {
+      $scope.$digest();
+
+      expect(GeneratorOptionsCtrl.validity.range.credits).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.range.dailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.range.weeklyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.minCredits).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.maxCredits).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.minDailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.maxDailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.minWeeklyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.maxWeeklyClassCount).toEqual(true);
+
+      GeneratorOptionsCtrl.userInput.minCredits = '2';
+      GeneratorOptionsCtrl.userInput.maxCredits = '-1.5';
+      GeneratorOptionsCtrl.userInput.minDailyClassCount = '2';
+      GeneratorOptionsCtrl.userInput.maxDailyClassCount = '5';
+      GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '-1';
+      GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '5';
+
+      $scope.$digest();
+
+      expect(GeneratorOptionsCtrl.validity.range.credits).toEqual(false);
+      expect(GeneratorOptionsCtrl.validity.range.dailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.range.weeklyClassCount).toEqual(false);
+      expect(GeneratorOptionsCtrl.validity.bound.minCredits).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.maxCredits).toEqual(false);
+      expect(GeneratorOptionsCtrl.validity.bound.minDailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.maxDailyClassCount).toEqual(true);
+      expect(GeneratorOptionsCtrl.validity.bound.minWeeklyClassCount).toEqual(false);
+      expect(GeneratorOptionsCtrl.validity.bound.maxWeeklyClassCount).toEqual(true);
     });
   });
 })();
