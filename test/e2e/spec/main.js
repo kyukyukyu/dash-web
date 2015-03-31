@@ -519,109 +519,89 @@ describe('Main', function () {
 
   describe('setting options on generating timetables', function () {
 
+    var genOptButton;
     var modal;
 
     beforeEach(function () {
-      modal = new GeneratorOptionsModal($('.modal-genopt[role=modal]'));
+      genOptButton = courseCartBox.elem.$('button[name=genOptButton]');
+      modal = new GeneratorOptionsModal($('.modal-genopt[role=dialog]'));
+
+      genOptButton.click();
     });
 
     it('should validate the range of credits', function () {
-      expect(modal.isValid('minCredits')).toBeTruthy();
-      expect(modal.isValid('maxCredits')).toBeTruthy();
+      expect(modal.isValid('credits')).toBeTruthy();
 
       modal.minCredits = '-1';
-      expect(modal.isValid('minCredits')).toBeFalsy();
-      expect(modal.isValid('maxCredits')).toBeTruthy();
+      expect(modal.isValid('credits')).toBeFalsy();
 
       modal.minCredits = '2';
-      expect(modal.isValid('minCredits')).toBeTruthy();
-      expect(modal.isValid('maxCredits')).toBeTruthy();
+      expect(modal.isValid('credits')).toBeTruthy();
 
       modal.maxCredits = '4';
-      expect(modal.isValid('minCredits')).toBeTruthy();
-      expect(modal.isValid('maxCredits')).toBeTruthy();
+      expect(modal.isValid('credits')).toBeTruthy();
 
       modal.minCredits = '8';
-      expect(modal.isValid('minCredits')).toBeFalsy();
-      expect(modal.isValid('maxCredits')).toBeFalsy();
+      expect(modal.isValid('credits')).toBeFalsy();
 
       modal.minCredits = '';
-      expect(modal.isValid('minCredits')).toBeTruthy();
-      expect(modal.isValid('maxCredits')).toBeTruthy();
+      expect(modal.isValid('credits')).toBeTruthy();
 
       modal.maxCredits = '-1';
-      expect(modal.isValid('minCredits')).toBeTruthy();
-      expect(modal.isValid('maxCredits')).toBeFalsy();
+      expect(modal.isValid('credits')).toBeFalsy();
     });
 
     it('should validate the range of # of classes/day', function () {
-      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
 
       modal.minDailyClassCount = '-1';
-      expect(modal.isValid('minDailyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
 
       modal.minDailyClassCount = '2';
-      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
 
       modal.maxDailyClassCount = '4';
-      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
 
       modal.minDailyClassCount = '8';
-      expect(modal.isValid('minDailyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxDailyClassCount')).toBeFalsy();
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
 
       modal.minDailyClassCount = '';
-      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxDailyClassCount')).toBeTruthy();
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
 
       modal.maxDailyClassCount = '-1';
-      expect(modal.isValid('minDailyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxDailyClassCount')).toBeFalsy();
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
     });
 
     it('should validate the range of # of days w/classes', function () {
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
 
       modal.minWeeklyClassCount = '-1';
-      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
 
       modal.minWeeklyClassCount = '0';
-      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
 
       modal.minWeeklyClassCount = '8';
-      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
 
       modal.minWeeklyClassCount = '2';
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
 
       modal.maxWeeklyClassCount = '4';
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
 
       modal.minWeeklyClassCount = '8';
-      expect(modal.isValid('minWeeklyClassCount')).toBeFalsy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
 
       modal.minWeeklyClassCount = '';
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeTruthy();
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
 
       modal.maxWeeklyClassCount = '8';
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
 
       modal.maxWeeklyClassCount = '-1';
-      expect(modal.isValid('minWeeklyClassCount')).toBeTruthy();
-      expect(modal.isValid('maxWeeklyClassCount')).toBeFalsy();
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
     });
 
   });

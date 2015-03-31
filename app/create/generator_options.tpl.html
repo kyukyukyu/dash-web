@@ -4,7 +4,7 @@
 <div class="modal-body">
   <p>Leave input box blank unless you want to set either bound.</p>
   <div class="form-horizontal">
-    <div class="form-group form-group-sm" ng-class="{'has-error': !vm.validity.range.credits}">
+    <div class="form-group form-group-sm form-group-credits" ng-class="{'has-error': !vm.validity.range.credits}">
       <label class="col-sm-4 control-label">Credits</label>
 
       <div class="col-sm-2">
@@ -19,7 +19,8 @@
                ng-model="vm.userInput.maxCredits">
       </div>
     </div>
-    <div class="form-group form-group-sm" ng-class="{'has-error': !vm.validity.range.dailyClassCount}">
+    <div class="form-group form-group-sm form-group-daily-class-count"
+         ng-class="{'has-error': !vm.validity.range.dailyClassCount}">
       <label class="col-sm-4 control-label"># of classes/day</label>
 
       <div class="col-sm-2">
@@ -34,7 +35,8 @@
                ng-model="vm.userInput.maxDailyClassCount">
       </div>
     </div>
-    <div class="form-group form-group-sm" ng-class="{'has-error': !vm.validity.range.weeklyClassCount}">
+    <div class="form-group form-group-sm form-group-weekly-class-count"
+         ng-class="{'has-error': !vm.validity.range.weeklyClassCount}">
       <label class="col-sm-4 control-label"># of days w/classes</label>
 
       <div class="col-sm-2">
