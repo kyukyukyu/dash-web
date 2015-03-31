@@ -124,6 +124,10 @@
       GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
       expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(false);
 
+      GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '0';
+      GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
+      expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(false);
+
       GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '2';
       GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '4';
       expect(GeneratorOptionsCtrl.isValidRange('weeklyClassCount')).toEqual(true);
@@ -143,6 +147,7 @@
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '2')).toEqual(true);
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '8')).toEqual(false);
       expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '-1')).toEqual(false);
+      expect(GeneratorOptionsCtrl.isValidBound('weeklyClassCount', '0')).toEqual(false);
     });
 
     it('should watch bound values and check their validity', function () {
