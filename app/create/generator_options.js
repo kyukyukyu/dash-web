@@ -5,6 +5,7 @@
   /**
    * @ngdoc object
    * @name dashApp.create:GeneratorOptionsCtrl
+   * @requires ng:$scope
    * @requires dashApp.create:TimetableGenerator
    * @description
    * # GeneratorOptionsCtrl
@@ -21,6 +22,7 @@
 
     vm.isValidRange = isValidRange;
     vm.isValidBound = isValidBound;
+    vm.save = save;
     vm.userInput = {};
     vm.validity = {
       range: {},
@@ -102,6 +104,22 @@
       } else {
         return (_bound === null || _bound > 0);
       }
+    }
+
+    function save() {
+      _.forEach(PROPERTY_NAMES, function (propertyName) {
+        var _propertyName = capitalize(propertyName);
+
+        _.forEach(['min', 'max'], function (boundPrefix) {
+          var boundPropName = boundPrefix + _propertyName;
+          var parseFunc = getParseFunc(propertyName);
+          var value = parseFunc(vm.userInput[boundPropName]);
+
+          TimetableGenerator.setOption(boundPropName, value);
+        });
+      });
+
+      $scope.$close();
     }
 
     function _getParseFunc(propertyName) {

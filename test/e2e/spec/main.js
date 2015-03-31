@@ -604,6 +604,29 @@ describe('Main', function () {
       expect(modal.isValid('weeklyClassCount')).toBeFalsy();
     });
 
+    it('should be able to save changes on options when valid', function () {
+      expect(modal.saveButton.isEnabled()).toEqual(true);
+      modal.saveButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
+    });
+
+    it('should not be able to save changes on options when invalid', function () {
+      modal.minCredits = '-2';
+      expect(modal.saveButton.isEnabled()).toEqual(false);
+      expect(modal.elem.isPresent()).toEqual(true);
+    });
+
+    it('should be able to discard changes on options when valid', function () {
+      modal.cancelButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
+    });
+
+    it('should be able to discard changes on options when invalid', function () {
+      modal.maxWeeklyClassCount = '-1';
+      modal.cancelButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
+    });
+
   });
 
   afterEach(function () {

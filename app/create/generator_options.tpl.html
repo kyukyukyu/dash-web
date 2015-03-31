@@ -54,10 +54,12 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-default" type="button" name="cancelButton" data-dismiss="modal">
+  <button class="btn btn-default" type="button" name="cancelButton" data-dismiss="modal" ng-click="$dismiss();">
     Cancel
   </button>
-  <button class="btn btn-primary" type="button" name="saveButton">
+  <button class="btn btn-primary" type="button" name="saveButton"
+          ng-click="vm.save();"
+          ng-disabled="!(vm.validity.range.credits && vm.validity.range.dailyClassCount && vm.validity.range.weeklyClassCount)">
     Save
   </button>
 </div>

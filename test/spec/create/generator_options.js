@@ -14,6 +14,7 @@
     beforeEach(function () {
       TimetableGenerator = {};
       TimetableGenerator.getOptions = getOptions;
+      TimetableGenerator.setOption = jasmine.createSpy('setOption', setOption);
 
       var options = {
         minCredits: null,
@@ -27,6 +28,10 @@
       function getOptions() {
         return options;
       }
+
+      function setOption(name, value) {
+        options[name] = value;
+      }
     });
 
     beforeEach(inject(function ($controller, $rootScope) {
@@ -36,6 +41,12 @@
         '$scope': $scope
       });
     }));
+
+    // mock methods provided by ui.bootstrap.modal:$modal
+    beforeEach(function () {
+      $scope.$close = jasmine.createSpy('$close');
+      $scope.$dismiss = jasmine.createSpy('$dismiss');
+    });
 
     it('should check if lower bound of credits <= upper bound of credits', function () {
       GeneratorOptionsCtrl.userInput.minCredits = '';
@@ -170,5 +181,24 @@
       expect(GeneratorOptionsCtrl.validity.range.dailyClassCount).toEqual(true);
       expect(GeneratorOptionsCtrl.validity.range.weeklyClassCount).toEqual(false);
     });
+
+    it('should save changes and close the modal', function () {
+      GeneratorOptionsCtrl.userInput.minCredits = '2';
+      GeneratorOptionsCtrl.userInput.maxCredits = '4.5';
+      GeneratorOptionsCtrl.userInput.minDailyClassCount = '2';
+      GeneratorOptionsCtrl.userInput.maxDailyClassCount = '5';
+      GeneratorOptionsCtrl.userInput.minWeeklyClassCount = '1';
+      GeneratorOptionsCtrl.userInput.maxWeeklyClassCount = '5';
+      GeneratorOptionsCtrl.save();
+
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('minCredits', 2);
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('maxCredits', 4.5);
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('minDailyClassCount', 2);
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('maxDailyClassCount', 5);
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('minWeeklyClassCount', 1);
+      expect(TimetableGenerator.setOption).toHaveBeenCalledWith('maxWeeklyClassCount', 5);
+      expect($scope.$close).toHaveBeenCalled();
+    });
+
   });
 })();
