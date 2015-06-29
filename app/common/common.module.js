@@ -7,5 +7,4 @@ angular
     'ngSanitize',
     'restangular',
     'ui.router',
-    'perfect_scrollbar'
   ]);
