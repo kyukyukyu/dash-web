@@ -38,11 +38,11 @@ describe('Main', function () {
     navbar = new NavBar();
 
     keywordBox = element(by.model('userInput.keyword'));
-    gearIcon = $('.box-group-top button');
+    gearIcon = $('.box-search button');
 
-    searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
-    searchResultBox = new SearchResultBox($('.box-group-bottom .box-search-result'));
-    courseCartBox = new CourseCartBox($('.box-group-bottom .box-course-cart'));
+    searchOptionBox = new SearchOptionBox($('.box-search-option'));
+    searchResultBox = new SearchResultBox($('.box-search-result'));
+    courseCartBox = new CourseCartBox($('.box-course-cart'));
 
     timetable = new Timetable($('ds-timetable'));
 
