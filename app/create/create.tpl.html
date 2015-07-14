@@ -93,7 +93,7 @@
           </div>
         </form>
       </div>
-      <div class="box box-search-result" ng-show="uiStatus.isResultBoxOpen" perfect-scrollbar>
+      <div class="box box-search-result" ng-show="uiStatus.isResultBoxOpen" ds-perfect-scrollbar>
         <ul class="subjects">
           <ds-subject ng-repeat="courseGroup in searchResult track by courseGroup.subject.id"
                       subject="courseGroup.subject"
@@ -106,7 +106,7 @@
     </div>
 
     <div class="box box-course-cart">
-      <ds-course-cart perfect-scrollbar></ds-course-cart>
+      <ds-course-cart ds-perfect-scrollbar></ds-course-cart>
       <div class="button-group" role="group" aria-label="Timetable generator button group">
         <div class="button-wrapper">
           <button class="btn btn-generate" type="button" name="generateButton">
