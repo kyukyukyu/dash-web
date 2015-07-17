@@ -10,7 +10,5 @@
  */
 angular
   .module('dashApp.create', [
-    'ngAnimate',
-    'ui.bootstrap',
     'dashApp.common'
   ]);
