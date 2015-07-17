@@ -7,6 +7,7 @@ angular
     'ngCookies',
     'ngSanitize',
     /* Cross-app modules */
+    'blocks.router',
     /* 3rd-party modules */
     'restangular',
     'ui.router',
