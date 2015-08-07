@@ -29,6 +29,31 @@
           templateUrl: 'create/create.tpl.html',
           controller: 'CreateCtrl'
         }
+      },
+      {
+        state: 'create.course-cart',
+        config: {
+        }
+      },
+      {
+        state: 'create.search',
+        config: {
+        }
+      },
+      {
+        state: 'create.search-result',
+        config: {
+        }
+      },
+      {
+        state: 'create.generated',
+        config: {
+        }
+      },
+      {
+        state: 'create.detail',
+        config: {
+        }
       }
     ];
   }
