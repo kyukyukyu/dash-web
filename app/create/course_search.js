@@ -53,8 +53,8 @@ var parseKeyword = function (keyword) {
  * Controller of the dashApp
  */
 angular.module('dashApp.create')
-  .controller('CourseSearchCtrl', function ($q, $scope, Restangular, Courses,
-                                            UIBackdrop) {
+  .controller('CourseSearchCtrl', function ($q, $scope, $state, Restangular,
+                                            Courses, UIBackdrop) {
     $scope.userInput = {
       keyword: '',
       type: null
@@ -111,6 +111,7 @@ angular.module('dashApp.create')
 
         $scope.searchResult = searchResult;
         $scope.uiStatus.isResultBoxOpen = true;
+        $state.go('^.search-result');
       }, function (reason) {
         if (reason === Courses.REASON_CAMPUS_NOT_SELECTED) {
           // TODO: Warn the user that there is no selected campus.
@@ -124,7 +125,9 @@ angular.module('dashApp.create')
     $scope.focusOnSearchBox = function () {
       UIBackdrop.show().then(function () {
         $scope.uiStatus.isSearchBoxFocused = false;
+        $state.go('^.course-cart');
       });
       $scope.uiStatus.isSearchBoxFocused = true;
+      $state.go('^.search');
     };
   });

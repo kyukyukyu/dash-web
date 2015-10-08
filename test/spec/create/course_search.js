@@ -12,6 +12,7 @@ describe('Controller: CourseSearchCtrl', function () {
   beforeEach(module('dashApp.mock.courses'));
 
   var $httpBackend,
+    mock$state,
     $timeout,
     UIBackdrop,
     Campuses,
@@ -19,10 +20,21 @@ describe('Controller: CourseSearchCtrl', function () {
     scope,
     fxCourses;
 
+  // mock $state
+  beforeEach(module(function ($provide) {
+    /* jshint latedef: nofunc */
+    $provide.service('$state', $state);
+
+    function $state() {
+      this.go = jasmine.createSpy('$state.go');
+    }
+  }));
+
   // instantiate dependencies
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, _Campuses_,
+  beforeEach(inject(function (_$httpBackend_, _$state_, _$timeout_, _Campuses_,
                               _UIBackdrop_, _fxCourses_) {
     $httpBackend = _$httpBackend_;
+    mock$state = _$state_;
     $timeout = _$timeout_;
     Campuses = _Campuses_;
     UIBackdrop = _UIBackdrop_;
@@ -252,9 +264,11 @@ describe('Controller: CourseSearchCtrl', function () {
   });
 
   describe('search box event', function () {
-    it('should set uiStatus.isSearchBoxFocused true when event handler is called', function () {
+
+    it('should update state variables when event handler is called', function () {
       expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
       scope.focusOnSearchBox();
+      expect(mock$state.go).toHaveBeenCalledWith('^.search');
       expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
     });
 
@@ -264,21 +278,24 @@ describe('Controller: CourseSearchCtrl', function () {
       expect(UIBackdrop.show).toHaveBeenCalled();
     });
 
-    it('should set uiStatus.isSearchBoxFocused false when backdrop shown by this was hidden', function () {
+    it('should update state variables when backdrop shown by this was hidden', function () {
       scope.focusOnSearchBox();
       expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
       UIBackdrop.hide();
       $timeout.flush();
       expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
+      expect(mock$state.go).toHaveBeenCalledWith('^.course-cart');
     });
 
-    it('should set uiStatus.isResultBoxOpen true when search result is retrieved', function () {
+    it('should update state variables when search result is retrieved', function () {
       expect(scope.uiStatus.isResultBoxOpen).toBe(false);
       Campuses.setSelectedCampus(1);
       $httpBackend.flush();
       scope.searchCourses();
       $httpBackend.flush();
       expect(scope.uiStatus.isResultBoxOpen).toBe(true);
+      expect(mock$state.go).toHaveBeenCalledWith('^.search-result');
     });
+
   });
 });
