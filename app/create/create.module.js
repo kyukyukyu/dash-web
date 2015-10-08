@@ -25,6 +25,7 @@
       {
         state: 'create',
         config: {
+          abstract: true,
           url: '/',
           templateUrl: 'create/create.tpl.html',
           controller: 'CreateCtrl'
@@ -33,6 +34,7 @@
       {
         state: 'create.course-cart',
         config: {
+          url: ''
         }
       },
       {
