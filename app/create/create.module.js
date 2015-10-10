@@ -34,7 +34,9 @@
       {
         state: 'create.conf',
         config: {
-          abstract: true
+          abstract: true,
+          templateUrl: 'create/create.conf.tpl.html',
+          controller: 'CourseSearchCtrl'
         }
       },
       {
