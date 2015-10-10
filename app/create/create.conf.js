@@ -1,49 +1,50 @@
-'use strict';
+(function () {
+  'use strict';
 
-/**
- * Parse the keyword into query object.
- * @param {String} keyword Keyword to parse.
- */
-var parseKeyword = function (keyword) {
-  if (typeof keyword !== 'string') {
-    throw new TypeError('keyword should be string');
-  }
+  /**
+   * Parse the keyword into query object.
+   * @param {String} keyword Keyword to parse.
+   */
+  var parseKeyword = function (keyword) {
+    if (typeof keyword !== 'string') {
+      throw new TypeError('keyword should be string');
+    }
 
-  var queryObj = {};
-  var arr = keyword.split(/\b(name|instructor|subject):/);
+    var queryObj = {};
+    var arr = keyword.split(/\b(name|instructor|subject):/);
 
-  for (var i = 0, str; i < arr.length; ++i) {
-    var key, value;
+    for (var i = 0, str; i < arr.length; ++i) {
+      var key, value;
 
-    str = arr[i];
+      str = arr[i];
 
-    if (/^(name|instructor|subject)$/.test(str)) {
-      // get the value for specified property
-      value = arr[++i];
-      switch (str) {
-        case 'name':
-              key = 'name';
-              break;
-        case 'instructor':
-              key = 'instructor';
-              break;
-        case 'subject':
-              key = 'subject';
+      if (/^(name|instructor|subject)$/.test(str)) {
+        // get the value for specified property
+        value = arr[++i];
+        switch (str) {
+          case 'name':
+                key = 'name';
+                break;
+          case 'instructor':
+                key = 'instructor';
+                break;
+          case 'subject':
+                key = 'subject';
+        }
+      } else {
+        key = 'name';
+        value = str;
       }
-    } else {
-      key = 'name';
-      value = str;
+
+      value = value.trim();
+      if (!value) {
+        continue;
+      }
+      queryObj[key] = value.trim();
     }
 
-    value = value.trim();
-    if (!value) {
-      continue;
-    }
-    queryObj[key] = value.trim();
-  }
-
-  return queryObj;
-};
+    return queryObj;
+  };
 
   angular.module('dashApp.create')
     .controller('CreateConfCtrl', CreateConfCtrl);
@@ -139,3 +140,4 @@ var parseKeyword = function (keyword) {
       $state.go('^.search');
     };
   }
+})();
