@@ -32,28 +32,40 @@
         }
       },
       {
-        state: 'create.course-cart',
+        state: 'create.conf',
+        config: {
+          abstract: true
+        }
+      },
+      {
+        state: 'create.conf.course-cart',
         config: {
           url: ''
         }
       },
       {
-        state: 'create.search',
+        state: 'create.conf.search',
         config: {
         }
       },
       {
-        state: 'create.search-result',
+        state: 'create.conf.search-result',
         config: {
         }
       },
       {
-        state: 'create.generated',
+        state: 'create.result',
+        config: {
+          abstract: true
+        }
+      },
+      {
+        state: 'create.result.list',
         config: {
         }
       },
       {
-        state: 'create.detail',
+        state: 'create.result.detail',
         config: {
         }
       }
