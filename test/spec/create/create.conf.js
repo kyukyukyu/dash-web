@@ -1,7 +1,7 @@
 /* global URI */
 'use strict';
 
-describe('Controller: CourseSearchCtrl', function () {
+describe('Controller: CreateConfCtrl', function () {
   // load the controller's module
   beforeEach(module('dashApp.create'));
 
@@ -16,7 +16,7 @@ describe('Controller: CourseSearchCtrl', function () {
     $timeout,
     UIBackdrop,
     Campuses,
-    CourseSearchCtrl,
+    CreateConfCtrl,
     scope,
     fxCourses;
 
@@ -47,7 +47,7 @@ describe('Controller: CourseSearchCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    CourseSearchCtrl = $controller('CourseSearchCtrl', {
+    CreateConfCtrl = $controller('CreateConfCtrl', {
       $scope: scope
     });
   }));

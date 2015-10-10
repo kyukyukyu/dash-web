@@ -36,7 +36,7 @@
         config: {
           abstract: true,
           templateUrl: 'create/create.conf.tpl.html',
-          controller: 'CourseSearchCtrl'
+          controller: 'CreateConfCtrl'
         }
       },
       {

@@ -45,16 +45,24 @@ var parseKeyword = function (keyword) {
   return queryObj;
 };
 
-/**
- * @ngdoc function
- * @name dashApp.controller:CourseSearchCtrl
- * @description
- * # CourseSearchCtrl
- * Controller of the dashApp
- */
-angular.module('dashApp.create')
-  .controller('CourseSearchCtrl', function ($q, $scope, $state, Restangular,
-                                            Courses, UIBackdrop) {
+  angular.module('dashApp.create')
+    .controller('CreateConfCtrl', CreateConfCtrl);
+
+  /**
+   * @namespace CreateConfCtrl
+   * @description
+   * # CreateConfCtrl
+   * Controller for ui-router abstract state `create.conf`. Manages status of
+   * user interface for configuring timetables to be generated.
+   */
+  /* @ngInject */
+  function CreateConfCtrl(
+      $q,
+      $scope,
+      $state,
+      Restangular,
+      Courses,
+      UIBackdrop) {
     $scope.userInput = {
       keyword: '',
       type: null
@@ -130,4 +138,4 @@ angular.module('dashApp.create')
       $scope.uiStatus.isSearchBoxFocused = true;
       $state.go('^.search');
     };
-  });
+  }
