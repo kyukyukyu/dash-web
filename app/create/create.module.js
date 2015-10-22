@@ -58,7 +58,9 @@
       {
         state: 'create.result',
         config: {
-          abstract: true
+          abstract: true,
+          templateUrl: 'create/create.result.tpl.html',
+          controller: 'CreateResultCtrl'
         }
       },
       {

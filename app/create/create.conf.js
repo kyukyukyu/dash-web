@@ -63,6 +63,7 @@
       $state,
       Restangular,
       Courses,
+      TimetableGenerator,
       UIBackdrop) {
     $scope.userInput = {
       keyword: '',
@@ -74,7 +75,8 @@
     $scope.uiStatus = {
       isSearchBoxFocused: false,
       isOptionBoxOpen: true,
-      isResultBoxOpen: false
+      isResultBoxOpen: false,
+      generating: false
     };
 
     $scope.$watch('userInput.type', function (type) {
@@ -139,5 +141,20 @@
       $scope.uiStatus.isSearchBoxFocused = true;
       $state.go('^.search');
     };
+
+    $scope.generateTimetables = generateTimetables;
+
+    /**
+     * @name generateTimetables
+     * @desc Generates timetables with courses in course carts and timetable
+     * generator options.
+     * @memberof CreateConfCtrl
+     */
+    function generateTimetables() {
+      $scope.uiStatus.generating = true;
+      TimetableGenerator.generate().then(function (timetables) {
+        $state.go('^.^.result.list', timetables);
+      });
+    }
   }
 })();

@@ -17,26 +17,38 @@ describe('Controller: CreateConfCtrl', function () {
     UIBackdrop,
     Campuses,
     CreateConfCtrl,
+    mockTimetableGenerator,
     scope,
     fxCourses;
 
-  // mock $state
+  // mock services
   beforeEach(module(function ($provide) {
     /* jshint latedef: nofunc */
     $provide.service('$state', $state);
+    $provide.service('TimetableGenerator', TimetableGenerator);
 
     function $state() {
       this.go = jasmine.createSpy('$state.go');
+    }
+
+    function TimetableGenerator($q) {
+      this.generate = jasmine.createSpy('TimetableGenerator.generate').and.callFake(function () {
+        var deferred = $q.defer();
+        deferred.resolve(null);
+        return deferred.promise;
+      });
     }
   }));
 
   // instantiate dependencies
   beforeEach(inject(function (_$httpBackend_, _$state_, _$timeout_, _Campuses_,
-                              _UIBackdrop_, _fxCourses_) {
+                              _TimetableGenerator_, _UIBackdrop_,
+                              _fxCourses_) {
     $httpBackend = _$httpBackend_;
     mock$state = _$state_;
     $timeout = _$timeout_;
     Campuses = _Campuses_;
+    mockTimetableGenerator = _TimetableGenerator_;
     UIBackdrop = _UIBackdrop_;
     fxCourses = _fxCourses_;
   }));
@@ -298,4 +310,22 @@ describe('Controller: CreateConfCtrl', function () {
     });
 
   });
+
+  describe('generating timetables', function () {
+
+    it('should use TimetableGenerator service for generating timetables', function () {
+      scope.generateTimetables();
+      expect(mockTimetableGenerator.generate).toHaveBeenCalled();
+    });
+
+    it('should update state variable when generating timetables has begun', function () {
+      expect(scope.uiStatus.generating).toBeFalsy();
+      scope.generateTimetables();
+      expect(scope.uiStatus.generating).toBeTruthy();
+      $timeout.flush();
+      expect(mock$state.go).toHaveBeenCalledWith('^.^.result.list', null);
+    });
+
+  });
+
 });
