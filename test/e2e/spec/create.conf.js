@@ -6,24 +6,23 @@ var mockDepartments = require('../../mock/departments');
 var mockGenEduCategories = require('../../mock/gen_edu_categories');
 var mockCourses = require('../../mock/courses');
 
-var NavBar = require('../page/common/navbar');
 var SearchOptionBox = require('../page/create/search_option_box');
 var SearchResultBox = require('../page/create/search_result_box');
 var CourseCartBox = require('../page/create/course_cart_box');
 var GeneratorOptionsModal = require('../page/create/generator_options_modal');
 var Timetable = require('../page/widgets/ds_timetable');
 
-describe('Main', function () {
+describe('Create Section - Configuration', function () {
 
   var proxy;
 
-  var navbar,
-    keywordBox, gearIcon,
-    searchOptionBox,
-    searchResultBox,
-    courseCartBox,
-    timetable,
-    backdrop;
+  var keywordBox,
+      gearIcon,
+      searchOptionBox,
+      searchResultBox,
+      courseCartBox,
+      timetable,
+      backdrop;
 
   beforeEach(function () {
     proxy = new HttpBackend(browser);
@@ -35,8 +34,6 @@ describe('Main', function () {
   });
 
   beforeEach(function () {
-    navbar = new NavBar();
-
     keywordBox = element(by.model('userInput.keyword'));
     gearIcon = $('.box-search button');
 
