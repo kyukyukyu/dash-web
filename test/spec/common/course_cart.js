@@ -64,7 +64,7 @@ describe('Service: CourseCart', function () {
       expect(courseGroup.subject.id).toEqual(course.subject.id);
       expect(courseGroup.subject.name).toEqual(course.subject.name);
       expect(courseGroup.subject.code).toEqual(course.subject.code);
-      expect(courseGroup.subject.credit).toEqual(course.subject.credit);
+      expect(courseGroup.subject.credits).toEqual(course.subject.credits);
 
       expect(courseGroup.courses.length).toBe(1);
       var courseInCart = courseGroup.courses[0];

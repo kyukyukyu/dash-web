@@ -152,7 +152,7 @@ describe('Create Section - Configuration', function () {
           .toEqual(subject.VERTICAL_BAR_COLOR.UNAVAILABLE);
         expect(subject.code).toEqual('CSE4006');
         expect(subject.name).toEqual('Software Engineering');
-        expect(subject.credit).toEqual('3.00');
+        expect(subject.credits).toEqual('3.00');
         expect(subject.numOfCourses).toBe(2);
         course = subject.getCourseAt(0);
         expect(course.code).toEqual('10029');

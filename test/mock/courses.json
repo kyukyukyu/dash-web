@@ -13,7 +13,7 @@
         "id": 1,
         "name": "Software Engineering",
         "code": "CSE4006",
-        "credit": 3.00,
+        "credits": 3.00,
         "created_at": "2014-11-17T19:16:00+09:00"
       },
       "department_id": 1,
@@ -53,7 +53,7 @@
         "id": 1,
         "name": "Software Engineering",
         "code": "CSE4006",
-        "credit": 3.00,
+        "credits": 3.00,
         "created_at": "2014-11-17T19:16:00+09:00"
       },
       "department_id": 1,
@@ -93,7 +93,7 @@
         "id": 2,
         "name": "Computer Architecture 2",
         "code": "ELE3020",
-        "credit": 3.00,
+        "credits": 3.00,
         "created_at": "2014-11-17T20:30:00+09:00"
       },
       "department_id": 1,
@@ -133,7 +133,7 @@
         "id": 3,
         "name": "Electrical Properties of Materials 1",
         "code": "ELE4073",
-        "credit": 3.00,
+        "credits": 3.00,
         "created_at": "2014-11-19T00:02:00+09:00"
       },
       "department_id": 2,
@@ -173,7 +173,7 @@
         "id": 4,
         "name": "Creativity and Communication",
         "code": "GEN7003",
-        "credit": 2.00,
+        "credits": 2.00,
         "created_at": "2014-11-19T18:41:00+09:00"
       },
       "department_id": 3,

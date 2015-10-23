@@ -88,7 +88,7 @@
           var credits =
               ttCourses
                 .pluck('subject')
-                .pluck('credit')
+                .pluck('credits')
                 .reduce(adder, 0);
           isValid = isValid &&
               (_.isNull(options.minCredits) ||

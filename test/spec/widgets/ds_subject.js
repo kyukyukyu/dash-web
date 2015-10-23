@@ -52,7 +52,7 @@ describe('Directive: dsSubject', function () {
 
     cellElement = element.find('.cell');
     expect(element.data('id')).toBe(1);
-    expect(cellElement.find('.credit').text()).toBe('3.00');
+    expect(cellElement.find('.credits').text()).toBe('3.00');
     expect(cellElement.find('.name').text()).toBe('Software Engineering');
     expect(cellElement.find('.code').text()).toBe('CSE4006');
   });
