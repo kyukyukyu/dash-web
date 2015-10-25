@@ -19,7 +19,8 @@
     var service = {
       generate: generate,
       getOptions: getOptions,
-      setOption: setOption
+      setOption: setOption,
+      generatedTimetables: []
     };
 
     var options = {
@@ -38,6 +39,7 @@
 
       $timeout(function () {
         var timetables = _generate();
+        service.generatedTimetables = timetables;
         deferred.resolve(timetables);
       }, 0);
 

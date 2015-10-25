@@ -343,6 +343,7 @@
       });
 
       $timeout.flush();
+      expect(TimetableGenerator.generatedTimetables).toEqual(timetables);
 
       sort(timetables);
 
