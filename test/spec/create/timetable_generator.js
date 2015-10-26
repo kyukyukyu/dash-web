@@ -154,6 +154,56 @@
       testTimetables(expected);
     });
 
+    it('should compute statistics for generated timetables', function () {
+      var courseGroups = CourseCart.getCourseGroups();
+      _(courseGroups).at(0, 3).forEach(function (courseGroup) {
+        var subject = courseGroup.subject;
+        CourseCart.setCourseGroupRequired(subject.id, false);
+      });
+
+      var expectedTimetableInfos = [
+        {
+          credits: 6.00,
+          nClassDays: 4,
+          nFreeHours: 0
+        },
+        {
+          credits: 9.00,
+          nClassDays: 4,
+          nFreeHours: 10
+        },
+        {
+          credits: 9.00,
+          nClassDays: 4,
+          nFreeHours: 9
+        },
+        {
+          credits: 8.00,
+          nClassDays: 4,
+          nFreeHours: 6
+        },
+        {
+          credits: 11.00,
+          nClassDays: 4,
+          nFreeHours: 15
+        }
+      ];
+
+      var timetables;
+      TimetableGenerator.generate().then(function (_timetables) {
+        timetables = _timetables;
+      });
+      $timeout.flush();
+      sort(timetables);
+      _.zip(timetables, expectedTimetableInfos).forEach(function (pair) {
+        var actual = pair[0];
+        var expected = pair[1];
+        expect(actual.credits).toEqual(expected.credits);
+        expect(actual.nClassDays).toEqual(expected.nClassDays);
+        expect(actual.nFreeHours).toEqual(expected.nFreeHours);
+      });
+    });
+
     describe('interface for options', function () {
 
       it('should have default options object with null values', function () {

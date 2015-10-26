@@ -75,6 +75,22 @@
         return sum + a;
       }
 
+      function accFreeHours(acc, classHours) {
+        classHours = _(classHours).sortBy('start_time');
+        var chPairs =
+            _.zip(_(classHours).initial(1).value(),
+                  _(classHours).rest(1).value());
+        var nDailyFreeHours = chPairs.reduce(accDailyFreeHours, 0);
+        return acc + nDailyFreeHours;
+
+        ////////
+
+        function accDailyFreeHours(accDaily, chPair) {
+          /* jshint camelcase: false */
+          return accDaily + (chPair[1].start_time - chPair[0].end_time - 1);
+        }
+      }
+
       var timetables = [];
       while (cgIndexA >= 0) {
         if (cgIndexA === courseGroups.length) {
@@ -98,12 +114,17 @@
               (_.isNull(options.maxCredits) ||
                credits <= options.maxCredits);
 
-          var classCounts =
+          var classHoursByDay =
               ttCourses
                 .pluck('hours')
                 .flatten(true)
-                .pluck('day_of_week')
-                .countBy();
+                .groupBy('day_of_week');
+          var classCounts =
+              classHoursByDay
+                .map(_.size);
+          var nFreeHours =
+              classHoursByDay
+                .reduce(accFreeHours, 0);
 
           var minDailyClassCount = classCounts.min().value();
           var maxDailyClassCount = classCounts.max().value();
@@ -122,7 +143,10 @@
 
           if (isValid) {
             var timetable = {
-              courses: ttCourses.value()
+              courses: ttCourses.value(),
+              credits: credits,
+              nClassDays: weeklyClassCount,
+              nFreeHours: nFreeHours
             };
             timetables.push(timetable);
           }
