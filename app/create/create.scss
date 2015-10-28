@@ -201,6 +201,25 @@ $course-cart-btn-options-border-left: 1px solid $course-cart-btngroup-bgcolor-li
       }
     }
   }
+
+  .box-timetable-list {
+    > nav {
+      margin:
+          (-$white-box-vertical-padding) (-$white-box-horizontal-padding)
+          ($white-box-horizontal-padding) (-$white-box-horizontal-padding);
+      background: $white-box-nav-background;
+      color: $white-box-nav-color;
+      height: $search-box-height;
+
+      > .btn {
+        color: $white-box-nav-color;
+      }
+
+      > .title {
+        line-height: $search-box-height;
+      }
+    }
+  }
 }
 
 .modal.modal-genopt {

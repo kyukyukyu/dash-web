@@ -60,7 +60,7 @@
         config: {
           abstract: true,
           templateUrl: 'create/create.result.tpl.html',
-          controller: 'CreateResultCtrl'
+          controller: 'CreateResultCtrl as resultVm'
         }
       },
       {
