@@ -1,24 +1,24 @@
 'use strict';
 
 (function (module, undefined) {
-  function TimetableListBox(elem) {
+  function CreateResultBox(elem) {
     this.elem = elem;
     this.ttElems = this.elem.$$('.item-timetable');
   }
 
-  Object.defineProperties(TimetableListBox.prototype, {
+  Object.defineProperties(CreateResultBox.prototype, {
     'nTimetables': {
       get: function () { return this.ttElems.count(); }
     }
   });
-  TimetableListBox.prototype.getItemAt = function (index) {
+  CreateResultBox.prototype.getItemAt = function (index) {
     return new TimetableListItem(this.ttElems.get(index));
   };
-  TimetableListBox.prototype.clickGenerateButton = function () {
+  CreateResultBox.prototype.clickGenerateButton = function () {
     return this.elem.$('.btn-generate').click();
   };
 
-  module.exports = TimetableListBox;
+  module.exports = CreateResultBox;
 
   function TimetableListItem(elem) {
     this.elem = elem;

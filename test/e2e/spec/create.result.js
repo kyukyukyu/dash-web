@@ -8,7 +8,7 @@ var mockCourses = require('../../mock/courses');
 
 var SearchResultBox = require('../page/create/search_result_box');
 var CourseCartBox = require('../page/create/course_cart_box');
-var TimetableListBox = require('../page/create/timetable_list_box');
+var CreateResultBox = require('../page/create/create_result_box');
 var Timetable = require('../page/widgets/ds_timetable');
 
 describe('Create Section - Generation Result', function () {
@@ -52,8 +52,8 @@ describe('Create Section - Generation Result', function () {
 
   // Page object for timetable on the left column.
   var ttLeftCol;
-  // Page object for timetable list box.
-  var ttListBox;
+  // Page object for generation result box.
+  var genResBox;
   /*
   // Expected list of timetables. Each of timetables is represented as a list
   // of course IDs.
@@ -67,7 +67,7 @@ describe('Create Section - Generation Result', function () {
   beforeEach(function () {
     // Locate UI components for timetable generation results.
     ttLeftCol = new Timetable($('ds-timetable'));
-    ttListBox = new TimetableListBox($('.box-timetable-list'));
+    genResBox = new CreateResultBox($('.box-create-result'));
   });
 
   it('should show the list of generated timetables', function () {
@@ -99,10 +99,10 @@ describe('Create Section - Generation Result', function () {
         nFreeHours: '7.5'
       }
     ];
-    expect(ttListBox.nTimetables).toBe(expectedTimetableInfos.length);
+    expect(genResBox.nTimetables).toBe(expectedTimetableInfos.length);
     for (var i = 0; i < expectedTimetableInfos.length; ++i) {
       // Item in timetable list.
-      var ttListItem = ttListBox.getItemAt(i);
+      var ttListItem = genResBox.getItemAt(i);
       // Expected timetable information.
       var expectedTtInfo = expectedTimetableInfos[i];
       expect(ttListItem.credits).toEqual(expectedTtInfo.credits);
