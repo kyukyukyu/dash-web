@@ -15,9 +15,6 @@
       value: false
     }
   });
-  CreateResultBox.prototype.clickGenerateButton = function () {
-    return this.elem.$('.btn-generate').click();
-  };
 
   module.exports = CreateResultBox;
 
