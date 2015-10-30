@@ -99,10 +99,14 @@ describe('Create Section - Generation Result', function () {
         nFreeHours: '7.5'
       }
     ];
-    expect(genResBox.nTimetables).toBe(expectedTimetableInfos.length);
+    // Check if timetable list is shown and details are hidden.
+    expect(genResBox.showingList).toBeTruthy();
+    expect(genResBox.showingDetails).toBeFalsy();
+    // Check the length of timetable list.
+    expect(genResBox.list.nTimetables).toBe(expectedTimetableInfos.length);
     for (var i = 0; i < expectedTimetableInfos.length; ++i) {
       // Item in timetable list.
-      var ttListItem = genResBox.getItemAt(i);
+      var ttListItem = genResBox.list.getItemAt(i);
       // Expected timetable information.
       var expectedTtInfo = expectedTimetableInfos[i];
       expect(ttListItem.credits).toEqual(expectedTtInfo.credits);

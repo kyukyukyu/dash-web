@@ -2,23 +2,37 @@
 
 (function (module, undefined) {
   function CreateResultBox(elem) {
+    // TODO: add property 'list' and 'details' for each UI state.
     this.elem = elem;
-    this.ttElems = this.elem.$$('.item-timetable');
+    this.list = new TimetableList(elem);
   }
 
   Object.defineProperties(CreateResultBox.prototype, {
-    'nTimetables': {
-      get: function () { return this.ttElems.count(); }
+    'showingList': {
+      value: true
+    },
+    'showingDetails': {
+      value: false
     }
   });
-  CreateResultBox.prototype.getItemAt = function (index) {
-    return new TimetableListItem(this.ttElems.get(index));
-  };
   CreateResultBox.prototype.clickGenerateButton = function () {
     return this.elem.$('.btn-generate').click();
   };
 
   module.exports = CreateResultBox;
+
+  function TimetableList(box) {
+    this.ttElems = box.$$('.item-timetable');
+  }
+
+  Object.defineProperties(TimetableList.prototype, {
+    'nTimetables': {
+      get: function () { return this.ttElems.count(); }
+    }
+  });
+  TimetableList.prototype.getItemAt = function (index) {
+    return new TimetableListItem(this.ttElems.get(index));
+  };
 
   function TimetableListItem(elem) {
     this.elem = elem;
