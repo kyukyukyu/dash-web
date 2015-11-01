@@ -66,6 +66,8 @@
       {
         state: 'create.result.list',
         config: {
+          templateUrl: 'create/create.result.list.tpl.html',
+          controller: 'CreateResultListCtrl as resultListVm'
         }
       },
       {
