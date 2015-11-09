@@ -93,8 +93,8 @@
       <ds-subject ng-repeat="courseGroup in searchResult track by courseGroup.subject.id"
                   subject="courseGroup.subject"
                   courses="courseGroup.courses"
-                  course-mouseenter="timetable.previewCourse = course"
-                  course-mouseleave="timetable.previewCourse = null"
+                  course-mouseenter="setPreviewCourse(course)"
+                  course-mouseleave="setPreviewCourse(null)"
                   expanded></ds-subject>
     </ul>
   </div>

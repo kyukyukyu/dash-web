@@ -9,7 +9,7 @@ describe('Controller: CreateResultListCtrl', function () {
 
   var mock$state,
       $timeout,
-      mockTimetableGenerator,
+      mockCreateSectionState,
       fxCourses,
       CreateResultListCtrl,
       scope;
@@ -18,15 +18,16 @@ describe('Controller: CreateResultListCtrl', function () {
   beforeEach(module(function ($provide) {
     /* jshint latedef: nofunc */
     $provide.service('$state', $state);
-    $provide.service('TimetableGenerator', TimetableGenerator);
+    $provide.factory('CreateSectionState', CreateSectionState);
 
     function $state() {
       this.go = jasmine.createSpy('$state.go');
     }
 
-    function TimetableGenerator(fxCourses) {
+    function CreateSectionState(fxCourses) {
       var courses = fxCourses.objects;
-      this.generatedTimetables = [
+      var stateVars = {};
+      stateVars.generatedTimetables = [
         {
           credits: 6.00,
           nClassDays: 4,
@@ -40,15 +41,17 @@ describe('Controller: CreateResultListCtrl', function () {
           courses: [courses[0], courses[2], courses[3]]
         }
       ];
+      stateVars.idxTimetable = null;
+      return stateVars;
     }
   }));
 
   // instantiate dependencies
-  beforeEach(inject(function (_$state_, _$timeout_, _TimetableGenerator_,
+  beforeEach(inject(function (_$state_, _$timeout_, _CreateSectionState_,
                               _fxCourses_) {
     mock$state = _$state_;
     $timeout = _$timeout_;
-    mockTimetableGenerator = _TimetableGenerator_;
+    mockCreateSectionState = _CreateSectionState_;
     fxCourses = _fxCourses_;
   }));
 
@@ -60,14 +63,20 @@ describe('Controller: CreateResultListCtrl', function () {
     });
   }));
 
-  it('should expose array of generated timetables to view model', function () {
+  it('should expose array of generated timetables in state variables for create section to view model', function () {
     expect(CreateResultListCtrl.timetables)
-        .toEqual(mockTimetableGenerator.generatedTimetables);
+        .toBe(mockCreateSectionState.generatedTimetables);
   });
 
   it('should expose a function that converts number of free hours to real amount of free time', function () {
     expect(CreateResultListCtrl.getAmountOfFreeTime).not.toBeUndefined();
     expect(CreateResultListCtrl.getAmountOfFreeTime(4)).toEqual(2);
+  });
+
+  it('should expose a function that sets the value of state variable for index of selected timetable', function () {
+    expect(CreateResultListCtrl.setIdxTimetable).not.toBeUndefined();
+    CreateResultListCtrl.setIdxTimetable(42);
+    expect(mockCreateSectionState.idxTimetable).toBe(42);
   });
 
 });

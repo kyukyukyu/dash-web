@@ -18,6 +18,7 @@ describe('Controller: CreateConfCtrl', function () {
     Campuses,
     CreateConfCtrl,
     mockTimetableGenerator,
+    mockCreateSectionState,
     scope,
     fxCourses;
 
@@ -26,6 +27,7 @@ describe('Controller: CreateConfCtrl', function () {
     /* jshint latedef: nofunc */
     $provide.service('$state', $state);
     $provide.service('TimetableGenerator', TimetableGenerator);
+    $provide.factory('CreateSectionState', CreateSectionState);
 
     function $state() {
       this.go = jasmine.createSpy('$state.go');
@@ -34,21 +36,33 @@ describe('Controller: CreateConfCtrl', function () {
     function TimetableGenerator($q) {
       this.generate = jasmine.createSpy('TimetableGenerator.generate').and.callFake(function () {
         var deferred = $q.defer();
-        deferred.resolve(null);
+        deferred.resolve([]);
         return deferred.promise;
       });
+    }
+
+    function CreateSectionState() {
+      var stateVars = {};
+      stateVars.timetable = {
+        fixedCourses: [],
+        previewCourse: null,
+        freeHours: []
+      };
+      stateVars.generatedTimetables = null;
+      return stateVars;
     }
   }));
 
   // instantiate dependencies
   beforeEach(inject(function (_$httpBackend_, _$state_, _$timeout_, _Campuses_,
-                              _TimetableGenerator_, _UIBackdrop_,
-                              _fxCourses_) {
+                              _TimetableGenerator_, _CreateSectionState_,
+                              _UIBackdrop_, _fxCourses_) {
     $httpBackend = _$httpBackend_;
     mock$state = _$state_;
     $timeout = _$timeout_;
     Campuses = _Campuses_;
     mockTimetableGenerator = _TimetableGenerator_;
+    mockCreateSectionState = _CreateSectionState_;
     UIBackdrop = _UIBackdrop_;
     fxCourses = _fxCourses_;
   }));
@@ -311,6 +325,17 @@ describe('Controller: CreateConfCtrl', function () {
 
   });
 
+  describe('user interface', function () {
+
+    it('should expose a function that updates the value of state variable for preview course in timetable to scope', function () {
+      var courses = fxCourses.objects;
+      expect(mockCreateSectionState.timetable.previewCourse).toBeNull();
+      scope.setPreviewCourse(courses[0]);
+      expect(mockCreateSectionState.timetable.previewCourse).toBe(courses[0]);
+    });
+
+  });
+
   describe('generating timetables', function () {
 
     it('should use TimetableGenerator service for generating timetables', function () {
@@ -320,10 +345,12 @@ describe('Controller: CreateConfCtrl', function () {
 
     it('should update state variable when generating timetables has begun', function () {
       expect(scope.uiStatus.generating).toBeFalsy();
+      expect(mockCreateSectionState.generatedTimetables).toBeNull();
       scope.generateTimetables();
       expect(scope.uiStatus.generating).toBeTruthy();
       $timeout.flush();
-      expect(mock$state.go).toHaveBeenCalledWith('^.^.result.list', null);
+      expect(mock$state.go).toHaveBeenCalledWith('^.^.result.list');
+      expect(mockCreateSectionState.generatedTimetables).toEqual([]);
     });
 
   });

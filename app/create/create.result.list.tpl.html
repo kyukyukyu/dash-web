@@ -1,5 +1,5 @@
 <div class="list-group">
-  <button class="list-group-item item-timetable" type="button" ng-repeat="tt in resultListVm.timetables" ng-mouseover="timetable.fixedCourses = tt.courses">
+  <button class="list-group-item item-timetable" type="button" ng-repeat="tt in resultListVm.timetables" ng-mouseover="resultListVm.setIdxTimetable($index)">
     <i class="fa fa-calendar"></i>
     <span class="timetable-info"><strong class="credits">{{tt.credits|number:2}}</strong> credits</span>
     <span class="timetable-info"><strong class="n-class-days">{{tt.nClassDays}}</strong> class days</span>

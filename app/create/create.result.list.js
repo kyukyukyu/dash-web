@@ -15,15 +15,20 @@
   /* @ngInject */
   function CreateResultListCtrl(
       $state,
-      TimetableGenerator) {
+      CreateSectionState) {
     var vm = this;
-    vm.timetables = TimetableGenerator.generatedTimetables;
+    vm.timetables = CreateSectionState.generatedTimetables;
     vm.getAmountOfFreeTime = getAmountOfFreeTime;
+    vm.setIdxTimetable = setIdxTimetable;
 
     function getAmountOfFreeTime(nFreeHours) {
       // TODO: Provide the amount of single course hour and break time in
       // a service.
       return 0.5 * nFreeHours;
+    }
+
+    function setIdxTimetable(idx) {
+      CreateSectionState.idxTimetable = idx;
     }
   }
 })();

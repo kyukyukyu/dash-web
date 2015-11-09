@@ -64,6 +64,7 @@
       Restangular,
       Courses,
       TimetableGenerator,
+      CreateSectionState,
       UIBackdrop) {
     $scope.userInput = {
       keyword: '',
@@ -143,6 +144,7 @@
     };
 
     $scope.generateTimetables = generateTimetables;
+    $scope.setPreviewCourse = setPreviewCourse;
 
     /**
      * @name generateTimetables
@@ -153,8 +155,19 @@
     function generateTimetables() {
       $scope.uiStatus.generating = true;
       TimetableGenerator.generate().then(function (timetables) {
-        $state.go('^.^.result.list', timetables);
+        $state.go('^.^.result.list');
+        CreateSectionState.generatedTimetables = timetables;
       });
+    }
+
+    /**
+     * @name setPreviewCourse
+     * @desc Updates the value of state variable for preview source in
+     *       timetable.
+     * @memberOf CreateConfCtrl
+     */
+    function setPreviewCourse(course) {
+      CreateSectionState.timetable.previewCourse = course;
     }
   }
 })();
