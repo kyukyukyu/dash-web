@@ -71,7 +71,7 @@
         }
       },
       {
-        state: 'create.result.detail',
+        state: 'create.result.details',
         config: {
         }
       }
