@@ -2,17 +2,26 @@
 
 (function (module, undefined) {
   function CreateResultBox(elem) {
-    // TODO: add property 'list' and 'details' for each UI state.
     this.elem = elem;
+    this.navTitle = elem.$('nav .title');
+    this.btnBack = elem.$('nav > .btn-back');
     this.list = new TimetableList(elem);
   }
 
   Object.defineProperties(CreateResultBox.prototype, {
     'showingList': {
-      value: true
+      get: function getShowingList() {
+        return this.navTitle.getText().then(function (titleText) {
+          return /Generated Timetables/.test(titleText);
+        });
+      }
     },
     'showingDetails': {
-      value: false
+      get: function getShowingDetails() {
+        return this.navTitle.getText().then(function (titleText) {
+          return /Details/.test(titleText);
+        });
+      }
     }
   });
 

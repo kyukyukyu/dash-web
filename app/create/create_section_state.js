@@ -30,6 +30,12 @@
      * @memberOf Factories.CreateSectionState
      */
     stateVars.UI_STATE_RESULT_LIST = 'create.result.list';
+    /**
+     * @name UI_STATE_RESULT_DETAILS
+     * @constant {string}
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.UI_STATE_RESULT_DETAILS = 'create.result.details';
     // UI state stack. Top of stack points to the end of array.
     var uiStateStack = [stateVars.UI_STATE_CONF_COURSE_CART];
     /**
