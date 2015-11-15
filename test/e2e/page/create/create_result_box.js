@@ -47,4 +47,30 @@
     }
   });
 
+  function TimetableDetails(box) {
+    this.statsElem = box.$('.stats');
+    this.subjectElems = box.$$('.subjects > ds-subject');
+  }
+
+  Object.defineProperties(TimetableDetails.prototype, {
+    'credits': {
+      get: function () {
+        return this.statsElem.$('.stat-credits > .number').getText();
+      }
+    },
+    'nClassDays': {
+      get: function () {
+        return this.statsElem.$('.stat-n-class-days > .number').getText();
+      }
+    },
+    'nFreeHours': {
+      get: function () {
+        return this.statsElem.$('.stat-n-free-hours > .number').getText();
+      }
+    },
+    'nSubjects': {
+      get: function () { return this.subjectElems.count(); }
+    }
+  });
+
 })(module);

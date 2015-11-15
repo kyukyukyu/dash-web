@@ -1,0 +1,21 @@
+<ul class="stats">
+  <li class="stat stat-credits">
+    <span class="number">{{resultDetailsVm.credits|number:2}}</span>
+     credits
+  </li>
+  <li class="stat stat-n-class-days">
+    <span class="number">{{resultDetailsVm.nClassDays}}</span>
+     class days
+  </li>
+  <li class="stat stat-n-free-hours">
+    <span class="number">{{resultDetailsVm.nFreeHours|number:1}}</span>
+     free hours
+  </li>
+</ul>
+<div class="subjects">
+  <ds-subject
+      ng-repeat="course in resultDetailsVm.courses track by course.subject.id"
+      subject="course.subject"
+      courses="[course]">
+  </ds-subject>
+</div>

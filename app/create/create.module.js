@@ -73,6 +73,8 @@
       {
         state: 'create.result.details',
         config: {
+          templateUrl: 'create/create.result.details.tpl.html',
+          controller: 'CreateResultDetailsCtrl as resultDetailsVm'
         }
       }
     ];
