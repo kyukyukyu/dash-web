@@ -14,8 +14,24 @@
    * @memberOf Factories
    */
   /* @ngInject */
-  function CreateSectionState() {
+  function CreateSectionState($state) {
+    // State variables object.
     var stateVars = {};
+    // String constants that represents UI states.
+    /**
+     * @name UI_STATE_CONF_COURSE_CART
+     * @constant {string}
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.UI_STATE_CONF_COURSE_CART = 'create.conf.course-cart';
+    /**
+     * @name UI_STATE_RESULT_LIST
+     * @constant {string}
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.UI_STATE_RESULT_LIST = 'create.result.list';
+    // UI state stack. Top of stack points to the end of array.
+    var uiStateStack = [stateVars.UI_STATE_CONF_COURSE_CART];
     /**
      * @name timetable
      * @desc Timetable object for `<ds-timetable>` object in the left column.
@@ -49,6 +65,34 @@
      * @memberOf Factories.CreateSectionState
      */
     stateVars.idxTimetable = null;
+    /**
+     * @function pushUiState
+     * @desc Pushes a new UI state to UI state stack, and moves to the state.
+     * @param {string} newStateName Name of UI state to push.
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.pushUiState = pushUiState;
+    /**
+     * @function popUiState
+     * @desc Pops an UI state from UI state stack, and moves to the state.
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.popUiState = popUiState;
     return stateVars;
+
+    function pushUiState(newStateName) {
+      uiStateStack.push($state.current.name);
+      $state.go(newStateName);
+    }
+
+    function popUiState() {
+      if (_.isEmpty(uiStateStack)) {
+        // This will not happen in normal situation.
+        return;
+      }
+      // Destination UI state.
+      var dest = uiStateStack.pop();
+      $state.go(dest);
+    }
   }
 })();

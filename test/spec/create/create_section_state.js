@@ -5,10 +5,30 @@ describe('Service: CreateSectionState', function () {
   // Load the service's module.
   beforeEach(module('dashApp.create'));
 
-  // Instantiate the service.
+  // Mock dependencies.
+  beforeEach(module(function ($provide) {
+    /* jshint latedef: nofunc */
+    $provide.service('$state', $state);
+
+    function $state() {
+      var that = this;
+      that.current = {};
+      that.current.name = 'create.conf.course-cart';
+      that.go = go;
+      spyOn(that, 'go').and.callThrough();
+
+      function go(newStateName) {
+        that.current.name = newStateName;
+      }
+    }
+  }));
+
+  // Instantiate the service and its dependencies.
   var CreateSectionState;
-  beforeEach(inject(function (_CreateSectionState_) {
+  var mock$state;
+  beforeEach(inject(function (_CreateSectionState_, _$state_) {
     CreateSectionState = _CreateSectionState_;
+    mock$state = _$state_;
   }));
 
   it('should have state variables initialized', function () {
@@ -18,6 +38,15 @@ describe('Service: CreateSectionState', function () {
     expect(CreateSectionState.timetable.freeHours).toEqual([]);
     expect(CreateSectionState.generatedTimetables).toEqual([]);
     expect(CreateSectionState.idxTimetable).toBeNull();
+  });
+
+  it('should provide functions that pushes/pops a UI state to/from UI state stack', function () {
+    expect(CreateSectionState.pushUiState).toBeDefined();
+    CreateSectionState.pushUiState('create.result.list');
+    expect(mock$state.go).toHaveBeenCalledWith('create.result.list');
+    expect(CreateSectionState.popUiState).toBeDefined();
+    CreateSectionState.popUiState();
+    expect(mock$state.go).toHaveBeenCalledWith('create.conf.course-cart');
   });
 
 });
