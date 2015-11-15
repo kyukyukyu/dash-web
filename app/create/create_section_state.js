@@ -72,6 +72,12 @@
      */
     stateVars.idxTimetable = null;
     /**
+     * @function reset
+     * @desc Resets section state variables with initial values.
+     * @memberOf Factories.CreateSectionState
+     */
+    stateVars.reset = reset;
+    /**
      * @function pushUiState
      * @desc Pushes a new UI state to UI state stack, and moves to the state.
      * @param {string} newStateName Name of UI state to push.
@@ -85,6 +91,15 @@
      */
     stateVars.popUiState = popUiState;
     return stateVars;
+
+    function reset() {
+      stateVars.timetable.fixedCourses = [];
+      stateVars.timetable.previewCourse = null;
+      stateVars.timetable.freeHours = [];
+      stateVars.generatedTimetables = [];
+      stateVars.idxTimetable = null;
+      uiStateStack = [stateVars.UI_STATE_CONF_COURSE_CART];
+    }
 
     function pushUiState(newStateName) {
       uiStateStack.push($state.current.name);

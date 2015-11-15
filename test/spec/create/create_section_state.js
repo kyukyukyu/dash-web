@@ -40,6 +40,22 @@ describe('Service: CreateSectionState', function () {
     expect(CreateSectionState.idxTimetable).toBeNull();
   });
 
+  it('should provide function that resets section state', function () {
+    CreateSectionState.timetable.fixedCourses.push(42);
+    CreateSectionState.timetable.previewCourse = 42;
+    CreateSectionState.timetable.freeHours.push(42);
+    CreateSectionState.generatedTimetables.push(42);
+    CreateSectionState.idxTimetable = 42;
+    expect(CreateSectionState.reset).toBeDefined();
+    CreateSectionState.reset();
+    expect(CreateSectionState.timetable).toBeDefined();
+    expect(CreateSectionState.timetable.fixedCourses).toEqual([]);
+    expect(CreateSectionState.timetable.previewCourse).toBeNull();
+    expect(CreateSectionState.timetable.freeHours).toEqual([]);
+    expect(CreateSectionState.generatedTimetables).toEqual([]);
+    expect(CreateSectionState.idxTimetable).toBeNull();
+  });
+
   it('should provide functions that pushes/pops a UI state to/from UI state stack', function () {
     expect(CreateSectionState.pushUiState).toBeDefined();
     CreateSectionState.pushUiState('create.result.list');
