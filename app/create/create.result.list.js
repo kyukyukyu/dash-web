@@ -20,6 +20,7 @@
     vm.timetables = CreateSectionState.generatedTimetables;
     vm.getAmountOfFreeTime = getAmountOfFreeTime;
     vm.setFixedTimetable = setFixedTimetable;
+    vm.showDetailsOf = showDetailsOf;
 
     function getAmountOfFreeTime(nFreeHours) {
       // TODO: Provide the amount of single course hour and break time in
@@ -35,6 +36,11 @@
         fixedCourses = tt.courses;
       }
       CreateSectionState.timetable.fixedCourses = fixedCourses;
+    }
+
+    function showDetailsOf(idx) {
+      CreateSectionState.idxTimetable = idx;
+      CreateSectionState.pushUiState('^.details');
     }
   }
 })();

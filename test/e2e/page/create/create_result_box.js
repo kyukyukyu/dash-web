@@ -6,6 +6,7 @@
     this.navTitle = elem.$('nav .title');
     this.btnBack = elem.$('nav > .btn-back');
     this.list = new TimetableList(elem);
+    this.details = new TimetableDetails(elem);
   }
 
   Object.defineProperties(CreateResultBox.prototype, {

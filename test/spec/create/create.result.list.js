@@ -44,6 +44,8 @@ describe('Controller: CreateResultListCtrl', function () {
         }
       ];
       stateVars.idxTimetable = null;
+      stateVars.pushUiState =
+          jasmine.createSpy('CreateSectionState.pushUiState');
       return stateVars;
     }
   }));
@@ -91,6 +93,14 @@ describe('Controller: CreateResultListCtrl', function () {
   it('should set the value of state variable for fixed courses with null value', function () {
     CreateResultListCtrl.setFixedTimetable(null);
     expect(mockCreateSectionState.timetable.fixedCourses).toEqual([]);
+  });
+
+  it('should expose a function that shows the details of single timetable', function () {
+    expect(CreateResultListCtrl.showDetailsOf).not.toBeUndefined();
+    CreateResultListCtrl.showDetailsOf(0);
+    expect(mockCreateSectionState.idxTimetable).toBe(0);
+    expect(mockCreateSectionState.pushUiState)
+        .toHaveBeenCalledWith('^.details');
   });
 
 });

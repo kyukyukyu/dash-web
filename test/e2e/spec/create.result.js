@@ -115,6 +115,63 @@ describe('Create Section - Generation Result', function () {
     }
   });
 
+  it('should show single timetable when selected from list', function () {
+    // Check if timetable list is shown and details are hidden.
+    expect(genResBox.showingList).toBeTruthy();
+    expect(genResBox.showingDetails).toBeFalsy();
+    // The first item in timetable list.
+    var ttListItem = genResBox.list.getItemAt(0);
+    // Move mouse cursor over the first timetable item.
+    browser.actions().mouseMove(ttListItem.elem).perform();
+    // Check if timetable is displayed correctly.
+    var courseHour;
+    courseHour = ttLeftCol.getFixedHourAt(14, 3, 0);
+    expect(courseHour.name).toEqual('Computer Architecture 2');
+    expect(courseHour.duration).toBe(3);
+    courseHour = ttLeftCol.getFixedHourAt(14, 4, 0);
+    expect(courseHour.name).toEqual('Computer Architecture 2');
+    expect(courseHour.duration).toBe(3);
+    courseHour = ttLeftCol.getFixedHourAt(5, 1, 0);
+    expect(courseHour.name).toEqual('Electrical Properties of Materials 1');
+    expect(courseHour.duration).toBe(3);
+    courseHour = ttLeftCol.getFixedHourAt(5, 2, 0);
+    expect(courseHour.name).toEqual('Electrical Properties of Materials 1');
+    expect(courseHour.duration).toBe(3);
+    // Click the timetable item in the list.
+    ttListItem.elem.click();
+    // Check if details of timetable is shown and timetable list is hidden.
+    expect(genResBox.showingList).toBeFalsy();
+    expect(genResBox.showingDetails).toBeTruthy();
+    expect(genResBox.details.credits).toEqual('6.00');
+    expect(genResBox.details.nClassDays).toEqual('4');
+    expect(genResBox.details.nFreeHours).toEqual('0.0');
+    expect(genResBox.details.nSubjects).toBe(2);
+  });
+
+  it('should provide back button in navigation bar', function () {
+    // Check if timetable list is shown and details are hidden.
+    expect(genResBox.showingList).toBeTruthy();
+    expect(genResBox.showingDetails).toBeFalsy();
+    // Click the first item in timetable list.
+    var ttListItem = genResBox.list.getItemAt(0);
+    ttListItem.elem.click();
+    // Check if details are shown and timetable list are hidden.
+    expect(genResBox.showingList).toBeFalsy();
+    expect(genResBox.showingDetails).toBeTruthy();
+    // Click the back button.
+    genResBox.btnBack.click();
+    browser.waitForAngular();
+    // Check if timetable list is shown and details are hidden.
+    expect(genResBox.showingList).toBeTruthy();
+    expect(genResBox.showingDetails).toBeFalsy();
+    // Click the back button.
+    genResBox.btnBack.click();
+    browser.waitForAngular();
+    // Check if generation result is hidden and course cart box is shown.
+    expect(genResBox.elem.isPresent()).toBeFalsy();
+    expect($('.box-search-result').isPresent()).toBeTruthy();
+  });
+
   afterEach(function () {
     proxy.onLoad.reset();
   });
