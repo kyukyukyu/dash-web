@@ -27,6 +27,8 @@ describe('Controller: CreateResultListCtrl', function () {
     function CreateSectionState(fxCourses) {
       var courses = fxCourses.objects;
       var stateVars = {};
+      stateVars.timetable = {};
+      stateVars.timetable.fixedCourses = [];
       stateVars.generatedTimetables = [
         {
           credits: 6.00,
@@ -73,10 +75,22 @@ describe('Controller: CreateResultListCtrl', function () {
     expect(CreateResultListCtrl.getAmountOfFreeTime(4)).toEqual(2);
   });
 
-  it('should expose a function that sets the value of state variable for index of selected timetable', function () {
-    expect(CreateResultListCtrl.setIdxTimetable).not.toBeUndefined();
-    CreateResultListCtrl.setIdxTimetable(42);
-    expect(mockCreateSectionState.idxTimetable).toBe(42);
+  it('should set the value of state variable for fixed courses with a valid timetable object', function () {
+    var courses = fxCourses.objects;
+    var tt = {
+      credits: 6.00,
+      nClassDays: 4,
+      nFreeHours: 0.0,
+      courses: [courses[2], courses[3]]
+    };
+    expect(CreateResultListCtrl.setFixedTimetable).not.toBeUndefined();
+    CreateResultListCtrl.setFixedTimetable(tt);
+    expect(mockCreateSectionState.timetable.fixedCourses).toBe(tt.courses);
+  });
+
+  it('should set the value of state variable for fixed courses with null value', function () {
+    CreateResultListCtrl.setFixedTimetable(null);
+    expect(mockCreateSectionState.timetable.fixedCourses).toEqual([]);
   });
 
 });
