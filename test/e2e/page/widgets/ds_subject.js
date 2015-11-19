@@ -54,7 +54,7 @@
       browser.actions().mouseMove(this.actions).perform();
     }
   };
-  'code name credit'.split(' ').forEach(defineFunc(Subject.prototype, '.cell '));
+  'code name credits'.split(' ').forEach(defineFunc(Subject.prototype, '.cell '));
 
   Course.prototype.clickCartButton = function () {
     browser.actions().mouseMove(this.actions).perform();

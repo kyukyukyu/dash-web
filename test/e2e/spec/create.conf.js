@@ -6,23 +6,23 @@ var mockDepartments = require('../../mock/departments');
 var mockGenEduCategories = require('../../mock/gen_edu_categories');
 var mockCourses = require('../../mock/courses');
 
-var NavBar = require('../page/common/navbar');
 var SearchOptionBox = require('../page/create/search_option_box');
 var SearchResultBox = require('../page/create/search_result_box');
 var CourseCartBox = require('../page/create/course_cart_box');
+var GeneratorOptionsModal = require('../page/create/generator_options_modal');
 var Timetable = require('../page/widgets/ds_timetable');
 
-describe('Main', function () {
+describe('Create Section - Configuration', function () {
 
   var proxy;
 
-  var navbar,
-    keywordBox, gearIcon,
-    searchOptionBox,
-    searchResultBox,
-    courseCartBox,
-    timetable,
-    backdrop;
+  var keywordBox,
+      gearIcon,
+      searchOptionBox,
+      searchResultBox,
+      courseCartBox,
+      timetable,
+      backdrop;
 
   beforeEach(function () {
     proxy = new HttpBackend(browser);
@@ -34,14 +34,12 @@ describe('Main', function () {
   });
 
   beforeEach(function () {
-    navbar = new NavBar();
-
     keywordBox = element(by.model('userInput.keyword'));
-    gearIcon = $('.box-group-top button');
+    gearIcon = $('.box-search button');
 
-    searchOptionBox = new SearchOptionBox($('.box-group-bottom .box-search-option'));
-    searchResultBox = new SearchResultBox($('.box-group-bottom .box-search-result'));
-    courseCartBox = new CourseCartBox($('.box-group-bottom .box-course-cart'));
+    searchOptionBox = new SearchOptionBox($('.box-search-option'));
+    searchResultBox = new SearchResultBox($('.box-search-result'));
+    courseCartBox = new CourseCartBox($('.box-course-cart'));
 
     timetable = new Timetable($('ds-timetable'));
 
@@ -154,7 +152,7 @@ describe('Main', function () {
           .toEqual(subject.VERTICAL_BAR_COLOR.UNAVAILABLE);
         expect(subject.code).toEqual('CSE4006');
         expect(subject.name).toEqual('Software Engineering');
-        expect(subject.credit).toEqual('3.00');
+        expect(subject.credits).toEqual('3.00');
         expect(subject.numOfCourses).toBe(2);
         course = subject.getCourseAt(0);
         expect(course.code).toEqual('10029');
@@ -360,7 +358,6 @@ describe('Main', function () {
     });
   });
 
-  // TODO: test course cart
   describe('managing course cart', function () {
 
     function openResultBox() {
@@ -513,6 +510,118 @@ describe('Main', function () {
       expect(subjectInResult.verticalBarBgColor).toEqual(subjectInResult.VERTICAL_BAR_COLOR.REQUIRED);
       subjectInResult = searchResultBox.getSubjectAt(1);
       expect(subjectInResult.verticalBarBgColor).toEqual(subjectInResult.VERTICAL_BAR_COLOR.REQUIRED);
+    });
+
+  });
+
+  describe('setting options on generating timetables', function () {
+
+    var genOptButton;
+    var modal;
+
+    beforeEach(function () {
+      genOptButton = courseCartBox.elem.$('button[name=genOptButton]');
+      modal = new GeneratorOptionsModal($('.modal-genopt[role=dialog]'));
+
+      genOptButton.click();
+    });
+
+    it('should validate the range of credits', function () {
+      expect(modal.isValid('credits')).toBeTruthy();
+
+      modal.minCredits = '-1';
+      expect(modal.isValid('credits')).toBeFalsy();
+
+      modal.minCredits = '2';
+      expect(modal.isValid('credits')).toBeTruthy();
+
+      modal.maxCredits = '4';
+      expect(modal.isValid('credits')).toBeTruthy();
+
+      modal.minCredits = '8';
+      expect(modal.isValid('credits')).toBeFalsy();
+
+      modal.minCredits = '';
+      expect(modal.isValid('credits')).toBeTruthy();
+
+      modal.maxCredits = '-1';
+      expect(modal.isValid('credits')).toBeFalsy();
+    });
+
+    it('should validate the range of # of classes/day', function () {
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
+
+      modal.minDailyClassCount = '-1';
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
+
+      modal.minDailyClassCount = '2';
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
+
+      modal.maxDailyClassCount = '4';
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
+
+      modal.minDailyClassCount = '8';
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
+
+      modal.minDailyClassCount = '';
+      expect(modal.isValid('dailyClassCount')).toBeTruthy();
+
+      modal.maxDailyClassCount = '-1';
+      expect(modal.isValid('dailyClassCount')).toBeFalsy();
+    });
+
+    it('should validate the range of # of days w/classes', function () {
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '-1';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+
+      modal.minWeeklyClassCount = '0';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+
+      modal.minWeeklyClassCount = '8';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+
+      modal.minWeeklyClassCount = '2';
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
+
+      modal.maxWeeklyClassCount = '4';
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
+
+      modal.minWeeklyClassCount = '8';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+
+      modal.minWeeklyClassCount = '';
+      expect(modal.isValid('weeklyClassCount')).toBeTruthy();
+
+      modal.maxWeeklyClassCount = '8';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+
+      modal.maxWeeklyClassCount = '-1';
+      expect(modal.isValid('weeklyClassCount')).toBeFalsy();
+    });
+
+    it('should be able to save changes on options when valid', function () {
+      expect(modal.saveButton.isEnabled()).toEqual(true);
+      modal.saveButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
+    });
+
+    it('should not be able to save changes on options when invalid', function () {
+      modal.minCredits = '-2';
+      expect(modal.saveButton.isEnabled()).toEqual(false);
+      expect(modal.elem.isPresent()).toEqual(true);
+    });
+
+    it('should be able to discard changes on options when valid', function () {
+      modal.cancelButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
+    });
+
+    it('should be able to discard changes on options when invalid', function () {
+      modal.maxWeeklyClassCount = '-1';
+      modal.cancelButton.click();
+      expect(modal.elem.isPresent()).toEqual(false);
     });
 
   });

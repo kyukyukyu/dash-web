@@ -16,6 +16,9 @@
   CourseCartBox.prototype.getSubjectAt = function (index) {
     return this.courseCart.getSubjectAt(index);
   };
+  CourseCartBox.prototype.clickGenerateButton = function () {
+    return this.elem.$('.btn-generate').click();
+  };
 
   module.exports = CourseCartBox;
 })(module);

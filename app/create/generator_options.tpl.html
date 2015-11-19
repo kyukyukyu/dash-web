@@ -1,0 +1,65 @@
+<div class="modal-header">
+  <h4 class="modal-title">Options for Generating Timetables</h4>
+</div>
+<div class="modal-body">
+  <p>Leave input box blank unless you want to set either bound.</p>
+  <div class="form-horizontal">
+    <div class="form-group form-group-sm form-group-credits" ng-class="{'has-error': !vm.validity.range.credits}">
+      <label class="col-sm-4 control-label">Credits</label>
+
+      <div class="col-sm-2">
+        <input class="form-control" type="number" min="0" step="0.01"
+               name="minCredits"
+               ng-model="vm.userInput.minCredits">
+      </div>
+      <div class="col-tilde">~</div>
+      <div class="col-sm-2">
+        <input class="form-control" type="number" min="0" step="0.01"
+               name="maxCredits"
+               ng-model="vm.userInput.maxCredits">
+      </div>
+    </div>
+    <div class="form-group form-group-sm form-group-daily-class-count"
+         ng-class="{'has-error': !vm.validity.range.dailyClassCount}">
+      <label class="col-sm-4 control-label"># of classes/day</label>
+
+      <div class="col-sm-2">
+        <input class="form-control" min="0" type="number"
+               name="minDailyClassCount"
+               ng-model="vm.userInput.minDailyClassCount">
+      </div>
+      <div class="col-tilde">~</div>
+      <div class="col-sm-2">
+        <input class="form-control" min="0" type="number"
+               name="maxDailyClassCount"
+               ng-model="vm.userInput.maxDailyClassCount">
+      </div>
+    </div>
+    <div class="form-group form-group-sm form-group-weekly-class-count"
+         ng-class="{'has-error': !vm.validity.range.weeklyClassCount}">
+      <label class="col-sm-4 control-label"># of days w/classes</label>
+
+      <div class="col-sm-2">
+        <input class="form-control" min="0" type="number"
+               name="minWeeklyClassCount"
+               ng-model="vm.userInput.minWeeklyClassCount">
+      </div>
+      <div class="col-tilde">~</div>
+      <div class="col-sm-2">
+        <input class="form-control" min="0" type="number"
+               name="maxWeeklyClassCount"
+               ng-model="vm.userInput.maxWeeklyClassCount">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" type="button" name="cancelButton" data-dismiss="modal" ng-click="$dismiss();">
+    Cancel
+  </button>
+  <button class="btn btn-primary" type="button" name="saveButton"
+          ng-click="vm.save();"
+          ng-disabled="!(vm.validity.range.credits && vm.validity.range.dailyClassCount && vm.validity.range.weeklyClassCount)">
+    Save
+  </button>
+</div>

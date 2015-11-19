@@ -9,6 +9,12 @@ $search-ui-top-when-shown: 0;
 $search-ui-top-when-hidden: -($search-box-height + $white-box-margin-bottom);
 $course-cart-top: $body-padding-top + $search-box-height + $white-box-margin-bottom;
 $course-cart-bottom: $body-padding-bottom + $footer-height;
+$course-cart-btngroup-height: 50px;
+$course-cart-btngroup-bgcolor: #469ede;
+$course-cart-btngroup-bgcolor-lighten: rgba(#ffffff, 0.25);
+$course-cart-btngroup-color: #ffffff;
+$course-cart-btn-options-width: 36px;
+$course-cart-btn-options-border-left: 1px solid $course-cart-btngroup-bgcolor-lighten;
 
 @mixin keyframe-search-ui-hidden {
   display: block;
@@ -41,12 +47,10 @@ $course-cart-bottom: $body-padding-bottom + $footer-height;
 }
 
 @mixin course-cart-position {
-  @include right-column-width;
-
-  top: $course-cart-top;
-  bottom: $course-cart-bottom;
   overflow: hidden;
   position: fixed;
+  top: $course-cart-top;
+  bottom: $course-cart-bottom;
 }
 
 /* Right column */
@@ -58,110 +62,173 @@ $course-cart-bottom: $body-padding-bottom + $footer-height;
 
   .box {
     @include white-box();
+    @include right-column-width;
+  }
+
+  > .box {
+    position: fixed;
+  }
+
+  > .box-search {
+    top: $body-padding-top;
+    padding: 0;
+    height: $search-box-height;
+
+    &.focused {
+      border-color: $border-color-focused;
+      z-index: $zindex-modal + 5;
+    }
+
+    > .input-group {
+      height: 100%;
+
+      > *,
+      > .input-group-btn > .btn {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+      }
+
+      > .input-group-addon,
+      > .input-group-btn > .btn {
+        padding-left: $search-box-icon-horizontal-padding;
+        padding-right: $search-box-icon-horizontal-padding;
+        font-size: 16px;
+        line-height: 100%;
+      }
+
+      > form > .form-control {
+        border: 0;
+        height: $search-box-height - 2;
+        outline: none;
+        box-shadow: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
   }
 
   > .box-group {
-    position: absolute !important;
-    left: $grid-gutter-width / 2;
-    right: $grid-gutter-width / 2;
+    @include course-cart-position;
+
+    z-index: $zindex-modal;
+    opacity: 1;
+
+    &.ng-hide-add, &.ng-hide-remove {
+      animation-duration: 0.2s;
+      animation-timing-function: ease-in-out;
+    }
+
+    &.ng-hide-add {
+      animation-name: search-ui-hide;
+    }
+
+    &.ng-hide-remove {
+      animation-name: search-ui-show;
+    }
+
+    > .box-search-option {
+      #dsCatalogSearchBoxLabelType,
+      #dsCatalogSearchBoxLabelGrade,
+      #dsCatalogSearchBoxLabelDept,
+      #dsCatalogSearchBoxLabelCat {
+        padding-top: $padding-base-vertical;
+        padding-bottom: $padding-base-vertical;
+        margin-top: 1px;
+        margin-bottom: 1px;
+      }
+    }
+
+    > .box-search-result {
+      padding: 0;
+
+      .subjects {
+        @include ds-subject-list-style;
+      }
+    }
   }
 
-  .box-group-top {
-    height: $search-box-height;
-    top: 0;
+  .box-course-cart {
+    @include course-cart-position;
 
-    .search-box {
-      @include right-column-width;
+    z-index: $zindex-modal-background - 10;
+    padding: 0;
 
-      padding: 0;
-      height: $search-box-height;
-      position: fixed;
+    > ds-course-cart {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: $course-cart-btngroup-height;
+    }
 
-      &.focused {
-        border-color: $border-color-focused;
-        z-index: $zindex-modal + 5;
-      }
+    > .button-group {
+      position: absolute;
+      bottom: 0;
+      display: table;
+      table-layout: fixed;
+      margin: 0;
+      width: 100%;
+      height: $course-cart-btngroup-height;
+      background-color: $course-cart-btngroup-bgcolor;
 
-      > .input-group {
-        height: 100%;
+      > .button-wrapper {
+        display: table-cell;
+        position: relative;
 
-        > *,
-        > .input-group-btn > .btn {
-          background: transparent;
-          border: 0;
+        &.button-wrapper-options {
+          width: $course-cart-btn-options-width;
+          border-left: $course-cart-btn-options-border-left;
+        }
+
+        > .btn {
+          position: absolute;
+          width: 100%;
+          height: 100%;
           border-radius: 0;
-        }
+          background-color: transparent;
+          color: $course-cart-btngroup-color;
 
-        > .input-group-addon,
-        > .input-group-btn > .btn {
-          padding-left: $search-box-icon-horizontal-padding;
-          padding-right: $search-box-icon-horizontal-padding;
-          font-size: 16px;
-          line-height: 100%;
-        }
+          &:hover {
+            background-color: $course-cart-btngroup-bgcolor-lighten;
+            color: $course-cart-btngroup-color;
+          }
 
-        > form > .form-control {
-          border: 0;
-          height: $search-box-height - 2;
-          outline: none;
-          box-shadow: none;
-          padding-left: 0;
-          padding-right: 0;
+          &.btn-options {
+            width: $course-cart-btn-options-width;
+          }
         }
       }
     }
   }
 
-  .box-group-bottom {
-    top: $search-box-height + $white-box-margin-bottom;
-    bottom: 0;
+  .box-create-result {
+    > nav {
+      margin:
+          (-$white-box-vertical-padding) (-$white-box-horizontal-padding)
+          ($white-box-horizontal-padding) (-$white-box-horizontal-padding);
+      background: $white-box-nav-background;
+      color: $white-box-nav-color;
+      height: $search-box-height;
 
-    .box-group {
-      @include course-cart-position;
-
-      z-index: $zindex-modal;
-      opacity: 1;
-
-      &.ng-hide-add, &.ng-hide-remove {
-        animation-duration: 0.2s;
-        animation-timing-function: ease-in-out;
+      > .btn {
+        color: $white-box-nav-color;
       }
 
-      &.ng-hide-add {
-        animation-name: search-ui-hide;
-      }
-
-      &.ng-hide-remove {
-        animation-name: search-ui-show;
-      }
-
-      .box-search-option {
-        #dsCatalogSearchBoxLabelType,
-        #dsCatalogSearchBoxLabelGrade,
-        #dsCatalogSearchBoxLabelDept,
-        #dsCatalogSearchBoxLabelCat {
-          padding-top: $padding-base-vertical;
-          padding-bottom: $padding-base-vertical;
-          margin-top: 1px;
-          margin-bottom: 1px;
-        }
-      }
-
-      .box-search-result {
-        padding: 0;
-        width: 100%;
-
-        .subjects {
-          @include ds-subject-list-style;
-        }
+      > .title {
+        line-height: $search-box-height;
       }
     }
+  }
+}
 
-    .box-course-cart {
-      @include course-cart-position;
+.modal.modal-genopt {
+  .col-tilde {
+    @include make-sm-column(0.25);
 
-      z-index: $zindex-modal-background - 10;
-      padding: 0;
-    }
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    line-height: $input-height-small;
   }
 }

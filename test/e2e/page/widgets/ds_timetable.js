@@ -33,6 +33,11 @@
     var cell = row.$$('td').get(columnIndex - (spannedColumns || 0));
     return new CourseHour(cell);
   };
+  Timetable.prototype.getFixedHourAt = function (rowIndex, columnIndex, spannedColumns) {
+    var row = this.tableFixed.$$('tbody > tr').get(rowIndex);
+    var cell = row.$$('td').get(columnIndex - (spannedColumns || 0));
+    return new CourseHour(cell);
+  };
 
   Object.defineProperties(CourseHour.prototype, {
     'duration': {

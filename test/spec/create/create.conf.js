@@ -1,7 +1,7 @@
 /* global URI */
 'use strict';
 
-describe('Controller: CourseSearchCtrl', function () {
+describe('Controller: CreateConfCtrl', function () {
   // load the controller's module
   beforeEach(module('dashApp.create'));
 
@@ -12,19 +12,57 @@ describe('Controller: CourseSearchCtrl', function () {
   beforeEach(module('dashApp.mock.courses'));
 
   var $httpBackend,
+    mock$state,
     $timeout,
     UIBackdrop,
     Campuses,
-    CourseSearchCtrl,
+    CreateConfCtrl,
+    mockTimetableGenerator,
+    mockCreateSectionState,
     scope,
     fxCourses;
 
+  // mock services
+  beforeEach(module(function ($provide) {
+    /* jshint latedef: nofunc */
+    $provide.service('$state', $state);
+    $provide.service('TimetableGenerator', TimetableGenerator);
+    $provide.factory('CreateSectionState', CreateSectionState);
+
+    function $state() {
+      this.go = jasmine.createSpy('$state.go');
+    }
+
+    function TimetableGenerator($q) {
+      this.generate = jasmine.createSpy('TimetableGenerator.generate').and.callFake(function () {
+        var deferred = $q.defer();
+        deferred.resolve([]);
+        return deferred.promise;
+      });
+    }
+
+    function CreateSectionState() {
+      var stateVars = {};
+      stateVars.timetable = {
+        fixedCourses: [],
+        previewCourse: null,
+        freeHours: []
+      };
+      stateVars.generatedTimetables = null;
+      return stateVars;
+    }
+  }));
+
   // instantiate dependencies
-  beforeEach(inject(function (_$httpBackend_, _$timeout_, _Campuses_,
+  beforeEach(inject(function (_$httpBackend_, _$state_, _$timeout_, _Campuses_,
+                              _TimetableGenerator_, _CreateSectionState_,
                               _UIBackdrop_, _fxCourses_) {
     $httpBackend = _$httpBackend_;
+    mock$state = _$state_;
     $timeout = _$timeout_;
     Campuses = _Campuses_;
+    mockTimetableGenerator = _TimetableGenerator_;
+    mockCreateSectionState = _CreateSectionState_;
     UIBackdrop = _UIBackdrop_;
     fxCourses = _fxCourses_;
   }));
@@ -35,7 +73,7 @@ describe('Controller: CourseSearchCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    CourseSearchCtrl = $controller('CourseSearchCtrl', {
+    CreateConfCtrl = $controller('CreateConfCtrl', {
       $scope: scope
     });
   }));
@@ -252,9 +290,11 @@ describe('Controller: CourseSearchCtrl', function () {
   });
 
   describe('search box event', function () {
-    it('should set uiStatus.isSearchBoxFocused true when event handler is called', function () {
+
+    it('should update state variables when event handler is called', function () {
       expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
       scope.focusOnSearchBox();
+      expect(mock$state.go).toHaveBeenCalledWith('^.search');
       expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
     });
 
@@ -264,21 +304,55 @@ describe('Controller: CourseSearchCtrl', function () {
       expect(UIBackdrop.show).toHaveBeenCalled();
     });
 
-    it('should set uiStatus.isSearchBoxFocused false when backdrop shown by this was hidden', function () {
+    it('should update state variables when backdrop shown by this was hidden', function () {
       scope.focusOnSearchBox();
       expect(scope.uiStatus.isSearchBoxFocused).toBe(true);
       UIBackdrop.hide();
       $timeout.flush();
       expect(scope.uiStatus.isSearchBoxFocused).toBe(false);
+      expect(mock$state.go).toHaveBeenCalledWith('^.course-cart');
     });
 
-    it('should set uiStatus.isResultBoxOpen true when search result is retrieved', function () {
+    it('should update state variables when search result is retrieved', function () {
       expect(scope.uiStatus.isResultBoxOpen).toBe(false);
       Campuses.setSelectedCampus(1);
       $httpBackend.flush();
       scope.searchCourses();
       $httpBackend.flush();
       expect(scope.uiStatus.isResultBoxOpen).toBe(true);
+      expect(mock$state.go).toHaveBeenCalledWith('^.search-result');
     });
+
   });
+
+  describe('user interface', function () {
+
+    it('should expose a function that updates the value of state variable for preview course in timetable to scope', function () {
+      var courses = fxCourses.objects;
+      expect(mockCreateSectionState.timetable.previewCourse).toBeNull();
+      scope.setPreviewCourse(courses[0]);
+      expect(mockCreateSectionState.timetable.previewCourse).toBe(courses[0]);
+    });
+
+  });
+
+  describe('generating timetables', function () {
+
+    it('should use TimetableGenerator service for generating timetables', function () {
+      scope.generateTimetables();
+      expect(mockTimetableGenerator.generate).toHaveBeenCalled();
+    });
+
+    it('should update state variable when generating timetables has begun', function () {
+      expect(scope.uiStatus.generating).toBeFalsy();
+      expect(mockCreateSectionState.generatedTimetables).toBeNull();
+      scope.generateTimetables();
+      expect(scope.uiStatus.generating).toBeTruthy();
+      $timeout.flush();
+      expect(mock$state.go).toHaveBeenCalledWith('^.^.result.list');
+      expect(mockCreateSectionState.generatedTimetables).toEqual([]);
+    });
+
+  });
+
 });

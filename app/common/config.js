@@ -25,15 +25,8 @@
   common.config(configRestangular);
 
   /* @ngInject */
-  function configUiRouter($stateProvider, $urlRouterProvider) {
+  function configUiRouter($urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
-
-    $stateProvider
-      .state('create', {
-        url: '/',
-        templateUrl: 'create/create.tpl.html',
-        controller: 'CreateCtrl'
-      });
   }
 
   common.config(configUiRouter);

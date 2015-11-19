@@ -8,7 +8,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="bower_components/perfect-scrollbar/css/perfect-scrollbar.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -84,8 +84,7 @@
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/perfect-scrollbar/src/perfect-scrollbar.js"></script>
-    <script src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
+    <script src="bower_components/perfect-scrollbar/js/perfect-scrollbar.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -94,6 +93,9 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="app.js"></script>
+        <script src="blocks/blocks.module.js"></script>
+        <script src="blocks/router/router.module.js"></script>
+        <script src="blocks/router/router_helper.js"></script>
         <script src="common/common.module.js"></script>
         <script src="common/config.js"></script>
         <script src="common/campuses.js"></script>
@@ -102,12 +104,19 @@
         <script src="common/navbar.js"></script>
         <script src="common/course_cart.js"></script>
         <script src="widgets/widgets.module.js"></script>
+        <script src="widgets/ds_perfect_scrollbar.js"></script>
         <script src="widgets/ds_repeat_done.js"></script>
         <script src="widgets/ds_subject.js"></script>
         <script src="widgets/ds_course_cart.js"></script>
         <script src="widgets/ds_timetable.js"></script>
         <script src="create/create.module.js"></script>
-        <script src="create/course_search.js"></script>
+        <script src="create/create.conf.js"></script>
+        <script src="create/create.result.js"></script>
+        <script src="create/create.result.list.js"></script>
+        <script src="create/create.result.details.js"></script>
+        <script src="create/timetable_generator.js"></script>
+        <script src="create/generator_options.js"></script>
+        <script src="create/create_section_state.js"></script>
         <script src="create/create.js"></script>
         <!-- endbuild -->
 </body>
