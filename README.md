@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/kyukyukyu/dash-web.png?label=ready&title=Ready)](https://waffle.io/kyukyukyu/dash-web)
 dash-web [![Build Status](https://travis-ci.org/kyukyukyu/dash-web.svg?branch=master)](https://travis-ci.org/kyukyukyu/dash-web) [![Sauce Test Status](https://saucelabs.com/buildstatus/dash)](https://saucelabs.com/u/dash)
 ========
 
